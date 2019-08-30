@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/intro_navigation"
+    app:startDestination="@id/congratsFragment">
+
+    <fragment
+        android:id="@+id/congratsFragment"
+        android:name="com.abduqodirov.invitex.CongratsFragment"
+        android:label="fragment_congrats"
+        tools:layout="@layout/fragment_congrats" >
+        <action
+            android:id="@+id/action_congratsFragment_to_signUpFragment"
+            app:destination="@id/signUpFragment"
+            app:popUpTo="@+id/signUpFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/signUpFragment"
+        android:name="com.abduqodirov.invitex.SignUpFragment"
+        android:label="fragment_sign_up"
+        tools:layout="@layout/fragment_sign_up" >
+        <action
+            android:id="@+id/action_signUpFragment_to_cardAmoutFragment"
+            app:destination="@id/cardAmoutFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/cardAmoutFragment"
+        android:name="com.abduqodirov.invitex.CardAmoutFragment"
+        android:label="fragment_card_amout"
+        tools:layout="@layout/fragment_card_amout" />
+</navigation>
