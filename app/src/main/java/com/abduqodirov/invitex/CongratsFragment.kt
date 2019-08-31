@@ -1,6 +1,7 @@
 package com.abduqodirov.invitex
 
 
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -31,6 +32,5 @@ class CongratsFragment : Fragment() {
         // Inflate the layout for this fragment
         return binding.root
     }
-
 
 }

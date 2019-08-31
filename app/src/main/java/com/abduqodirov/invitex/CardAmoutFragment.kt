@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.navigation.fragment.findNavController
 import com.abduqodirov.invitex.databinding.FragmentCardAmoutBinding
 
 /**
@@ -25,9 +26,16 @@ class CardAmoutFragment : Fragment() {
         val binding: FragmentCardAmoutBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_card_amout,
             container, false)
 
+        binding.button.setOnClickListener {
+            this.findNavController().navigate(R.id.action_global_mainListsFragment)
+        }
+
+
         //TODO verstkasini qil, logikasiniyam qil
         return binding.root
     }
+
+
 
 
 }
