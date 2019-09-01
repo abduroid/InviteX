@@ -23,7 +23,7 @@ abstract class MehmonDatabase : RoomDatabase() {
                     instance = Room.databaseBuilder(
                         context.applicationContext,
                         MehmonDatabase::class.java,
-                        "mehmonlar"
+                        "invite_database"
                     )
                         .fallbackToDestructiveMigration()
                         .build()

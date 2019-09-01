@@ -17,10 +17,6 @@ class MainListsViewModel(
 
     val mehmons = database.getAllMehmons()
 
-    init {
-
-    }
-
     private suspend fun clear() {
         withContext(Dispatchers.IO) {
             database.clear()

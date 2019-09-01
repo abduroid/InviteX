@@ -10,16 +10,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.abduqodirov.invitex.database.MehmonDatabase
 import com.abduqodirov.invitex.databinding.FragmentMainListsBinding
 
 /**
  * A simple [Fragment] subclass.
  */
-class MainListsFragment : Fragment() {
+class MainListsFragment : Fragment(){
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,6 +47,7 @@ class MainListsFragment : Fragment() {
             container, false
         )
 
+
         val application = requireNotNull(this.activity).application
 
         val dataSource = MehmonDatabase.getInstance(application).mehmonDatabaseDao
@@ -52,6 +55,14 @@ class MainListsFragment : Fragment() {
         val viewModelFactory = MainListsViewModelFactory(dataSource = dataSource, application = application)
 
         val mainListsViewModel = ViewModelProviders.of(this, viewModelFactory).get(MainListsViewModel::class.java)
+
+        val adapter = MehmonAdapter()
+
+        binding.mainList.adapter = adapter
+
+        mainListsViewModel.mehmons.observe(this, Observer {
+            adapter.submitList(it)
+        })
 
         binding.lifecycleOwner = this
 
