@@ -33,9 +33,6 @@
             android:name="com.abduqodirov.invitex.CardAmoutFragment"
             android:label="fragment_card_amout"
             tools:layout="@layout/fragment_card_amout" />
-        <action
-            android:id="@+id/action_global_mainListsFragment"
-            app:destination="@id/mainListsFragment" />
     </navigation>
     <fragment
         android:id="@+id/mainListsFragment"
@@ -45,4 +42,5 @@
             android:id="@+id/action_mainListsFragment_to_intro_nested_navigation3"
             app:destination="@id/intro_nested_navigation" />
     </fragment>
+    <action android:id="@+id/action_global_mainListsFragment" app:destination="@id/mainListsFragment" />
 </navigation>

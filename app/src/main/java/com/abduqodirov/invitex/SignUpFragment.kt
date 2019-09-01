@@ -22,6 +22,8 @@ class SignUpFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
+        //TODO signup backendi qilinishi kerak
+
         val binding: FragmentSignUpBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_sign_up,
             container, false)
 

@@ -10,7 +10,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
+import com.abduqodirov.invitex.database.MehmonDatabase
 import com.abduqodirov.invitex.databinding.FragmentMainListsBinding
 
 /**
@@ -31,6 +34,7 @@ class MainListsFragment : Fragment() {
                 putBoolean("isFirstLaunch", false)
                 commit()
             }
+            //TODO OOPlashtir
 
             this.findNavController()
                 .navigate(R.id.action_mainListsFragment_to_intro_nested_navigation3)
@@ -40,6 +44,16 @@ class MainListsFragment : Fragment() {
             inflater, R.layout.fragment_main_lists,
             container, false
         )
+
+        val application = requireNotNull(this.activity).application
+
+        val dataSource = MehmonDatabase.getInstance(application).mehmonDatabaseDao
+
+        val viewModelFactory = MainListsViewModelFactory(dataSource = dataSource, application = application)
+
+        val mainListsViewModel = ViewModelProviders.of(this, viewModelFactory).get(MainListsViewModel::class.java)
+
+        binding.lifecycleOwner = this
 
         // Inflate the layout for this fragment
         return binding.root
