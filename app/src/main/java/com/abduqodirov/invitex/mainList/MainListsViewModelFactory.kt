@@ -1,4 +1,4 @@
-package com.abduqodirov.invitex
+package com.abduqodirov.invitex.mainList
 
 import android.app.Application
 import androidx.lifecycle.ViewModel

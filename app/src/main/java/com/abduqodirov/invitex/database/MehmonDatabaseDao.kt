@@ -12,9 +12,6 @@ interface MehmonDatabaseDao {
     @Insert
     fun insert(mehmon: Mehmon)
 
-    @Update
-    fun update(mehmon: Mehmon)
-
     @Query("SELECT * FROM mehmonlar WHERE mehmonId = :key")
     fun get(key: Long): Mehmon?
 

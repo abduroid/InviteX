@@ -36,7 +36,7 @@
     </navigation>
     <fragment
         android:id="@+id/mainListsFragment"
-        android:name="com.abduqodirov.invitex.MainListsFragment"
+        android:name="com.abduqodirov.invitex.mainList.MainListsFragment"
         android:label="MainListsFragment" >
         <action
             android:id="@+id/action_mainListsFragment_to_intro_nested_navigation3"

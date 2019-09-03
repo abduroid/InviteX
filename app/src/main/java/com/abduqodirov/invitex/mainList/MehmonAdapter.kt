@@ -1,4 +1,4 @@
-package com.abduqodirov.invitex
+package com.abduqodirov.invitex.mainList
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -8,7 +8,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.abduqodirov.invitex.database.Mehmon
 import com.abduqodirov.invitex.databinding.ItemListBinding
 
-class MehmonAdapter: ListAdapter<Mehmon, MehmonAdapter.ViewHolder>(MehmonDiffCallBack()) {
+class MehmonAdapter: ListAdapter<Mehmon, MehmonAdapter.ViewHolder>(
+    MehmonDiffCallBack()
+) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder.from(parent)
