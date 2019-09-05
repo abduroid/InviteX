@@ -20,23 +20,25 @@ class MainListsViewModel(
 
     val mehmons = database.getAllMehmons()
 
+    fun specificMehmons(toifa: String) = database.getSpecificMehmons(toifa)
+
     val ism_ed = MutableLiveData<String>()
 
     private val _showDialogEvent = MutableLiveData<Boolean>()
     val showDialogEvent: LiveData<Boolean>
         get() = _showDialogEvent
 
-    fun doneShowingDialog() {
+    private fun doneShowingDialog() {
         ism_ed.value = ""
         _showDialogEvent.value = false
         Log.i("dialog", "false qildim")
     }
 
     fun onClickAdd() {
-//        _showDialogEvent.value = true
         uiScope.launch {
             //TODO buni hali to'g'rilash kerak, hozir tekshirvolaveray
-            val mehmon = Mehmon(ism = ism_ed.value!!)
+            //TODO bu yerda kobra effekti ketib qolyabdi, toifani statik kiritib emas, userdan so'rab qo'yish kerak
+            val mehmon = Mehmon(ism = ism_ed.value!!, toifa = "sinfdoshlar")
 
             insert(mehmon)
             doneShowingDialog()

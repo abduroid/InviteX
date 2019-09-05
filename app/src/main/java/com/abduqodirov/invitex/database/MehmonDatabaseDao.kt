@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
-import androidx.room.Update
 
 @Dao
 interface MehmonDatabaseDao {
@@ -20,5 +19,8 @@ interface MehmonDatabaseDao {
 
     @Query("SELECT * FROM mehmonlar ORDER BY mehmonId DESC")
     fun getAllMehmons(): LiveData<List<Mehmon>>
+
+    @Query("SELECT * FROM mehmonlar WHERE toifa =  :toifa")
+    fun getSpecificMehmons(toifa: String): LiveData<List<Mehmon>>
 
 }

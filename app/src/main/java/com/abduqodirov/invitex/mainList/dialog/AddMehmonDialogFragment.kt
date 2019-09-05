@@ -14,7 +14,7 @@ import com.abduqodirov.invitex.mainList.MainListsViewModel
 import com.abduqodirov.invitex.mainList.MainListsViewModelFactory
 
 class AddMehmonDialogFragment(val viewModelFactory: MainListsViewModelFactory) : DialogFragment() {
-
+//TODO mehmonni ro'yhatga qo'shayotkanda toifasini aniqlashtirish kerak
     private lateinit var viewModel: MainListsViewModel
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return activity?.let {
@@ -35,7 +35,7 @@ class AddMehmonDialogFragment(val viewModelFactory: MainListsViewModelFactory) :
             builder.setView(binding.root)
 
             viewModel.showDialogEvent.observe(it, Observer {
-                onDismiss(dialog)
+//                onDismiss(dialog)
             })
 
             builder.create()
@@ -43,12 +43,9 @@ class AddMehmonDialogFragment(val viewModelFactory: MainListsViewModelFactory) :
         } ?: throw IllegalStateException("Activity cannot be null")
     }
 
-    override fun onCancel(dialog: DialogInterface?) {
+    override fun onCancel(dialog: DialogInterface) {
         super.onCancel(dialog)
-        //TODO a variant dialogdan tashqari bosilganda edittextni tozalash
         viewModel.ism_ed.value = ""
-
-
-        //TODO b variant bu metodni o'chirib tashlash, bunda editextdagi yozuv saqlanadi
     }
+
 }

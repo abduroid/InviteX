@@ -28,7 +28,7 @@ class SignUpFragment : Fragment() {
             container, false)
 
         binding.signedupButton.setOnClickListener {
-            this.findNavController().navigate(R.id.action_signUpFragment_to_cardAmoutFragment)
+            this.findNavController().navigate(SignUpFragmentDirections.actionSignUpFragmentToCardAmoutFragment())
         }
 
         // Inflate the layout for this fragment

@@ -27,7 +27,7 @@ class CardAmoutFragment : Fragment() {
             container, false)
 
         binding.button.setOnClickListener {
-            this.findNavController().navigate(R.id.action_global_mainListsFragment)
+            this.findNavController().navigate(R.id.action_global_collectionListFragment2)
         }
 
 

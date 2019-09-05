@@ -26,7 +26,7 @@ class CongratsFragment : Fragment() {
             container, false)
 
         binding.hopButton.setOnClickListener {
-            this.findNavController().navigate(R.id.action_congratsFragment_to_signUpFragment)
+            this.findNavController().navigate(CongratsFragmentDirections.actionCongratsFragmentToSignUpFragment())
         }
 
         // Inflate the layout for this fragment

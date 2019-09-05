@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_navigation"
-    app:startDestination="@id/mainListsFragment">
+    app:startDestination="@id/collectionListFragment">
 
     <navigation
         android:id="@+id/intro_nested_navigation"
@@ -34,13 +34,30 @@
             android:label="fragment_card_amout"
             tools:layout="@layout/fragment_card_amout" />
     </navigation>
-    <fragment
-        android:id="@+id/mainListsFragment"
-        android:name="com.abduqodirov.invitex.mainList.MainListsFragment"
-        android:label="MainListsFragment" >
+
+        <fragment
+            android:id="@+id/collectionListFragment"
+            android:name="com.abduqodirov.invitex.mainList.CollectionListFragment"
+            android:label="CollectionsListFragment"
+            tools:layout="@layout/fragment_collection_list">
+            <action
+                android:id="@+id/action_collectionListFragment_to_intro_nested_navigation"
+                app:destination="@id/intro_nested_navigation" />
+        </fragment>
         <action
-            android:id="@+id/action_mainListsFragment_to_intro_nested_navigation3"
-            app:destination="@id/intro_nested_navigation" />
-    </fragment>
-    <action android:id="@+id/action_global_mainListsFragment" app:destination="@id/mainListsFragment" />
+            android:id="@+id/action_global_collectionListFragment2"
+            app:destination="@id/collectionListFragment" />
+<!--    <fragment-->
+<!--        android:id="@+id/mainListFragment"-->
+<!--        android:name="com.abduqodirov.invitex.mainList.MainListsFragment"-->
+<!--        android:label="MainListsFragment">-->
+<!--        <action-->
+<!--            android:id="@+id/action_mainListFragment_to_intro_nested_navigation2"-->
+<!--            app:destination="@id/intro_nested_navigation" />-->
+<!--    </fragment>-->
+<!--    <action-->
+<!--        android:id="@+id/action_global_mainListFragment"-->
+<!--        app:destination="@+id/mainListFragment" />-->
+
+
 </navigation>
