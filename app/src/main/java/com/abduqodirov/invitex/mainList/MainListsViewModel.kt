@@ -24,7 +24,7 @@ class MainListsViewModel(
 
     fun specificMehmons(toifa: String) = database.getSpecificMehmons(toifa)
 
-    val currentTab = MutableLiveData<String>()
+    val tanlanganTab = MutableLiveData<String>()
 
     private val _dialogState = MutableLiveData<Boolean>()
     val dialogState: LiveData<Boolean>
@@ -37,7 +37,9 @@ class MainListsViewModel(
     }
 
     fun onClickAdd() {
-        val mehmon = Mehmon(ism = ism_ed.value!!, toifa = currentTab.value ?: "qarindoshlar")
+
+//        Log.d("TESTAG","ism_ed.value->${ism_ed.value}  tanlanganTab.value->${tanlanganTab.value}")
+        val mehmon = Mehmon(ism = ism_ed.value!!, toifa = tanlanganTab.value!!)
         uiScope.launch {
 
             //TODO kobra effekti

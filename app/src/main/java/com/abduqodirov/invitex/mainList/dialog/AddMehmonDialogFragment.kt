@@ -24,7 +24,9 @@ class AddMehmonDialogFragment(val viewModelFactory: MainListsViewModelFactory) :
 
             val inflater = requireActivity().layoutInflater
 
-            viewModel = ViewModelProviders.of(it, viewModelFactory).get(MainListsViewModel::class.java)
+            viewModel = it.run {
+                ViewModelProviders.of(this, viewModelFactory).get(MainListsViewModel::class.java)
+            }
 
             val binding: DialogAddmehmonBinding =
                 DataBindingUtil.inflate(inflater, R.layout.dialog_addmehmon, null, false)

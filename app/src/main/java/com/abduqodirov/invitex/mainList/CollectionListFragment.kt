@@ -8,7 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.Observer
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager.widget.ViewPager
@@ -18,7 +18,7 @@ import com.abduqodirov.invitex.database.MehmonDatabase
 import com.abduqodirov.invitex.databinding.FragmentCollectionListBinding
 import com.abduqodirov.invitex.mainList.dialog.AddMehmonDialogFragment
 import com.google.android.material.tabs.TabLayout
-
+import kotlin.Exception
 
 
 /**
@@ -29,8 +29,9 @@ class CollectionListFragment : Fragment() {
     private lateinit var collectionListAdapter: CollectionListAdapter
     private lateinit var viewPager: ViewPager
     private lateinit var binding: FragmentCollectionListBinding
-    private lateinit var viewModel: MainListsViewModel
+    private lateinit var viewModelFactory: MainListsViewModelFactory
 
+    private lateinit var viewModel: MainListsViewModel
 
     private val tabs = listOf("sinfdoshlar", "qarindoshlar", "Ishxona", "Do'stlar")
 
@@ -60,13 +61,10 @@ class CollectionListFragment : Fragment() {
 
         val dataSource = MehmonDatabase.getInstance(application).mehmonDatabaseDao
 
-        val viewModelFactory = MainListsViewModelFactory(
+        viewModelFactory = MainListsViewModelFactory(
             dataSource = dataSource,
             application = application
         )
-
-        viewModel =
-            ViewModelProviders.of(this, viewModelFactory).get(MainListsViewModel::class.java)
 
         val dialog = AddMehmonDialogFragment(viewModelFactory = viewModelFactory)
 
@@ -86,6 +84,10 @@ class CollectionListFragment : Fragment() {
         val tabLayout = view.findViewById<TabLayout>(R.id.tab_layout)
         tabLayout.setupWithViewPager(viewPager)
 
+        viewModel = activity?.run {
+            ViewModelProviders.of(this, viewModelFactory).get(MainListsViewModel::class.java)
+        } ?: throw Exception ("Invalid activity")
+
         viewPager.addOnPageChangeListener(object : OnPageChangeListener {
             override fun onPageScrollStateChanged(state: Int) {
                 Log.i("tab", state.toString())
@@ -100,8 +102,8 @@ class CollectionListFragment : Fragment() {
             }
 
             override fun onPageSelected(position: Int) {
-                viewModel.currentTab.value = tabs[position]
-                Log.i("tab", "${viewModel.currentTab.value} is now selected")
+                viewModel.tanlanganTab.value = tabs[position]
+                Log.i("tab", "${viewModel.tanlanganTab.value} is now selected")
             }
 
         })
