@@ -18,32 +18,32 @@ class MainListsViewModel(
 
     private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
-    val mehmons = database.getAllMehmons()
-
-    fun specificMehmons(toifa: String) = database.getSpecificMehmons(toifa)
+//    val mehmons = database.getAllMehmons()
 
     val ism_ed = MutableLiveData<String>()
 
-    private val _showDialogEvent = MutableLiveData<Boolean>()
-    val showDialogEvent: LiveData<Boolean>
-        get() = _showDialogEvent
+    fun specificMehmons(toifa: String) = database.getSpecificMehmons(toifa)
 
-    private fun doneShowingDialog() {
+    val currentTab = MutableLiveData<String>()
+
+    private val _dialogState = MutableLiveData<Boolean>()
+    val dialogState: LiveData<Boolean>
+        get() = _dialogState
+
+    fun closeDialog() {
+        _dialogState.value = false
         ism_ed.value = ""
-        _showDialogEvent.value = false
-        Log.i("dialog", "false qildim")
+        Log.i("dialog", "Dialog is now ${_dialogState.value.toString()}")
     }
 
     fun onClickAdd() {
+        val mehmon = Mehmon(ism = ism_ed.value!!, toifa = currentTab.value ?: "qarindoshlar")
         uiScope.launch {
-            //TODO buni hali to'g'rilash kerak, hozir tekshirvolaveray
-            //TODO bu yerda kobra effekti ketib qolyabdi, toifani statik kiritib emas, userdan so'rab qo'yish kerak
-            val mehmon = Mehmon(ism = ism_ed.value!!, toifa = "sinfdoshlar")
 
+            //TODO kobra effekti
             insert(mehmon)
-            doneShowingDialog()
+            closeDialog()
         }
-
     }
 
     private suspend fun insert(mehmon: Mehmon) {

@@ -18,6 +18,7 @@ import com.abduqodirov.invitex.database.Mehmon
 import com.abduqodirov.invitex.database.MehmonDatabase
 import com.abduqodirov.invitex.databinding.FragmentMainListsBinding
 import com.abduqodirov.invitex.mainList.dialog.AddMehmonDialogFragment
+import kotlinx.android.synthetic.main.fragment_collection_list.*
 import org.w3c.dom.ls.LSInput
 
 /**
@@ -28,31 +29,15 @@ private const val ARG_OBJECT = "object"
 
 class MainListsFragment : Fragment() {
 
-    private lateinit var binding: FragmentMainListsBinding
-    private lateinit var mainListsViewModel: MainListsViewModel
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
 
-
-        binding = DataBindingUtil.inflate(
+        val binding: FragmentMainListsBinding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_main_lists,
             container, false
         )
-
-//        mainListsViewModel.mehmons.observe(this, Observer {
-//            adapter.submitList(it)
-//        })
-
-
-        // Inflate the layout for this fragment
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
 
         val adapter = MehmonAdapter()
 
@@ -67,31 +52,24 @@ class MainListsFragment : Fragment() {
             application = application
         )
 
-        mainListsViewModel = ViewModelProviders.of(this, viewModelFactory).get(
+        val mainListsViewModel = ViewModelProviders.of(this, viewModelFactory).get(
             MainListsViewModel::class.java
         )
 
         arguments?.takeIf { it.containsKey(ARG_OBJECT) }?.apply {
-            mainListsViewModel.specificMehmons(getString(ARG_OBJECT)).observe(this@MainListsFragment, Observer {
-                adapter.submitList(it)
-            })
+            val toifa = getString(ARG_OBJECT)
+
+            mainListsViewModel.specificMehmons(toifa)
+                .observe(this@MainListsFragment, Observer {
+                    adapter.submitList(it)
+                })
         }
 
-        val dialog = AddMehmonDialogFragment(viewModelFactory)
-
-        binding.mainFab.setOnClickListener {
-            dialog.show(fragmentManager!!, "AddMehmon")
-        }
-
-        mainListsViewModel.showDialogEvent.observe(this, Observer {
-            Log.i("dialog", it.toString())
-            if (!it) {
-                dialog.dismiss()
-            }
-        })
 
         binding.lifecycleOwner = this
 
+        // Inflate the layout for this fragment
+        return binding.root
     }
 
 }

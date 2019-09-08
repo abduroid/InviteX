@@ -20,7 +20,7 @@ interface MehmonDatabaseDao {
     @Query("SELECT * FROM mehmonlar ORDER BY mehmonId DESC")
     fun getAllMehmons(): LiveData<List<Mehmon>>
 
-    @Query("SELECT * FROM mehmonlar WHERE toifa =  :toifa")
+    @Query("SELECT * FROM mehmonlar WHERE toifa =  :toifa ORDER BY mehmonId DESC")
     fun getSpecificMehmons(toifa: String): LiveData<List<Mehmon>>
 
 }

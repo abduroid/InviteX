@@ -3,6 +3,7 @@ package com.abduqodirov.invitex.mainList.dialog
 import android.app.Dialog
 import android.content.DialogInterface
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
@@ -15,6 +16,7 @@ import com.abduqodirov.invitex.mainList.MainListsViewModelFactory
 
 class AddMehmonDialogFragment(val viewModelFactory: MainListsViewModelFactory) : DialogFragment() {
 //TODO mehmonni ro'yhatga qo'shayotkanda toifasini aniqlashtirish kerak
+
     private lateinit var viewModel: MainListsViewModel
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return activity?.let {
@@ -22,8 +24,7 @@ class AddMehmonDialogFragment(val viewModelFactory: MainListsViewModelFactory) :
 
             val inflater = requireActivity().layoutInflater
 
-            viewModel =
-                ViewModelProviders.of(it, viewModelFactory).get(MainListsViewModel::class.java)
+            viewModel = ViewModelProviders.of(it, viewModelFactory).get(MainListsViewModel::class.java)
 
             val binding: DialogAddmehmonBinding =
                 DataBindingUtil.inflate(inflater, R.layout.dialog_addmehmon, null, false)
@@ -32,11 +33,11 @@ class AddMehmonDialogFragment(val viewModelFactory: MainListsViewModelFactory) :
 
             binding.lifecycleOwner = it
 
-            builder.setView(binding.root)
-
-            viewModel.showDialogEvent.observe(it, Observer {
-//                onDismiss(dialog)
+            viewModel.dialogState.observe(it, Observer {
+                dialog?.dismiss()
             })
+
+            builder.setView(binding.root)
 
             builder.create()
 
@@ -45,7 +46,7 @@ class AddMehmonDialogFragment(val viewModelFactory: MainListsViewModelFactory) :
 
     override fun onCancel(dialog: DialogInterface) {
         super.onCancel(dialog)
-        viewModel.ism_ed.value = ""
+        viewModel.closeDialog()
     }
 
 }
