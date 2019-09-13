@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_navigation"
-    app:startDestination="@id/collectionListFragment">
+    app:startDestination="@id/intro_nested_navigation">
 
     <navigation
         android:id="@+id/intro_nested_navigation"
@@ -14,18 +14,10 @@
             android:label="fragment_congrats"
             tools:layout="@layout/fragment_congrats">
             <action
-                android:id="@+id/action_congratsFragment_to_signUpFragment"
-                app:destination="@id/signUpFragment"
-                app:popUpTo="@+id/signUpFragment"
-                app:popUpToInclusive="true" />
-        </fragment>
-        <fragment
-            android:id="@+id/signUpFragment"
-            android:name="com.abduqodirov.invitex.SignUpFragment"
-            android:label="fragment_sign_up"
-            tools:layout="@layout/fragment_sign_up">
+                android:id="@+id/action_congratsFragment_to_noInternetFragment"
+                app:destination="@id/noInternetFragment" />
             <action
-                android:id="@+id/action_signUpFragment_to_cardAmoutFragment"
+                android:id="@+id/action_congratsFragment_to_cardAmoutFragment"
                 app:destination="@id/cardAmoutFragment" />
         </fragment>
         <fragment
@@ -33,6 +25,14 @@
             android:name="com.abduqodirov.invitex.CardAmoutFragment"
             android:label="fragment_card_amout"
             tools:layout="@layout/fragment_card_amout" />
+        <fragment
+            android:id="@+id/noInternetFragment"
+            android:name="com.abduqodirov.invitex.NoInternetFragment"
+            android:label="NoInternetFragment" >
+            <action
+                android:id="@+id/action_noInternetFragment_to_cardAmoutFragment"
+                app:destination="@id/cardAmoutFragment" />
+        </fragment>
     </navigation>
 
         <fragment

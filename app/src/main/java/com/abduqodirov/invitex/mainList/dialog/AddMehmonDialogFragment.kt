@@ -15,7 +15,6 @@ import com.abduqodirov.invitex.mainList.MainListsViewModel
 import com.abduqodirov.invitex.mainList.MainListsViewModelFactory
 
 class AddMehmonDialogFragment(val viewModelFactory: MainListsViewModelFactory) : DialogFragment() {
-//TODO mehmonni ro'yhatga qo'shayotkanda toifasini aniqlashtirish kerak
 
     private lateinit var viewModel: MainListsViewModel
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {

@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "469405114557",
+    "firebase_url": "https://invitex-abdu.firebaseio.com",
+    "project_id": "invitex-abdu",
+    "storage_bucket": "invitex-abdu.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:469405114557:android:01c7c08d189ee57a7e97d4",
+        "android_client_info": {
+          "package_name": "com.abduqodirov.invitex"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "469405114557-ekil79fkj0bq862ch7pb1vpbl8kjs42q.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.abduqodirov.invitex",
+            "certificate_hash": "2958a98309c5594105655a0fb10e6181079a47ca"
+          }
+        },
+        {
+          "client_id": "469405114557-l82v0m1ifphv9gca0c1ipnbiu4nqec02.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBagXGo4xcjA1BNfrL-xTtVRCwrF8iwS44"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "469405114557-l82v0m1ifphv9gca0c1ipnbiu4nqec02.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

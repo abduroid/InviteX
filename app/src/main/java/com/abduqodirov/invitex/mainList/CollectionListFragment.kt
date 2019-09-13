@@ -31,8 +31,6 @@ class CollectionListFragment : Fragment() {
     private lateinit var binding: FragmentCollectionListBinding
     private lateinit var viewModelFactory: MainListsViewModelFactory
 
-    private lateinit var viewModel: MainListsViewModel
-
     private val tabs = listOf("sinfdoshlar", "qarindoshlar", "Ishxona", "Do'stlar")
 
     override fun onCreateView(
@@ -45,16 +43,9 @@ class CollectionListFragment : Fragment() {
 
         val sharedPreferences = activity!!.getSharedPreferences("keyim", Context.MODE_PRIVATE)
 
-        if (sharedPreferences.getBoolean("isFirstLaunch", true)) {
-
-            with(sharedPreferences.edit()) {
-                putBoolean("isFirstLaunch", false)
-                commit()
-            }
-            //TODO OOPlashtir
-
-            this.findNavController()
-                .navigate(CollectionListFragmentDirections.actionCollectionListFragmentToIntroNestedNavigation())
+        with(sharedPreferences.edit()) {
+            putBoolean("isFirstLaunch", false)
+            commit()
         }
 
         val application = requireNotNull(this.activity).application
@@ -84,9 +75,9 @@ class CollectionListFragment : Fragment() {
         val tabLayout = view.findViewById<TabLayout>(R.id.tab_layout)
         tabLayout.setupWithViewPager(viewPager)
 
-        viewModel = activity?.run {
+        val viewModel = activity?.run {
             ViewModelProviders.of(this, viewModelFactory).get(MainListsViewModel::class.java)
-        } ?: throw Exception ("Invalid activity")
+        } ?: throw Exception("Invalid activity")
 
         viewPager.addOnPageChangeListener(object : OnPageChangeListener {
             override fun onPageScrollStateChanged(state: Int) {
@@ -103,7 +94,6 @@ class CollectionListFragment : Fragment() {
 
             override fun onPageSelected(position: Int) {
                 viewModel.tanlanganTab.value = tabs[position]
-                Log.i("tab", "${viewModel.tanlanganTab.value} is now selected")
             }
 
         })
