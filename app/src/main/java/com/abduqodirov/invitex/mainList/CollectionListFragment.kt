@@ -30,6 +30,7 @@ class CollectionListFragment : Fragment() {
     private lateinit var viewPager: ViewPager
     private lateinit var binding: FragmentCollectionListBinding
     private lateinit var viewModelFactory: MainListsViewModelFactory
+    private lateinit var viewModel: MainListsViewModel
 
     private val tabs = listOf("sinfdoshlar", "qarindoshlar", "Ishxona", "Do'stlar")
 
@@ -41,12 +42,6 @@ class CollectionListFragment : Fragment() {
         binding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_collection_list, container, false)
 
-        val sharedPreferences = activity!!.getSharedPreferences("keyim", Context.MODE_PRIVATE)
-
-        with(sharedPreferences.edit()) {
-            putBoolean("isFirstLaunch", false)
-            commit()
-        }
 
         val application = requireNotNull(this.activity).application
 
@@ -75,9 +70,9 @@ class CollectionListFragment : Fragment() {
         val tabLayout = view.findViewById<TabLayout>(R.id.tab_layout)
         tabLayout.setupWithViewPager(viewPager)
 
-        val viewModel = activity?.run {
+        viewModel = activity?.run {
             ViewModelProviders.of(this, viewModelFactory).get(MainListsViewModel::class.java)
-        } ?: throw Exception("Invalid activity")
+        } ?: throw Exception ("Invalid activity")
 
         viewPager.addOnPageChangeListener(object : OnPageChangeListener {
             override fun onPageScrollStateChanged(state: Int) {
