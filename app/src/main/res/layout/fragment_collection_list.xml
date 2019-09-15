@@ -6,13 +6,13 @@
     <data>
         <variable
             name="viewModel"
-            type="com.abduqodirov.invitex.mainList.MainListsViewModel" />
+            type="com.abduqodirov.invitex.singleList.SingleListViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".mainList.CollectionListFragment">
+        tools:context=".CollectionListFragment">
 
         <androidx.viewpager.widget.ViewPager
             android:id="@+id/pager"

@@ -14,9 +14,6 @@
             android:label="fragment_congrats"
             tools:layout="@layout/fragment_congrats">
             <action
-                android:id="@+id/action_congratsFragment_to_noInternetFragment"
-                app:destination="@id/noInternetFragment" />
-            <action
                 android:id="@+id/action_congratsFragment_to_cardAmoutFragment"
                 app:destination="@id/cardAmoutFragment" />
         </fragment>
@@ -25,28 +22,20 @@
             android:name="com.abduqodirov.invitex.CardAmoutFragment"
             android:label="fragment_card_amout"
             tools:layout="@layout/fragment_card_amout" />
-        <fragment
-            android:id="@+id/noInternetFragment"
-            android:name="com.abduqodirov.invitex.NoInternetFragment"
-            android:label="NoInternetFragment" >
-            <action
-                android:id="@+id/action_noInternetFragment_to_cardAmoutFragment"
-                app:destination="@id/cardAmoutFragment" />
-        </fragment>
     </navigation>
 
         <fragment
             android:id="@+id/collectionListFragment"
-            android:name="com.abduqodirov.invitex.mainList.CollectionListFragment"
+            android:name="com.abduqodirov.invitex.CollectionListFragment"
             android:label="CollectionsListFragment"
             tools:layout="@layout/fragment_collection_list">
             <action
                 android:id="@+id/action_collectionListFragment_to_intro_nested_navigation"
                 app:destination="@id/intro_nested_navigation" />
         </fragment>
-        <action
-            android:id="@+id/action_global_collectionListFragment2"
-            app:destination="@id/collectionListFragment" />
+    <action
+        android:id="@+id/action_global_collectionListFragment"
+        app:destination="@+id/collectionListFragment" />
 <!--    <fragment-->
 <!--        android:id="@+id/mainListFragment"-->
 <!--        android:name="com.abduqodirov.invitex.mainList.MainListsFragment"-->

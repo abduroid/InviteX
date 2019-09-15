@@ -6,7 +6,7 @@
     <data>
         <variable
             name="viewModel"
-            type="com.abduqodirov.invitex.mainList.MainListsViewModel" />
+            type="com.abduqodirov.invitex.CollectionListViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

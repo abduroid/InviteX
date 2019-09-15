@@ -2,7 +2,6 @@ package com.abduqodirov.invitex
 
 
 import android.content.Context
-import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -23,19 +22,32 @@ class CardAmoutFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
 
-        val binding: FragmentCardAmoutBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_card_amout,
-            container, false)
+        val binding: FragmentCardAmoutBinding = DataBindingUtil.inflate(
+            inflater, R.layout.fragment_card_amout,
+            container, false
+        )
+        var cardAmount: Int
+        val sharedPreferences = activity!!.getSharedPreferences("keyim", Context.MODE_PRIVATE)
 
-        binding.button.setOnClickListener {
-            this.findNavController().navigate(R.id.action_global_collectionListFragment2)
+        binding.amountButton.setOnClickListener {
+
+            cardAmount = if (binding.cardAmoutEdit.text.toString().isNotEmpty()) {
+                binding.cardAmoutEdit.text.toString().toInt()
+            } else {
+                0
+            }
+            with(sharedPreferences.edit()) {
+                putInt("cardAmount", cardAmount)
+                commit()
+            }
+
+            this.findNavController().navigate(R.id.action_global_collectionListFragment)
         }
 
 
         //TODO verstkasini qil, logikasiniyam qil
         return binding.root
     }
-
-
 
 
 }
