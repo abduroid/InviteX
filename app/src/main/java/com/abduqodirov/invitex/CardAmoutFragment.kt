@@ -1,38 +1,35 @@
 package com.abduqodirov.invitex
 
-
 import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
 import androidx.navigation.fragment.findNavController
-import com.abduqodirov.invitex.databinding.FragmentCardAmoutBinding
+import kotlinx.android.synthetic.main.fragment_card_amout.*
 
-/**
- * A simple [Fragment] subclass.
- */
 class CardAmoutFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
 
-        val binding: FragmentCardAmoutBinding = DataBindingUtil.inflate(
-            inflater, R.layout.fragment_card_amout,
-            container, false
-        )
+        //TODO verstkasini qil, logikasiniyam qil
+        return inflater.inflate(R.layout.fragment_card_amout, container, false)
+    }
+
+    override fun onStart() {
+        super.onStart()
+
         var cardAmount: Int
         val sharedPreferences = activity!!.getSharedPreferences("keyim", Context.MODE_PRIVATE)
 
-        binding.amountButton.setOnClickListener {
+        amount_button.setOnClickListener {
 
-            cardAmount = if (binding.cardAmoutEdit.text.toString().isNotEmpty()) {
-                binding.cardAmoutEdit.text.toString().toInt()
+            cardAmount = if (card_amout_edit.text.toString().isNotEmpty()) {
+                card_amout_edit.text.toString().toInt()
             } else {
                 0
             }
@@ -43,11 +40,6 @@ class CardAmoutFragment : Fragment() {
 
             this.findNavController().navigate(R.id.action_global_collectionListFragment)
         }
-
-
-        //TODO verstkasini qil, logikasiniyam qil
-        return binding.root
     }
-
 
 }

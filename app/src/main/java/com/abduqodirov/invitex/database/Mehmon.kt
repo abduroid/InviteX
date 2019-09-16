@@ -14,6 +14,9 @@ data class Mehmon(
     val ism: String = "",
 
     @ColumnInfo(name = "toifa")
-    val toifa: String = ""
+    val toifa: String = "",
+
+    @ColumnInfo(name = "isAytilgan")
+    val isAytilgan: Boolean = false
 
 )

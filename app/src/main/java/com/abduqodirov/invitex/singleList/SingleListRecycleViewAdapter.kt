@@ -1,6 +1,5 @@
 package com.abduqodirov.invitex.singleList
 
-import android.graphics.Paint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -9,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.abduqodirov.invitex.database.Mehmon
 import com.abduqodirov.invitex.databinding.ItemListBinding
 
-class MehmonAdapter: ListAdapter<Mehmon, MehmonAdapter.ViewHolder>(
+class SingleListRecycleViewAdapter: ListAdapter<Mehmon, SingleListRecycleViewAdapter.ViewHolder>(
     MehmonDiffCallBack()
 ) {
 
@@ -28,15 +27,7 @@ class MehmonAdapter: ListAdapter<Mehmon, MehmonAdapter.ViewHolder>(
 
         fun bind(item: Mehmon) {
             binding.mehmon = item
-            binding.checkBox.setOnCheckedChangeListener { buttonView, isChecked ->
-                if (isChecked)
-                    binding.textView2.paintFlags = binding.textView2.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
-                else {
-                    binding.textView2.paintFlags = 0
-                }
-            }
             binding.executePendingBindings()
-
         }
 
         companion object {

@@ -21,7 +21,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             tools:text="Mamaqosim"
-            app:mehmonIsm="@{mehmon}"
+            android:text="@{mehmon.ism}"
             android:textSize="30sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.045"
@@ -35,6 +35,7 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
+            android:checked="@{mehmon.aytilgan}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

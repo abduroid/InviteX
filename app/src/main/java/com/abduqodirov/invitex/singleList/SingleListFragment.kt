@@ -1,6 +1,5 @@
 package com.abduqodirov.invitex.singleList
 
-
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -12,11 +11,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.abduqodirov.invitex.ListViewModelFactory
 import com.abduqodirov.invitex.R
 import com.abduqodirov.invitex.database.MehmonDatabase
-import com.abduqodirov.invitex.databinding.FragmentMainListsBinding
-
-/**
- * A simple [Fragment] subclass.
- */
+import com.abduqodirov.invitex.databinding.FragmentSingleListBinding
 
 private const val ARG_OBJECT = "object"
 
@@ -27,14 +22,17 @@ class SingleListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        val binding: FragmentMainListsBinding = DataBindingUtil.inflate(
-            inflater, R.layout.fragment_main_lists,
+        val binding: FragmentSingleListBinding = DataBindingUtil.inflate(
+            inflater, R.layout.fragment_single_list,
             container, false
         )
 
-        val adapter = MehmonAdapter()
+        val mAdapter = SingleListRecycleViewAdapter()
 
-        binding.mainList.adapter = adapter
+        binding.mainList.apply {
+            adapter = mAdapter
+            setHasFixedSize(true)
+        }
 
         val application = requireNotNull(this.activity).application
 
@@ -45,24 +43,22 @@ class SingleListFragment : Fragment() {
             application = application
         )
 
-        val mainListsViewModel = activity?.run {
+        val viewModel = activity?.run {
             ViewModelProviders.of(this, viewModelFactory).get(
                 SingleListViewModel::class.java
             )
-        } ?: throw Exception ("Invalid Activity")
+        } ?: throw Exception("Invalid Activity")
 
         arguments?.takeIf { it.containsKey(ARG_OBJECT) }?.apply {
-            val toifa = getString(ARG_OBJECT)
-            mainListsViewModel.specificMehmons(toifa)
+            viewModel.specificMehmons(getString(ARG_OBJECT))
                 .observe(this@SingleListFragment, Observer {
-                    adapter.submitList(it)
+                    mAdapter.submitList(it)
                 })
-            //TODO return them
         }
 
+        //TODO why is this neccessary
         binding.lifecycleOwner = this
 
-        // Inflate the layout for this fragment
         return binding.root
     }
 
