@@ -35,18 +35,10 @@ class SingleListViewModel(
         }
     }
 
-    private suspend fun get(mehmonId: Long): Mehmon? {
-        return withContext(Dispatchers.IO) {
-            val mehmon = database.get(mehmonId)
-            mehmon
-        }
-    }
-
     fun onMehmonChecked(mehmon: Mehmon) {
         uiScope.launch {
             //Anyway changes its previous state.
-            mehmon.isAytilgan = !mehmon.isAytilgan
-            update(mehmon)
+            update(Mehmon(mehmon.mehmonId, mehmon.ism, mehmon.toifa, !mehmon.isAytilgan))
         }
     }
 
