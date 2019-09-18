@@ -42,14 +42,10 @@ class SingleListViewModel(
         }
     }
 
-    fun onMehmonChecked(mehmonId: Long) {
+    fun onMehmonChecked(mehmon: Mehmon) {
         uiScope.launch {
-            val mehmon = get(mehmonId)
-            //TODO null safety
-            Log.i("tek", mehmon!!.ism)
             //Anyway changes its previous state.
             mehmon.isAytilgan = !mehmon.isAytilgan
-            Log.i("tek", "${mehmon.isAytilgan}")
             update(mehmon)
         }
     }

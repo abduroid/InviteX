@@ -44,10 +44,8 @@ class SingleListFragment : Fragment() {
             )
         } ?: throw Exception("Invalid Activity")
 
-        val mAdapter = SingleListRecycleViewAdapter(MehmonClickListener { mehmonId ->
-            //TODO aytilganni update qilish
-            Log.i("tek", "tushvotti bo'tka")
-            viewModel.onMehmonChecked(mehmonId)
+        val mAdapter = SingleListRecycleViewAdapter(MehmonClickListener { mehmon ->
+            viewModel.onMehmonChecked(mehmon)
         })
 
         binding.mainList.apply {

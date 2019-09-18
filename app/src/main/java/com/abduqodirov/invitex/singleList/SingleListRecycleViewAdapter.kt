@@ -53,6 +53,6 @@ class MehmonDiffCallBack : DiffUtil.ItemCallback<Mehmon>() {
     }
 }
 
-class MehmonClickListener(val clickListener: (sleepId: Long) -> Unit) {
-    fun onClick(mehmon: Mehmon) = clickListener(mehmon.mehmonId)
+class MehmonClickListener(val clickListener: (mehmon: Mehmon) -> Unit) {
+    fun onClick(mehmon: Mehmon) = clickListener(mehmon)
 }
