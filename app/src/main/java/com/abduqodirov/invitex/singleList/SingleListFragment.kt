@@ -1,6 +1,7 @@
 package com.abduqodirov.invitex.singleList
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -27,13 +28,6 @@ class SingleListFragment : Fragment() {
             container, false
         )
 
-        val mAdapter = SingleListRecycleViewAdapter()
-
-        binding.mainList.apply {
-            adapter = mAdapter
-            setHasFixedSize(true)
-        }
-
         val application = requireNotNull(this.activity).application
 
         val dataSource = MehmonDatabase.getInstance(application).mehmonDatabaseDao
@@ -46,9 +40,20 @@ class SingleListFragment : Fragment() {
         val viewModel = activity?.run {
             ViewModelProviders.of(this, viewModelFactory).get(
                 SingleListViewModel::class.java
+
             )
         } ?: throw Exception("Invalid Activity")
 
+        val mAdapter = SingleListRecycleViewAdapter(MehmonClickListener { mehmonId ->
+            //TODO aytilganni update qilish
+            Log.i("tek", "tushvotti bo'tka")
+            viewModel.onMehmonChecked(mehmonId)
+        })
+
+        binding.mainList.apply {
+            adapter = mAdapter
+            setHasFixedSize(true)
+        }
         arguments?.takeIf { it.containsKey(ARG_OBJECT) }?.apply {
             viewModel.specificMehmons(getString(ARG_OBJECT))
                 .observe(this@SingleListFragment, Observer {
