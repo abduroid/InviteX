@@ -10,8 +10,8 @@
             type="com.abduqodirov.invitex.database.Mehmon" />
 
         <variable
-            name="clickListener"
-            type="com.abduqodirov.invitex.singleList.MehmonClickListener" />
+            name="aytilganClickListener"
+            type="com.abduqodirov.invitex.singleList.AytilganClickListener" />
     </data>
 
 
@@ -42,7 +42,7 @@
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
             android:checked="@{mehmon.aytilgan}"
-            android:onClick="@{() -> clickListener.onClick(mehmon)}"
+            android:onClick="@{() -> aytilganClickListener.onChecked(mehmon)}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

@@ -8,9 +8,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.abduqodirov.invitex.database.Mehmon
 import com.abduqodirov.invitex.databinding.ItemListBinding
 
-class SingleListRecycleViewAdapter(val clickListener: MehmonClickListener) : ListAdapter<Mehmon, SingleListRecycleViewAdapter.ViewHolder>(
-    MehmonDiffCallBack()
-) {
+class SingleListRecycleViewAdapter(val aytilganClickListener: AytilganClickListener):
+    ListAdapter<Mehmon,
+            SingleListRecycleViewAdapter.ViewHolder>(MehmonDiffCallBack()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder.from(parent)
@@ -18,16 +18,16 @@ class SingleListRecycleViewAdapter(val clickListener: MehmonClickListener) : Lis
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = getItem(position)
-
-        holder.bind(item = item, clickListener = clickListener)
+        holder.bind(item = item, aytilganClickListener = aytilganClickListener)
     }
+
 
     class ViewHolder private constructor(val binding: ItemListBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(clickListener: MehmonClickListener, item: Mehmon) {
+        fun bind(item: Mehmon, aytilganClickListener: AytilganClickListener) {
             binding.mehmon = item
-            binding.clickListener = clickListener
+            binding.aytilganClickListener = aytilganClickListener
             binding.executePendingBindings()
         }
 
@@ -43,16 +43,16 @@ class SingleListRecycleViewAdapter(val clickListener: MehmonClickListener) : Lis
 }
 
 class MehmonDiffCallBack : DiffUtil.ItemCallback<Mehmon>() {
-
     override fun areItemsTheSame(oldItem: Mehmon, newItem: Mehmon): Boolean {
         return oldItem.mehmonId == newItem.mehmonId
     }
 
+    //TODO animatsiyani to'g'rilash kk
     override fun areContentsTheSame(oldItem: Mehmon, newItem: Mehmon): Boolean {
         return oldItem == newItem
     }
 }
 
-class MehmonClickListener(val clickListener: (mehmon: Mehmon) -> Unit) {
-    fun onClick(mehmon: Mehmon) = clickListener(mehmon)
+class AytilganClickListener(val aytilganClickListener: (mehmon: Mehmon) -> Unit) {
+    fun onChecked(mehmon: Mehmon) = aytilganClickListener(mehmon)
 }

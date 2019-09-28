@@ -8,7 +8,7 @@ import com.abduqodirov.invitex.singleList.SingleListFragment
 
 private const val ARG_OBJECT = "object"
 
-class CollectionListAdapter(fm: FragmentManager, private val toifalar: List<String>): FragmentPagerAdapter(fm) {
+class CollectionListAdapter(fm: FragmentManager, private val toifalar: Array<String>): FragmentPagerAdapter(fm) {
 
     override fun getItem(position: Int): Fragment {
         val fragment = SingleListFragment()

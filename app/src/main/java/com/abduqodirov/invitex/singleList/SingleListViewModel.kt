@@ -4,6 +4,8 @@ import android.app.Application
 import android.content.Context
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.abduqodirov.invitex.database.Mehmon
 import com.abduqodirov.invitex.database.MehmonDatabaseDao
 import kotlinx.coroutines.*
@@ -13,11 +15,18 @@ class SingleListViewModel(
     application: Application
 ) : AndroidViewModel(application) {
 
+    private var toifa: String = ""
+
     private var viewModelJob = Job()
     private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
     //Use another data structure to increase performance
-    fun specificMehmons(toifa: String) = database.getSpecificMehmons(toifa = toifa)
+    fun specificMehmons(toifa: String): LiveData<List<Mehmon>> {
+        this.toifa = toifa
+        return database.getSpecificMehmons(toifa = toifa)
+    }
+
+    val ism = MutableLiveData<String>()
 
     init {
         firstLaunchTasks()
@@ -42,6 +51,14 @@ class SingleListViewModel(
         }
     }
 
+    fun addMehmon() {
+        val mehmon = Mehmon(ism = ism.value!!, toifa = toifa)
+        uiScope.launch {
+            insert(mehmon)
+            ism.value = ""
+        }
+    }
+
     private fun firstLaunchTasks() {
         val sharedPreferences =
             getApplication<Application>().getSharedPreferences("keyim", Context.MODE_PRIVATE)
@@ -55,4 +72,5 @@ class SingleListViewModel(
             }
         }
     }
+
 }

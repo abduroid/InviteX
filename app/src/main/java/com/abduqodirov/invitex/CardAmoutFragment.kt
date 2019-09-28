@@ -9,34 +9,23 @@ import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import kotlinx.android.synthetic.main.fragment_card_amout.*
 
-class CardAmoutFragment : Fragment() {
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-
-        //TODO verstkasini qil, logikasiniyam qil
-        return inflater.inflate(R.layout.fragment_card_amout, container, false)
-    }
+class CardAmoutFragment : Fragment(R.layout.fragment_card_amout) {
 
     override fun onStart() {
         super.onStart()
 
-        var cardAmount: Int
         val sharedPreferences = activity!!.getSharedPreferences("keyim", Context.MODE_PRIVATE)
 
         amount_button.setOnClickListener {
 
-            cardAmount = if (card_amout_edit.text.toString().isNotEmpty()) {
-                card_amout_edit.text.toString().toInt()
-            } else {
-                0
+            if (card_amout_edit.text.toString().isNotEmpty()) {
+
+                with(sharedPreferences.edit()) {
+                    putInt("cardAmount", card_amout_edit.text.toString().toInt())
+                    commit()
+                }
             }
-            with(sharedPreferences.edit()) {
-                putInt("cardAmount", cardAmount)
-                commit()
-            }
+
 
             this.findNavController().navigate(R.id.action_global_collectionListFragment)
         }

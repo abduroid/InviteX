@@ -1,7 +1,6 @@
 package com.abduqodirov.invitex.singleList
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -18,6 +17,8 @@ private const val ARG_OBJECT = "object"
 
 class SingleListFragment : Fragment() {
 
+    private var toifa: String = "sinfdoshlar"
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -32,19 +33,23 @@ class SingleListFragment : Fragment() {
 
         val dataSource = MehmonDatabase.getInstance(application).mehmonDatabaseDao
 
+        arguments?.takeIf { it.containsKey(ARG_OBJECT) }?.apply {
+            toifa = getString(ARG_OBJECT)
+        }
+
         val viewModelFactory = ListViewModelFactory(
             dataSource = dataSource,
             application = application
         )
 
-        val viewModel = activity?.run {
+        val viewModel =
             ViewModelProviders.of(this, viewModelFactory).get(
                 SingleListViewModel::class.java
-
             )
-        } ?: throw Exception("Invalid Activity")
 
-        val mAdapter = SingleListRecycleViewAdapter(MehmonClickListener { mehmon ->
+        binding.viewModel = viewModel
+
+        val mAdapter = SingleListRecycleViewAdapter(AytilganClickListener { mehmon ->
             viewModel.onMehmonChecked(mehmon)
         })
 
@@ -52,14 +57,12 @@ class SingleListFragment : Fragment() {
             adapter = mAdapter
             setHasFixedSize(true)
         }
-        arguments?.takeIf { it.containsKey(ARG_OBJECT) }?.apply {
-            viewModel.specificMehmons(getString(ARG_OBJECT))
-                .observe(this@SingleListFragment, Observer {
-                    mAdapter.submitList(it)
-                })
-        }
 
-        //TODO why is this neccessary
+        viewModel.specificMehmons(toifa)
+            .observe(this@SingleListFragment, Observer {
+                mAdapter.submitList(it)
+            })
+
         binding.lifecycleOwner = this
 
         return binding.root
