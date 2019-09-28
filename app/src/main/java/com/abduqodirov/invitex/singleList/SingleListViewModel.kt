@@ -28,10 +28,6 @@ class SingleListViewModel(
 
     val ism = MutableLiveData<String>()
 
-    init {
-        firstLaunchTasks()
-    }
-
     private suspend fun insert(mehmon: Mehmon) {
         withContext(Dispatchers.IO) {
             database.insert(mehmon)
@@ -56,20 +52,6 @@ class SingleListViewModel(
         uiScope.launch {
             insert(mehmon)
             ism.value = ""
-        }
-    }
-
-    private fun firstLaunchTasks() {
-        val sharedPreferences =
-            getApplication<Application>().getSharedPreferences("keyim", Context.MODE_PRIVATE)
-
-        if (sharedPreferences.getBoolean("isFirstLaunch", true)) {
-
-            with(sharedPreferences.edit()) {
-                putBoolean("isFirstLaunch", false)
-                commit()
-
-            }
         }
     }
 

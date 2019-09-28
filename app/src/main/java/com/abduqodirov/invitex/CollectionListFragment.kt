@@ -1,5 +1,6 @@
 package com.abduqodirov.invitex
 
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.View
@@ -15,5 +16,21 @@ class CollectionListFragment : Fragment(R.layout.fragment_collection_list) {
         pager.adapter = collectionListAdapter
 
         tab_layout.setupWithViewPager(pager)
+
+        firstLaunchTasks()
+    }
+
+    private fun firstLaunchTasks() {
+        val sharedPreferences =
+            activity!!.getSharedPreferences("keyim", Context.MODE_PRIVATE)
+
+        if (sharedPreferences.getBoolean("isFirstLaunch", true)) {
+
+            with(sharedPreferences.edit()) {
+                putBoolean("isFirstLaunch", false)
+                commit()
+
+            }
+        }
     }
 }
