@@ -18,5 +18,4 @@ data class Mehmon(
 
     @ColumnInfo(name = "isAytilgan")
     var isAytilgan: Boolean = false
-
 )

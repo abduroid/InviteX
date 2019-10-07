@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_navigation"
-    app:startDestination="@id/intro_nested_navigation">
+    app:startDestination="@id/collectionListFragment">
 
     <navigation
         android:id="@+id/intro_nested_navigation"
@@ -24,6 +24,7 @@
             tools:layout="@layout/fragment_card_amout" />
     </navigation>
 
+    <!-- TODO animatsiyalar qo'yish-->
         <fragment
             android:id="@+id/collectionListFragment"
             android:name="com.abduqodirov.invitex.CollectionListFragment"
@@ -36,7 +37,17 @@
     <action
         android:id="@+id/action_global_collectionListFragment"
         app:destination="@+id/collectionListFragment" />
-<!--    <fragment-->
+    <fragment
+        android:id="@+id/signUpFragment"
+        android:name="com.abduqodirov.invitex.SignUpFragment"
+        android:label="fragment_sign_up"
+        tools:layout="@layout/fragment_sign_up" />
+    <fragment
+        android:id="@+id/synchronizeFragment"
+        android:name="com.abduqodirov.invitex.SynchronizeFragment"
+        android:label="fragment_synchronize"
+        tools:layout="@layout/fragment_synchronize" />
+    <!--    <fragment-->
 <!--        android:id="@+id/mainListFragment"-->
 <!--        android:name="com.abduqodirov.invitex.mainList.MainListsFragment"-->
 <!--        android:label="MainListsFragment">-->

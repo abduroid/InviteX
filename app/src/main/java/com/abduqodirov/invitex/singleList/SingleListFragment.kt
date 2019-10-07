@@ -1,10 +1,13 @@
 package com.abduqodirov.invitex.singleList
 
+import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -17,25 +20,22 @@ private const val ARG_OBJECT = "object"
 
 class SingleListFragment : Fragment() {
 
-    private var toifa: String = "sinfdoshlar"
+    private var toifa: String = ""
+    private lateinit var binding: FragmentSingleListBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
 
-        val binding: FragmentSingleListBinding = DataBindingUtil.inflate(
+        binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_single_list,
             container, false
         )
 
-        val application = requireNotNull(this.activity).application
+        val application = requireNotNull(activity!!.application)
 
         val dataSource = MehmonDatabase.getInstance(application).mehmonDatabaseDao
-
-        arguments?.takeIf { it.containsKey(ARG_OBJECT) }?.apply {
-            toifa = getString(ARG_OBJECT)
-        }
 
         val viewModelFactory = ListViewModelFactory(
             dataSource = dataSource,
@@ -46,6 +46,7 @@ class SingleListFragment : Fragment() {
             ViewModelProviders.of(this, viewModelFactory).get(
                 SingleListViewModel::class.java
             )
+
 
         binding.viewModel = viewModel
 
@@ -58,7 +59,11 @@ class SingleListFragment : Fragment() {
             setHasFixedSize(true)
         }
 
-        viewModel.specificMehmons(toifa)
+        arguments?.takeIf { it.containsKey(ARG_OBJECT) }?.apply {
+            toifa = getString(ARG_OBJECT)
+        }
+
+        viewModel.spesificMehmons(toifa)
             .observe(this@SingleListFragment, Observer {
                 mAdapter.submitList(it)
             })
@@ -68,4 +73,19 @@ class SingleListFragment : Fragment() {
         return binding.root
     }
 
+    override fun onResume() {
+        super.onResume()
+//        Hides keyboard if previously opened page had keyboard
+        hideKeyboard(view)
+
+    }
+
+    private fun hideKeyboard(view: View?) {
+        if (view != null) {
+            val imm =
+                view.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+
+            imm.hideSoftInputFromWindow(view.windowToken, 0)
+        }
+    }
 }

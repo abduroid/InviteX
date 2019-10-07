@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/synchronizeFragment"
+        android:icon="@drawable/fui_ic_googleg_color_24dp"
+        android:title="Onlinega o'tish" />
+    <item
+        android:id="@+id/signUpFragment"
+        android:icon="@drawable/fui_ic_facebook_white_22dp"
+        android:title="Ro'yxatdan o'tish" />
+</menu>

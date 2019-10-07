@@ -10,7 +10,7 @@ import androidx.room.Update
 interface MehmonDatabaseDao {
 
     @Insert
-    fun insert(mehmon: Mehmon)
+    fun insert(mehmon: Mehmon): Long
 
     @Update
     fun update(mehmon: Mehmon)
@@ -22,7 +22,7 @@ interface MehmonDatabaseDao {
     fun clear()
 
     @Query("SELECT * FROM mehmonlar ORDER BY mehmonId DESC")
-    fun getAllMehmons(): LiveData<List<Mehmon>>
+    fun getAllMehmons(): List<Mehmon>
 
     @Query("SELECT * FROM mehmonlar WHERE toifa =  :toifa ORDER BY mehmonId DESC")
     fun getSpecificMehmons(toifa: String): LiveData<List<Mehmon>>

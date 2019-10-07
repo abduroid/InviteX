@@ -4,9 +4,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".CongratsFragment">
+    tools:context=".CongratsFragment"
+    android:theme="@android:style/Theme.Holo.NoActionBar.Fullscreen">
 
     <!-- TODO verstka qil -->
+    <!-- TODO ActionBarni berkitish -->
 
     <TextView
         app:layout_constraintBottom_toBottomOf="parent"

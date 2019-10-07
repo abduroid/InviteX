@@ -41,9 +41,9 @@
                 android:id="@+id/ism_edit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@={viewModel.ism}"
+                android:hint="Ismni kiriting"
                 android:singleLine="true"
-                android:hint="Ismni kiriting" />
+                android:text="@={viewModel.ism}" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
