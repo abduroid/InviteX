@@ -6,7 +6,7 @@
     <data>
         <variable
             name="viewModel"
-            type="com.abduqodirov.invitex.singleList.SingleListViewModel" />
+            type="com.abduqodirov.invitex.viewmodel.SingleListViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -35,7 +35,7 @@
             android:layout_marginEnd="16dp"
             app:layout_constraintEnd_toStartOf="@+id/add_mehmon_button"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toBottomOf="@id/temporary_button">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/ism_edit"
@@ -54,10 +54,18 @@
             android:layout_marginEnd="16dp"
             android:text="@string/tayyor_button"
             android:enabled="@{viewModel.ism.length() > 0}"
-            android:onClick="@{() -> viewModel.addMehmon()}"
+            android:onClick="@{() -> viewModel.addLocalMehmon()}"
             app:layout_constraintBottom_toBottomOf="@+id/textInputLayout"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/textInputLayout" />
+
+        <Button
+            android:id="@+id/temporary_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="temporary button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -1,54 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".SynchronizeFragment">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- TODO: Update blank fragment layout -->
+    <data>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="216dp"
-        android:layout_marginEnd="104dp"
-        android:layout_marginBottom="496dp"
-        android:text="synchronize "
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <variable
+            name="viewModel"
+            type="com.abduqodirov.invitex.viewmodel.SynchronizeFragmentViewModel" />
+    </data>
 
-    <Button
-        android:id="@+id/yangi_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="85dp"
-        android:layout_marginBottom="185dp"
-        android:text="Yangi yaratish"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".fragments.SynchronizeFragment">
 
-    <Button
-        android:id="@+id/ulanish_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="37dp"
-        android:layout_marginBottom="128dp"
-        android:text="Ulanish"
-        app:layout_constraintBottom_toTopOf="@+id/yangi_button"
-        app:layout_constraintStart_toStartOf="parent" />
+        <!-- TODO: Update the design -->
 
-    <EditText
-        android:id="@+id/id_edit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="74dp"
-        android:layout_marginTop="97dp"
-        android:ems="10"
-        android:hint="wedding idni kirit"
-        android:inputType="textPersonName"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <!-- TODO usernameni birinchi belgisi raqam bo'lmasligi kerak-->
+        <Button
+            android:id="@+id/yangi_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="@{() -> viewModel.createNewFirestoreDatabase()}"
+            android:text="Yaratish"
+            app:layout_constraintEnd_toEndOf="@+id/username_Edit"
+            app:layout_constraintTop_toTopOf="@+id/ulanish_button" />
+
+        <Button
+            android:id="@+id/ulanish_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:onClick="@{() -> viewModel.joinToExistingDatabase()}"
+            android:text="Ulanish"
+            app:layout_constraintStart_toStartOf="@+id/username_Edit"
+            app:layout_constraintTop_toBottomOf="@+id/username_Edit" />
+
+        <EditText
+            android:id="@+id/wedding_id_edit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:ems="10"
+            android:hint="wedding idni kirit"
+            android:inputType="textPersonName"
+            android:text="@={viewModel.weddingId}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/username_Edit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:ems="10"
+            android:hint="Username kirit"
+            android:inputType="textPersonName"
+            android:text="@={viewModel.username}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/wedding_id_edit" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

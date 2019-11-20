@@ -11,7 +11,7 @@
 
         <variable
             name="aytilganClickListener"
-            type="com.abduqodirov.invitex.singleList.AytilganClickListener" />
+            type="com.abduqodirov.invitex.adapters.AytilganClickListener" />
     </data>
 
 

@@ -10,7 +10,7 @@
         app:startDestination="@id/congratsFragment">
         <fragment
             android:id="@+id/congratsFragment"
-            android:name="com.abduqodirov.invitex.CongratsFragment"
+            android:name="com.abduqodirov.invitex.fragments.CongratsFragment"
             android:label="fragment_congrats"
             tools:layout="@layout/fragment_congrats">
             <action
@@ -19,7 +19,7 @@
         </fragment>
         <fragment
             android:id="@+id/cardAmoutFragment"
-            android:name="com.abduqodirov.invitex.CardAmoutFragment"
+            android:name="com.abduqodirov.invitex.fragments.CardAmoutFragment"
             android:label="fragment_card_amout"
             tools:layout="@layout/fragment_card_amout" />
     </navigation>
@@ -27,7 +27,7 @@
     <!-- TODO animatsiyalar qo'yish-->
         <fragment
             android:id="@+id/collectionListFragment"
-            android:name="com.abduqodirov.invitex.CollectionListFragment"
+            android:name="com.abduqodirov.invitex.fragments.CollectionListFragment"
             android:label="CollectionsListFragment"
             tools:layout="@layout/fragment_collection_list">
             <action
@@ -39,12 +39,12 @@
         app:destination="@+id/collectionListFragment" />
     <fragment
         android:id="@+id/signUpFragment"
-        android:name="com.abduqodirov.invitex.SignUpFragment"
+        android:name="com.abduqodirov.invitex.fragments.SignUpFragment"
         android:label="fragment_sign_up"
         tools:layout="@layout/fragment_sign_up" />
     <fragment
         android:id="@+id/synchronizeFragment"
-        android:name="com.abduqodirov.invitex.SynchronizeFragment"
+        android:name="com.abduqodirov.invitex.fragments.SynchronizeFragment"
         android:label="fragment_synchronize"
         tools:layout="@layout/fragment_synchronize" />
     <!--    <fragment-->

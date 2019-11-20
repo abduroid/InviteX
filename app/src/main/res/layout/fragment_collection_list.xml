@@ -5,7 +5,7 @@
     android:id="@+id/fragment_collection_list"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".CollectionListFragment">
+    tools:context=".fragments.CollectionListFragment">
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/pager"

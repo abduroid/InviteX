@@ -10,6 +10,9 @@ data class Mehmon(
     @PrimaryKey(autoGenerate = true)
     var mehmonId: Long = 0L,
 
+    @ColumnInfo(name = "caller")
+    val caller: String = "local",
+
     @ColumnInfo(name = "ism")
     val ism: String = "",
 
