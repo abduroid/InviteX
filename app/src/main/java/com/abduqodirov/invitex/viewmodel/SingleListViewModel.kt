@@ -12,6 +12,7 @@ import com.abduqodirov.invitex.firestore.CloudFirestoreRepo
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.MetadataChanges
 import kotlinx.coroutines.*
+import java.lang.IndexOutOfBoundsException
 
 class SingleListViewModel(
     val database: MehmonDatabaseDao,
@@ -33,6 +34,7 @@ class SingleListViewModel(
     init {
         toifaniBarchaMehmonlari.value = arrayListOf(arrayListOf())
         toifaniBarchaMehmonlariClassic[0] = arrayListOf(Mehmon(ism = "fuck"))
+        //TODO add toifa for fuck element
 //        Log.i("initf", toifaniBarchaMehmonlariClassic[0][0].ism)
     }
 
@@ -85,58 +87,52 @@ class SingleListViewModel(
 //                toifaniBarchaMehmonlariClassic[]
                 for (mehmon in mehmonlar) {
 
-//                    var kerakliArray = 0
-//                    when (mehmon.toifa) {
-//                        "abdulaziz" -> kerakliArray = 0
-//                        "iphone" -> kerakliArray = 1
-//                    }
-
-                    if (mehmon.caller == "abdulaziz" || mehmon.toifa == "mezbon") {
-                        val checkedVariant = Mehmon(
-                            mehmonId = mehmon.mehmonId,
-                            ism = mehmon.ism,
-                            toifa = mehmon.toifa,
-                            caller = mehmon.caller,
-                            isAytilgan = true
-                        )
-
-                        val uncheckedVariant = Mehmon(
-                            mehmonId = mehmon.mehmonId,
-                            ism = mehmon.ism,
-                            toifa = mehmon.toifa,
-                            caller = mehmon.caller,
-                            isAytilgan = false
-                        )
-                        if (mehmon.toifa == "mezbon") {
-                            Log.i("lookt", "yes there is mezbon")
-                        }
-                        Log.i("ititi", toifaniBarchaMehmonlariClassic[0][0].ism)
-                        if (toifaniBarchaMehmonlariClassic[0].contains(checkedVariant) ||
-                            toifaniBarchaMehmonlariClassic[0].contains(uncheckedVariant)
-                        ) {
-                            toifaniBarchaMehmonlariClassic[0].remove(checkedVariant)
-                            toifaniBarchaMehmonlariClassic[0].remove(uncheckedVariant)
-                            toifaniBarchaMehmonlariClassic[0].add(mehmon)
-                            if (mehmon.toifa == "mezbon") {
-                                Log.i("look", "yes there is mezbon")
-                            }
-                        } else {
-                            if (mehmon.toifa == "mezbon") {
-                                Log.i("look", "yes there is mezbon")
-                            }
-                            toifaniBarchaMehmonlariClassic[0].add(mehmon)
-                        }
+                    var kerakliArray = 0
+                    when (mehmon.toifa) {
+                        "abdulaziz" -> kerakliArray = 0
+                        "iphone" -> kerakliArray = 1
                     }
+
+
+                    val checkedVariant = Mehmon(
+                        mehmonId = mehmon.mehmonId,
+                        ism = mehmon.ism,
+                        toifa = mehmon.toifa,
+                        caller = mehmon.caller,
+                        isAytilgan = true
+                    )
+
+                    val uncheckedVariant = Mehmon(
+                        mehmonId = mehmon.mehmonId,
+                        ism = mehmon.ism,
+                        toifa = mehmon.toifa,
+                        caller = mehmon.caller,
+                        isAytilgan = false
+                    )
+                    if (toifaniBarchaMehmonlariClassic[kerakliArray].contains(checkedVariant) ||
+                        toifaniBarchaMehmonlariClassic[kerakliArray].contains(uncheckedVariant)
+                    ) {
+                        toifaniBarchaMehmonlariClassic[kerakliArray].remove(checkedVariant)
+                        toifaniBarchaMehmonlariClassic[kerakliArray].remove(uncheckedVariant)
+                        toifaniBarchaMehmonlariClassic[kerakliArray].add(mehmon)
+                    } else {
+                        toifaniBarchaMehmonlariClassic[0].add(mehmon)
+                    }
+
+                }
+                toifaniBarchaMehmonlari.value!![0] =
+                    toifaniBarchaMehmonlariClassic[0]
+
+                try {
+                    toifaniBarchaMehmonlari.value!![1] = toifaniBarchaMehmonlariClassic[1]
+                } catch (exception: IndexOutOfBoundsException) {
+                    Log.i("checkbox","array hasn't been initialized yet")
                 }
 
-                Log.i("ititi", "${toifaniBarchaMehmonlariClassic[0].size}")
-
-
-//                //updates itself
-                toifaniBarchaMehmonlari.value!![0] = toifaniBarchaMehmonlariClassic[0]
                 toifaniBarchaMehmonlari.postValue(toifaniBarchaMehmonlari.value)
-//                toifaniBarchaMehmonlari.value!![1] = toifaniBarchaMehmonlariClassic[1]
-//                toifaniBarchaMehmonlari.postValue(mehmonlar)
+
+
+                Log.i("ititi", "${toifaniBarchaMehmonlariClassic[0].size}")
 
             }
 

@@ -73,6 +73,7 @@ class SingleListRecycleViewAdapter(val aytilganClickListener: AytilganClickListe
                 binding.root.visibility = View.INVISIBLE
             } else {
                 binding.root.visibility = View.VISIBLE
+                //TODO databinding variable for height and other appearance attributes
             }
             //TODO watch about how RecyclerView re-use views again
             binding.mehmon = item

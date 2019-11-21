@@ -85,7 +85,14 @@ class SingleListFragment : Fragment() {
 
                 viewModel.toifaniBarchaMehmonlari
                     .observe(this@SingleListFragment, Observer { remoteGuests ->
-                        mAdapter.submitList(mezbon + localGuests + remoteGuests[0])
+
+                        val firestoreMehmonlar = ArrayList<Mehmon>()
+
+                        for (guests in remoteGuests) {
+                            firestoreMehmonlar.addAll(guests)
+                        }
+
+                        mAdapter.submitList(mezbon + localGuests + firestoreMehmonlar)
                     })
             })
 
