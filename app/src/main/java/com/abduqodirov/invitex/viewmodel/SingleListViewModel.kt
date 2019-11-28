@@ -32,11 +32,39 @@ class SingleListViewModel(
 //    private val sharedPreferences = application.getSharedPreferences("keyim", Context.MODE_PRIVATE)
 
     init {
+
+//        loadMembers()
+
         toifaniBarchaMehmonlari.value = arrayListOf(arrayListOf())
         toifaniBarchaMehmonlariClassic[0] = arrayListOf(Mehmon(ism = "fuck"))
         //TODO add toifa for fuck element
 //        Log.i("initf", toifaniBarchaMehmonlariClassic[0][0].ism)
     }
+
+//    fun loadMembers() {
+//        val db = FirebaseFirestore.getInstance()
+//        db.collection("weddings").document(CloudFirestoreRepo.weddingId)
+//            .addSnapshotListener { querySnapshot, queryException ->
+//                if (queryException != null) {
+//                    Log.i("weddingM", "Listen failed.", queryException)
+//                    return@addSnapshotListener
+//                }
+//
+//                if (querySnapshot != null && querySnapshot.exists()) {
+////                Log.i("weddingM", "Current data: ${querySnapshot.data}")
+//
+//                    val mapOfMembers: Map<String, Any> = querySnapshot.data!!.toSortedMap()
+//                    for (member in mapOfMembers) {
+//                        if (member.key == "members") {
+//                            Log.i("weddingM", member.value)
+//                        }
+//                    }
+//                } else {
+//                    Log.i("weddingM", "Current data: null")
+//                }
+//
+//            }
+//    }
 
     fun localSpecificMehmons(toifa: String): LiveData<List<Mehmon>> {
 
@@ -45,6 +73,29 @@ class SingleListViewModel(
 
         return database.getSpecificMehmons(toifa)
 
+    }
+
+    fun observeOfItsGuests(toifa: String) {
+        val db = FirebaseFirestore.getInstance()
+        db.collection("weddings").document(CloudFirestoreRepo.weddingId)
+            .collection("${CloudFirestoreRepo.username}-$toifa")
+            .addSnapshotListener { querySnapshot, firebaseFirestoreException ->
+
+                if (firebaseFirestoreException != null) {
+                    Log.w("fire error", "Listen failed.", firebaseFirestoreException)
+                    return@addSnapshotListener
+                }
+                val mehmons = ArrayList<Mehmon>()
+
+                for (document in querySnapshot!!) {
+                    val mehmon = document.toObject(Mehmon::class.java)
+                    uiScope.launch {
+                        updateOnRoom(mehmon)
+                    }
+                    Log.i("hjht", "$mehmon")
+                }
+
+            }
     }
 
     fun loadFirestoreMehmons(toifa: String, username: String) {
@@ -89,7 +140,7 @@ class SingleListViewModel(
 
                     var kerakliArray = 0
                     when (mehmon.toifa) {
-                        "abdulaziz" -> kerakliArray = 0
+                        "pixel" -> kerakliArray = 0
                         "iphone" -> kerakliArray = 1
                     }
 
@@ -126,7 +177,7 @@ class SingleListViewModel(
                 try {
                     toifaniBarchaMehmonlari.value!![1] = toifaniBarchaMehmonlariClassic[1]
                 } catch (exception: IndexOutOfBoundsException) {
-                    Log.i("checkbox","array hasn't been initialized yet")
+                    Log.i("checkbox", "array hasn't been initialized yet")
                 }
 
                 toifaniBarchaMehmonlari.postValue(toifaniBarchaMehmonlari.value)
@@ -138,6 +189,10 @@ class SingleListViewModel(
 
 
         return mehmons
+    }
+
+    fun observeItsGuests(toifa: String) {
+
     }
 
 //    operator fun <T> MutableLiveData<MutableList<T>>.plusAssign(item: T) {

@@ -74,10 +74,15 @@ class SingleListFragment : Fragment() {
         val mezbon = listOf(Mehmon(ism = CloudFirestoreRepo.username, toifa = "mezbon"))
 
         viewModel.localSpecificMehmons(toifa)
-//        viewModel.toifaniBarchaMehmonlariClassic.clear()
+        //TODO Observe its guests(return this feature. Every client must observe it
+        // s guests from Firestore and update it on Room
 
-        viewModel.loadFirestoreMehmons(toifa = toifa, username = "abdulaziz")
+
+
+        viewModel.loadFirestoreMehmons(toifa = toifa, username = "pixel")
         viewModel.loadFirestoreMehmons(toifa = toifa, username = "iphone")
+
+        viewModel.observeOfItsGuests(toifa)
 
         viewModel.localGuests
             .observe(this@SingleListFragment, Observer { localGuests ->
@@ -91,6 +96,8 @@ class SingleListFragment : Fragment() {
                         for (guests in remoteGuests) {
                             firestoreMehmonlar.addAll(guests)
                         }
+
+                            //TODO there is a issue. When list updates, it changes its position in array.
 
                         mAdapter.submitList(mezbon + localGuests + firestoreMehmonlar)
                     })
