@@ -3,6 +3,7 @@ package com.abduqodirov.invitex.firestore
 import com.abduqodirov.invitex.database.Mehmon
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.MetadataChanges
 
 object CloudFirestoreRepo {
 
@@ -79,34 +80,38 @@ object CloudFirestoreRepo {
 
 
     fun sendToFireStore(mehmon: Mehmon) {
-        val db = FirebaseFirestore.getInstance()
-        db.collection("weddings/$weddingId/${username}-${mehmon.toifa}")
-            .document("${mehmon.mehmonId}")
-            .set(
-                Mehmon(
-                    mehmonId = mehmon.mehmonId,
-                    caller = username,
-                    ism = mehmon.ism,
-                    isAytilgan = mehmon.isAytilgan,
-                    toifa = mehmon.toifa
+        if (isFirestoreConnected()) {
+            weddingsCollection.document(weddingId).collection("${username}-${mehmon.toifa}")
+                .document("${mehmon.mehmonId}")
+                .set(
+                    Mehmon(
+                        mehmonId = mehmon.mehmonId,
+                        caller = username,
+                        ism = mehmon.ism,
+                        isAytilgan = mehmon.isAytilgan,
+                        toifa = mehmon.toifa
+                    )
                 )
-            )
+        }
 
     }
 
     fun updateItemChecked(mehmon: Mehmon) {
 
-        val mehmonUsername: String = if (mehmon.caller == "local") {
-            username
-        } else {
-            mehmon.caller
+        if (isFirestoreConnected()) {
+            val mehmonUsername: String = if (mehmon.caller == "local") {
+                username
+            } else {
+                mehmon.caller
+            }
+
+            weddingsCollection.document(weddingId).collection("${mehmonUsername}-${mehmon.toifa}")
+                .document("${mehmon.mehmonId}")
+                .update("aytilgan", mehmon.isAytilgan)
         }
-
-        weddingsCollection.document(weddingId).collection("${mehmonUsername}-${mehmon.toifa}")
-            .document("${mehmon.mehmonId}")
-            .update("aytilgan", mehmon.isAytilgan)
-
     }
+
+    fun isFirestoreConnected() = weddingId.isNotEmpty() && username.isNotEmpty()
 
 }
 

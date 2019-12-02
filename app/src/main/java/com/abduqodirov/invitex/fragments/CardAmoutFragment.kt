@@ -29,7 +29,7 @@ class CardAmoutFragment : Fragment(R.layout.fragment_card_amout) {
                 commit()
             }
 
-            this.findNavController().navigate(CardAmoutFragmentDirections.actionGlobalCollectionListFragment())
+            this.findNavController().navigate(CongratsFragmentDirections.actionCongratsFragmentToCollectionListFragment())
         }
     }
 

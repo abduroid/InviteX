@@ -4,15 +4,10 @@ import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.View
-import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
-import androidx.viewpager.widget.ViewPager
 import com.abduqodirov.invitex.R
 import com.abduqodirov.invitex.adapters.CollectionListAdapter
-import com.abduqodirov.invitex.database.MehmonDatabase
 import com.abduqodirov.invitex.firestore.CloudFirestoreRepo
-import com.abduqodirov.invitex.viewmodel.ListViewModelFactory
-import com.abduqodirov.invitex.viewmodel.SingleListViewModel
 import kotlinx.android.synthetic.main.fragment_collection_list.*
 
 class CollectionListFragment : Fragment(R.layout.fragment_collection_list) {
@@ -24,9 +19,9 @@ class CollectionListFragment : Fragment(R.layout.fragment_collection_list) {
         val sharedPreferences = application.getSharedPreferences("keyim", Context.MODE_PRIVATE)
 
 
-        if (!sharedPreferences.contains("cardAmount")) {
+        if (sharedPreferences.contains("isFirstLaunch")) {
             this.findNavController()
-                .navigate(CollectionListFragmentDirections.actionCollectionListFragmentToIntroNestedNavigation())
+                .navigate(CollectionListFragmentDirections.actionCollectionListFragmentToCongratsFragment())
         } else {
 
             if (sharedPreferences.contains("username")) {

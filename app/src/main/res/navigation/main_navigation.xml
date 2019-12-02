@@ -5,25 +5,6 @@
     android:id="@+id/main_navigation"
     app:startDestination="@id/collectionListFragment">
 
-    <navigation
-        android:id="@+id/intro_nested_navigation"
-        app:startDestination="@id/congratsFragment">
-        <fragment
-            android:id="@+id/congratsFragment"
-            android:name="com.abduqodirov.invitex.fragments.CongratsFragment"
-            android:label="fragment_congrats"
-            tools:layout="@layout/fragment_congrats">
-            <action
-                android:id="@+id/action_congratsFragment_to_cardAmoutFragment"
-                app:destination="@id/cardAmoutFragment" />
-        </fragment>
-        <fragment
-            android:id="@+id/cardAmoutFragment"
-            android:name="com.abduqodirov.invitex.fragments.CardAmoutFragment"
-            android:label="fragment_card_amout"
-            tools:layout="@layout/fragment_card_amout" />
-    </navigation>
-
     <!-- TODO animatsiyalar qo'yish-->
         <fragment
             android:id="@+id/collectionListFragment"
@@ -31,12 +12,9 @@
             android:label="CollectionsListFragment"
             tools:layout="@layout/fragment_collection_list">
             <action
-                android:id="@+id/action_collectionListFragment_to_intro_nested_navigation"
-                app:destination="@id/intro_nested_navigation" />
+                android:id="@+id/action_collectionListFragment_to_congratsFragment"
+                app:destination="@id/congratsFragment" />
         </fragment>
-    <action
-        android:id="@+id/action_global_collectionListFragment"
-        app:destination="@+id/collectionListFragment" />
     <fragment
         android:id="@+id/signUpFragment"
         android:name="com.abduqodirov.invitex.fragments.SignUpFragment"
@@ -47,6 +25,15 @@
         android:name="com.abduqodirov.invitex.fragments.SynchronizeFragment"
         android:label="fragment_synchronize"
         tools:layout="@layout/fragment_synchronize" />
+    <fragment
+        android:id="@+id/congratsFragment"
+        android:name="com.abduqodirov.invitex.fragments.CongratsFragment"
+        android:label="fragment_congrats"
+        tools:layout="@layout/fragment_congrats" >
+        <action
+            android:id="@+id/action_congratsFragment_to_collectionListFragment"
+            app:destination="@id/collectionListFragment" />
+    </fragment>
     <!--    <fragment-->
 <!--        android:id="@+id/mainListFragment"-->
 <!--        android:name="com.abduqodirov.invitex.mainList.MainListsFragment"-->

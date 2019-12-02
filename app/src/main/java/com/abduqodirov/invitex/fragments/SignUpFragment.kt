@@ -42,7 +42,7 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
         val response = IdpResponse.fromResultIntent(data)
 
         if (requestCode == RC_SIGN_IN) {
-            this.findNavController().navigate(CollectionListFragmentDirections.actionGlobalCollectionListFragment())
+            this.findNavController().navigate(CollectionListFragmentDirections.actionCollectionListFragmentToCongratsFragment())
         } else {
             if (response == null) {
                 Snackbar.make(view!!, "Bekor qilindi", Snackbar.LENGTH_SHORT).show()

@@ -26,6 +26,8 @@ class SynchronizeFragmentViewModel(val database: MehmonDatabaseDao, application:
 
         val cardAmount = sharedPreferences.getInt("cardAmount", 0)
 
+            //TODO username va wedding id ni trim qilib spacelarni olib tashlash kk
+
         CloudFirestoreRepo.initializeFireStore(cardAmount, username.value!!,
             ConnectedClickListener {
                 persistString("weddingId", it)
