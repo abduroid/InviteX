@@ -1,19 +1,17 @@
 package com.abduqodirov.invitex.viewmodel
 
 import android.app.Application
-import android.content.Context
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.abduqodirov.invitex.Constants
+import com.abduqodirov.invitex.MembersManager
 import com.abduqodirov.invitex.database.Mehmon
 import com.abduqodirov.invitex.database.MehmonDatabaseDao
 import com.abduqodirov.invitex.firestore.CloudFirestoreRepo
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.MetadataChanges
 import kotlinx.coroutines.*
-import java.lang.IndexOutOfBoundsException
 
 class SingleListViewModel(
     val database: MehmonDatabaseDao,
@@ -45,6 +43,7 @@ class SingleListViewModel(
     fun loadMembers() {
 
         if (CloudFirestoreRepo.isFirestoreConnected()) {
+
             val db = FirebaseFirestore.getInstance()
 
             db.collection("weddings").document(CloudFirestoreRepo.weddingId)
@@ -65,8 +64,9 @@ class SingleListViewModel(
                         memberlar.postValue(listWithoutLocalUsername)
 
                         for (i in listWithoutLocalUsername.indices) {
-                            if (!Constants.members.containsKey(members[i])) {
-                                Constants.members[members[i]] = i
+                            if (!MembersManager.members.containsKey(members[i])) {
+                                MembersManager.members[members[i]] = i
+                                toifaniBarchaMehmonlariClassic.add(arrayListOf(Mehmon(ism = "fuck")))
                             }
                         }
 
@@ -149,13 +149,11 @@ class SingleListViewModel(
                 }
 
 
+                var kerakliArray: Int = 0
+
                 for (mehmon in mehmonlar) {
 
-                    var kerakliArray = 0
-                    when (mehmon.toifa) {
-                        "pixel" -> kerakliArray = 0
-                        "iphone" -> kerakliArray = 1
-                    }
+                    kerakliArray = MembersManager.members.get(username)!!
 
 
                     val checkedVariant = Mehmon(
@@ -173,6 +171,7 @@ class SingleListViewModel(
                         caller = mehmon.caller,
                         isAytilgan = false
                     )
+
                     if (toifaniBarchaMehmonlariClassic[kerakliArray].contains(checkedVariant) ||
                         toifaniBarchaMehmonlariClassic[kerakliArray].contains(uncheckedVariant)
                     ) {
@@ -180,18 +179,17 @@ class SingleListViewModel(
                         toifaniBarchaMehmonlariClassic[kerakliArray].remove(uncheckedVariant)
                         toifaniBarchaMehmonlariClassic[kerakliArray].add(mehmon)
                     } else {
-                        toifaniBarchaMehmonlariClassic[0].add(mehmon)
+                        toifaniBarchaMehmonlariClassic[kerakliArray].add(mehmon)
                     }
 
                 }
-                toifaniBarchaMehmonlari.value!![0] =
-                    toifaniBarchaMehmonlariClassic[0]
-
-                try {
-                    toifaniBarchaMehmonlari.value!![1] = toifaniBarchaMehmonlariClassic[1]
-                } catch (exception: IndexOutOfBoundsException) {
-                    Log.i("checkbox", "array hasn't been initialized yet")
-                }
+                toifaniBarchaMehmonlari.value!![kerakliArray] = toifaniBarchaMehmonlariClassic[kerakliArray]
+//
+//                try {
+//                    toifaniBarchaMehmonlari.value!![1] = toifaniBarchaMehmonlariClassic[1]
+//                } catch (exception: IndexOutOfBoundsException) {
+//                    Log.i("checkbox", "array hasn't been initialized yet")
+//                }
 
                 toifaniBarchaMehmonlari.postValue(toifaniBarchaMehmonlari.value)
 

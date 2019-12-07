@@ -1,6 +1,6 @@
 package com.abduqodirov.invitex
 
-class Constants{
+class MembersManager{
     companion object {
         var members = mutableMapOf<String, Int>()
     }
