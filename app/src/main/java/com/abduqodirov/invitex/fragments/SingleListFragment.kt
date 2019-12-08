@@ -81,9 +81,13 @@ class SingleListFragment : Fragment() {
         viewModel.loadMembers()
 
         viewModel.memberlar.observe(this, Observer {
+
+
+            Log.i("tek", "Fragmentga kelgan memberlar ${it}")
             for (member in it) {
                 viewModel.loadFirestoreMehmons(toifa = toifa, username = member)
             }
+
         })
 
 

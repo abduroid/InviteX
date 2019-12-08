@@ -27,7 +27,7 @@ class SingleListViewModel(
     val toifa = MutableLiveData<String>()
 
     val toifaniBarchaMehmonlari = MutableLiveData<ArrayList<ArrayList<Mehmon>>>()
-    var toifaniBarchaMehmonlariClassic: ArrayList<ArrayList<Mehmon>> = arrayListOf(arrayListOf())
+    var toifaniBarchaMehmonlariClassic = arrayListOf<ArrayList<Mehmon>>(arrayListOf<Mehmon>())
     var localGuests: LiveData<List<Mehmon>> = MutableLiveData<List<Mehmon>>()
 
 //    val sharedPreferences = application.getSharedPreferences("keyim", Context.MODE_PRIVATE)
@@ -36,10 +36,12 @@ class SingleListViewModel(
     init {
 
         toifaniBarchaMehmonlari.value = arrayListOf(arrayListOf())
-        toifaniBarchaMehmonlariClassic[0] = arrayListOf(Mehmon(ism = "fuck"))
+//        toifaniBarchaMehmonlariClassic[0] = arrayListOf(Mehmon(ism = "fuck"))
         //TODO add toifa for fuck element
     }
 
+
+    //TODO has a issue: doesn't load all members
     fun loadMembers() {
 
         if (CloudFirestoreRepo.isFirestoreConnected()) {
@@ -55,21 +57,21 @@ class SingleListViewModel(
 
                     if (querySnapshot != null && querySnapshot.exists()) {
 
-                        Log.i("cooler", "${querySnapshot.data?.toMap()?.keys}")
-                        val weddingDoc: Map<String, Any> = querySnapshot.data!!.toMap()
+                        val weddingDoc: Map<String, Any> = querySnapshot.data!!.toSortedMap()
                         val members: List<String> = weddingDoc["members"] as List<String>
 
                         val listWithoutLocalUsername =
                             members.filter { member -> !member.equals(CloudFirestoreRepo.username) }
+
                         memberlar.postValue(listWithoutLocalUsername)
 
-                        for (i in listWithoutLocalUsername.indices) {
-                            if (!MembersManager.members.containsKey(members[i])) {
-                                MembersManager.members[members[i]] = i
-                                toifaniBarchaMehmonlariClassic.add(arrayListOf(Mehmon(ism = "fuck")))
+                        for (membercha in listWithoutLocalUsername) {
+                            if (!MembersManager.members.containsKey(membercha)) {
+                                MembersManager.members[membercha] = listWithoutLocalUsername.indexOf(membercha)
                             }
                         }
 
+                        Log.i("tek", "Members: ${MembersManager.members}")
                     } else {
                         Log.i("weddingM", "Current data: null")
                     }
@@ -153,7 +155,9 @@ class SingleListViewModel(
 
                 for (mehmon in mehmonlar) {
 
-                    kerakliArray = MembersManager.members.get(username)!!
+                    Log.i("teky", "Username is $username, Members map size is ${MembersManager.members.size}")
+
+                    kerakliArray = MembersManager.members.get(username)!! //TODO null check
 
 
                     val checkedVariant = Mehmon(
@@ -172,6 +176,10 @@ class SingleListViewModel(
                         isAytilgan = false
                     )
 
+                    Log.i("tek", "Hozir men $kerakliArray bilan ishlayman")
+                    if(kerakliArray >= toifaniBarchaMehmonlariClassic.size) {
+                        toifaniBarchaMehmonlariClassic.add(arrayListOf<Mehmon>())
+                    }
                     if (toifaniBarchaMehmonlariClassic[kerakliArray].contains(checkedVariant) ||
                         toifaniBarchaMehmonlariClassic[kerakliArray].contains(uncheckedVariant)
                     ) {
@@ -182,6 +190,11 @@ class SingleListViewModel(
                         toifaniBarchaMehmonlariClassic[kerakliArray].add(mehmon)
                     }
 
+                }
+
+
+                if(kerakliArray >= toifaniBarchaMehmonlari.value!!.size){
+                    toifaniBarchaMehmonlari.value!!.add(arrayListOf<Mehmon>())
                 }
                 toifaniBarchaMehmonlari.value!![kerakliArray] = toifaniBarchaMehmonlariClassic[kerakliArray]
 //
