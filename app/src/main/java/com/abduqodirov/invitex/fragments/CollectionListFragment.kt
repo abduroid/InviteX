@@ -28,8 +28,8 @@ class CollectionListFragment : Fragment(R.layout.fragment_collection_list) {
                 CloudFirestoreRepo.username = sharedPreferences.getString("username", "jjj")
             }
 
-            if (sharedPreferences.contains("weddingId")) {
-                CloudFirestoreRepo.weddingId = sharedPreferences.getString("weddingId", "null")
+            if (sharedPreferences.contains("userEnteredWeddingId")) {
+                CloudFirestoreRepo.weddingId = sharedPreferences.getString("userEnteredWeddingId", "null")
             }
 
             val tabs = resources.getStringArray(R.array.toifalar)

@@ -58,7 +58,6 @@ class SingleListFragment : Fragment() {
 
         val mAdapter =
             SingleListRecycleViewAdapter(AytilganClickListener { mehmon ->
-                Log.i("checkbox", "Fragment, adapter listener $mehmon")
                 viewModel.onMehmonChecked(mehmon)
             })
 
@@ -82,8 +81,8 @@ class SingleListFragment : Fragment() {
 
         viewModel.memberlar.observe(this, Observer {
 
+            Log.i("tek", "Fragmentga kelgan memberlar: ${it}")
 
-            Log.i("tek", "Fragmentga kelgan memberlar ${it}")
             for (member in it) {
                 viewModel.loadFirestoreMehmons(toifa = toifa, username = member)
             }
@@ -104,7 +103,6 @@ class SingleListFragment : Fragment() {
                             firestoreMehmonlar.addAll(guests)
                         }
 
-                        //TODO there is a issue. When list updates, it changes its position in array.
 
                         mAdapter.submitList(mezbon + localGuests + firestoreMehmonlar)
                     })

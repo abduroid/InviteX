@@ -41,7 +41,6 @@ class SingleListViewModel(
     }
 
 
-    //TODO has a issue: doesn't load all members
     fun loadMembers() {
 
         if (CloudFirestoreRepo.isFirestoreConnected()) {
@@ -71,7 +70,8 @@ class SingleListViewModel(
                             }
                         }
 
-                        Log.i("tek", "Members: ${MembersManager.members}")
+                        Log.i("tek", "Ccompanioonga berilgani: ${MembersManager.members}")
+
                     } else {
                         Log.i("weddingM", "Current data: null")
                     }
@@ -128,6 +128,8 @@ class SingleListViewModel(
     ): MutableLiveData<ArrayList<Mehmon>> {
 
 
+        Log.i("tek", "GetGuests men hozir $username bilan ishlayman")
+
         val mehmons = MutableLiveData<ArrayList<Mehmon>>()
 
         val db = FirebaseFirestore.getInstance()
@@ -155,7 +157,6 @@ class SingleListViewModel(
 
                 for (mehmon in mehmonlar) {
 
-                    Log.i("teky", "Username is $username, Members map size is ${MembersManager.members.size}")
 
                     kerakliArray = MembersManager.members.get(username)!! //TODO null check
 
@@ -176,8 +177,7 @@ class SingleListViewModel(
                         isAytilgan = false
                     )
 
-                    Log.i("tek", "Hozir men $kerakliArray bilan ishlayman")
-                    if(kerakliArray >= toifaniBarchaMehmonlariClassic.size) {
+                    for(i in 1..kerakliArray) {
                         toifaniBarchaMehmonlariClassic.add(arrayListOf<Mehmon>())
                     }
                     if (toifaniBarchaMehmonlariClassic[kerakliArray].contains(checkedVariant) ||
@@ -193,16 +193,10 @@ class SingleListViewModel(
                 }
 
 
-                if(kerakliArray >= toifaniBarchaMehmonlari.value!!.size){
+                for(i in 1..kerakliArray){
                     toifaniBarchaMehmonlari.value!!.add(arrayListOf<Mehmon>())
                 }
                 toifaniBarchaMehmonlari.value!![kerakliArray] = toifaniBarchaMehmonlariClassic[kerakliArray]
-//
-//                try {
-//                    toifaniBarchaMehmonlari.value!![1] = toifaniBarchaMehmonlariClassic[1]
-//                } catch (exception: IndexOutOfBoundsException) {
-//                    Log.i("checkbox", "array hasn't been initialized yet")
-//                }
 
                 toifaniBarchaMehmonlari.postValue(toifaniBarchaMehmonlari.value)
 

@@ -46,7 +46,7 @@
             android:ems="10"
             android:hint="wedding idni kirit"
             android:inputType="textPersonName"
-            android:text="@={viewModel.weddingId}"
+            android:text="@={viewModel.userEnteredWeddingId}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -63,6 +63,18 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/wedding_id_edit" />
+
+        <TextView
+            android:id="@+id/weddingIdText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:textIsSelectable="true"
+            android:text="@{viewModel.weddingId}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ulanish_button" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

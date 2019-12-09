@@ -41,14 +41,16 @@ object CloudFirestoreRepo {
 
     fun joinToExistingWedding(
         username: String,
-        weddingId: String,
+        weddingIdArg: String,
         connetedClickListener: ConnectedClickListener
     ) {
         this.username = username
 
-        weddingsCollection.document(weddingId).update("members", FieldValue.arrayUnion(username))
+        weddingsCollection.document(weddingIdArg)
+            .update("members", FieldValue.arrayUnion(username))
             .addOnSuccessListener {
-                connetedClickListener.onConnect(weddingId)
+                connetedClickListener.onConnect(weddingId = weddingIdArg)
+                weddingId = weddingIdArg
             }
             .addOnFailureListener {
             }
@@ -57,7 +59,7 @@ object CloudFirestoreRepo {
 //    fun getGuestsOfMember(username: String, toifa: String): ArrayList<Mehmon> {
 //
 //        val mehmons = ArrayList<Mehmon>()
-//        weddingsCollection.document(weddingId).collection("$username-$toifa")
+//        weddingsCollection.document(userEnteredWeddingId).collection("$username-$toifa")
 //            .addSnapshotListener { querySnapshot, firebaseFirestoreException ->
 //                Log.i("hjht", "listener triggered")
 //

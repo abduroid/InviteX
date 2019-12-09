@@ -8,6 +8,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.abduqodirov.invitex.R
+import androidx.lifecycle.Observer
 import com.abduqodirov.invitex.database.MehmonDatabase
 import com.abduqodirov.invitex.database.MehmonDatabaseDao
 import com.abduqodirov.invitex.databinding.FragmentSynchronizeBinding
@@ -40,6 +41,10 @@ class SynchronizeFragment : Fragment() {
         val viewModel =
             ViewModelProviders.of(this, viewModelFactory)
                 .get(SynchronizeFragmentViewModel::class.java)
+
+        viewModel.weddingId.observe(this@SynchronizeFragment, Observer {
+            binding.weddingIdText.text = it
+        })
 
         binding.viewModel = viewModel
 

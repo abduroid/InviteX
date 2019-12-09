@@ -14,6 +14,7 @@ class SynchronizeFragmentViewModel(val database: MehmonDatabaseDao, application:
     AndroidViewModel(application) {
 
     val username = MutableLiveData<String>()
+    val userEnteredWeddingId = MutableLiveData<String>()
     val weddingId = MutableLiveData<String>()
 
     private var viewModelJob = Job()
@@ -21,6 +22,12 @@ class SynchronizeFragmentViewModel(val database: MehmonDatabaseDao, application:
 
     private var sharedPreferences =
         application.getSharedPreferences("keyim", Context.MODE_PRIVATE)
+
+    init {
+        if(CloudFirestoreRepo.isFirestoreConnected()) {
+            weddingId.value = CloudFirestoreRepo.weddingId
+        }
+    }
 
     fun createNewFirestoreDatabase() {
 
@@ -30,33 +37,39 @@ class SynchronizeFragmentViewModel(val database: MehmonDatabaseDao, application:
 
         CloudFirestoreRepo.initializeFireStore(cardAmount, username.value!!,
             ConnectedClickListener {
-                persistString("weddingId", it)
+                weddingId.value = it
+                weddingId.postValue(weddingId.value)
+                persistString("userEnteredWeddingId", it)
                 persistString("username", username.value!!)
 
                 uploadOfflineMehmons()
             })
-
-        with(sharedPreferences.edit()) {
-            putStringSet("members", mutableSetOf(username.value!!))
-            commit()
-        }
-        //TODO weddingId docga listener qo'yib yangi member qo'shilganda uni sharedprefdagi membersga qo'shish
+//
+//        with(sharedPreferences.edit()) {
+//            putStringSet("members", mutableSetOf(username.value!!))
+//            commit()
+//        }
+        //TODO userEnteredWeddingId docga listener qo'yib yangi member qo'shilganda uni sharedprefdagi membersga qo'shish
         //TODO va singlelistviewmodelda uni mehmonlariga listener qo'yish
 
     }
 
     fun joinToExistingDatabase() {
 
-        CloudFirestoreRepo.joinToExistingWedding(username.value!!, weddingId.value!!,
+        CloudFirestoreRepo.joinToExistingWedding(username.value!!, userEnteredWeddingId.value!!,
             ConnectedClickListener {
+                Log.i("tek", "Callback ishga tushdi")
+
+                persistString("userEnteredWeddingId", userEnteredWeddingId.value!!)
+                persistString("username", username.value!!)
+
                 uploadOfflineMehmons()
             })
-        persistString("weddingId", weddingId.value!!)
-        persistString("username", username.value!!)
 
     }
 
     private fun uploadOfflineMehmons() {
+        Log.i("tek", "Offline mehmonlarni jo'nataman hozir")
         coroutineScope.launch {
             withContext(Dispatchers.IO) {
                 //TODO uyoqda band bo'lgan IDlarga bu mehmonlarni overwrite qivoryapti
