@@ -48,6 +48,14 @@ class SynchronizeFragment : Fragment() {
 
         binding.viewModel = viewModel
 
+        viewModel.uploadingProgress.observe(this@SynchronizeFragment, Observer {
+
+            binding.uploadGuests.max = viewModel.sizeToBeUploaded
+            binding.uploadGuests.progress = it
+
+        })
+
+
         //TODO yangi yaratish disabled bo'lishi kerak agar wedding Id sharedprefda bor bo'lsa
 
         return binding.root

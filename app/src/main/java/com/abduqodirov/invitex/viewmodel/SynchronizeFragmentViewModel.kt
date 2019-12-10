@@ -17,6 +17,9 @@ class SynchronizeFragmentViewModel(val database: MehmonDatabaseDao, application:
     val userEnteredWeddingId = MutableLiveData<String>()
     val weddingId = MutableLiveData<String>()
 
+    val uploadingProgress = MutableLiveData<Int>()
+    var sizeToBeUploaded = 0
+
     private var viewModelJob = Job()
     private val coroutineScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
@@ -24,7 +27,7 @@ class SynchronizeFragmentViewModel(val database: MehmonDatabaseDao, application:
         application.getSharedPreferences("keyim", Context.MODE_PRIVATE)
 
     init {
-        if(CloudFirestoreRepo.isFirestoreConnected()) {
+        if (CloudFirestoreRepo.isFirestoreConnected()) {
             weddingId.value = CloudFirestoreRepo.weddingId
         }
     }
@@ -33,7 +36,7 @@ class SynchronizeFragmentViewModel(val database: MehmonDatabaseDao, application:
 
         val cardAmount = sharedPreferences.getInt("cardAmount", 0)
 
-            //TODO username va wedding id ni trim qilib spacelarni olib tashlash kk
+        //TODO username va wedding id ni trim qilib spacelarni olib tashlash kk
 
         CloudFirestoreRepo.initializeFireStore(cardAmount, username.value!!,
             ConnectedClickListener {
@@ -56,6 +59,7 @@ class SynchronizeFragmentViewModel(val database: MehmonDatabaseDao, application:
 
     fun joinToExistingDatabase() {
 
+        //TODO Ulanganda WeddingIdni textViewga chiqarib qo'ymayapti faqat qayta kirganda initdan qo'yilyabdi
         CloudFirestoreRepo.joinToExistingWedding(username.value!!, userEnteredWeddingId.value!!,
             ConnectedClickListener {
                 Log.i("tek", "Callback ishga tushdi")
@@ -68,14 +72,21 @@ class SynchronizeFragmentViewModel(val database: MehmonDatabaseDao, application:
 
     }
 
+
     private fun uploadOfflineMehmons() {
         Log.i("tek", "Offline mehmonlarni jo'nataman hozir")
         coroutineScope.launch {
             withContext(Dispatchers.IO) {
                 //TODO uyoqda band bo'lgan IDlarga bu mehmonlarni overwrite qivoryapti
                 val listMehmon = database.getAllMehmons()
+
+                sizeToBeUploaded = listMehmon.size - 1
+
+
                 for (item in listMehmon) {
                     CloudFirestoreRepo.sendToFireStore(item)
+                        //TODO Progressss tugamasidan back bosilsa dialog ko'rsatish kerak
+                    uploadingProgress.postValue(listMehmon.indexOf(item))
                 }
             }
         }

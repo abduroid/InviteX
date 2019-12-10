@@ -68,13 +68,22 @@
             android:id="@+id/weddingIdText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:textIsSelectable="true"
             android:text="@{viewModel.weddingId}"
+            android:textIsSelectable="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ulanish_button" />
+            app:layout_constraintTop_toBottomOf="@+id/yangi_button" />
+
+        <ProgressBar
+            android:id="@+id/uploadGuests"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintBottom_toTopOf="@+id/weddingIdText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/yangi_button" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
