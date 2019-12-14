@@ -10,7 +10,7 @@ import com.abduqodirov.invitex.firestore.ConnectedClickListener
 import com.abduqodirov.invitex.firestore.CloudFirestoreRepo
 import kotlinx.coroutines.*
 
-class SynchronizeFragmentViewModel(val database: MehmonDatabaseDao, application: Application) :
+class SynchronizeViewModel(val database: MehmonDatabaseDao, application: Application) :
     AndroidViewModel(application) {
 
     val username = MutableLiveData<String>()

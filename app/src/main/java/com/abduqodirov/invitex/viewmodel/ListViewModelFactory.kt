@@ -16,8 +16,8 @@ class ListViewModelFactory(
             return SingleListViewModel(dataSource, application) as T
         }
 
-        if (modelClass.isAssignableFrom(SynchronizeFragmentViewModel::class.java)) {
-            return SynchronizeFragmentViewModel(dataSource, application) as T
+        if (modelClass.isAssignableFrom(SynchronizeViewModel::class.java)) {
+            return SynchronizeViewModel(dataSource, application) as T
         }
 
         throw IllegalArgumentException("Unknown ViewModel class")

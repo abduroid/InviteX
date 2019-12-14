@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".fragments.SynchronizeIntroFragment">
+
+    <!-- TODO: Update the design -->
+
+
+    <!-- TODO usernameni birinchi belgisi raqam bo'lmasligi kerak-->
+    <!--        <Button-->
+    <!--            android:id="@+id/yangi_button"-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:onClick="@{() -> viewModel.createNewFirestoreDatabase()}"-->
+    <!--            android:text="Yaratish"-->
+    <!--            app:layout_constraintEnd_toEndOf="@+id/username_Edit"-->
+    <!--            app:layout_constraintTop_toTopOf="@+id/ulanish_button" />-->
+
+    <!--        <Button-->
+    <!--            android:id="@+id/ulanish_button"-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_marginTop="32dp"-->
+    <!--            android:onClick="@{() -> viewModel.joinToExistingDatabase()}"-->
+    <!--            android:text="Ulanish"-->
+    <!--            app:layout_constraintStart_toStartOf="@+id/username_Edit"-->
+    <!--            app:layout_constraintTop_toBottomOf="@+id/username_Edit" />-->
+
+    <!--        <EditText-->
+    <!--            android:id="@+id/wedding_id_edit"-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_marginTop="32dp"-->
+    <!--            android:ems="10"-->
+    <!--            android:hint="wedding idni kirit"-->
+    <!--            android:inputType="textPersonName"-->
+    <!--            android:text="@={viewModel.userEnteredWeddingId}"-->
+    <!--            app:layout_constraintEnd_toEndOf="parent"-->
+    <!--            app:layout_constraintStart_toStartOf="parent"-->
+    <!--            app:layout_constraintTop_toTopOf="parent" />-->
+
+    <!--        <EditText-->
+    <!--            android:id="@+id/username_Edit"-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_marginTop="32dp"-->
+    <!--            android:ems="10"-->
+    <!--            android:hint="Username kirit"-->
+    <!--            android:inputType="textPersonName"-->
+    <!--            android:text="@={viewModel.username}"-->
+    <!--            app:layout_constraintEnd_toEndOf="parent"-->
+    <!--            app:layout_constraintStart_toStartOf="parent"-->
+    <!--            app:layout_constraintTop_toBottomOf="@+id/wedding_id_edit" />-->
+
+    <!--        <TextView-->
+    <!--            android:id="@+id/weddingIdText"-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:text="@{viewModel.weddingId}"-->
+    <!--            android:textIsSelectable="true"-->
+    <!--            app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--            app:layout_constraintEnd_toEndOf="parent"-->
+    <!--            app:layout_constraintStart_toStartOf="parent"-->
+    <!--            app:layout_constraintTop_toBottomOf="@+id/yangi_button" />-->
+
+    <!--        <ProgressBar-->
+    <!--            android:id="@+id/uploadGuests"-->
+    <!--            style="?android:attr/progressBarStyleHorizontal"-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            app:layout_constraintBottom_toTopOf="@+id/weddingIdText"-->
+    <!--            app:layout_constraintEnd_toEndOf="parent"-->
+    <!--            app:layout_constraintStart_toStartOf="parent"-->
+    <!--            app:layout_constraintTop_toBottomOf="@+id/yangi_button" />-->
+
+    <ImageView
+        android:id="@+id/imageView2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@mipmap/ic_launcher"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
+        android:layout_marginTop="100dp" />
+
+    <Button
+        android:id="@+id/joinButton"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Join" />
+
+    <Button
+        android:id="@+id/createButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/joinButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Create" />
+
+    <TextView
+        android:id="@+id/whatAreTheseTextLink"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:text="What are these even?"
+        android:textColor="#0750FF" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

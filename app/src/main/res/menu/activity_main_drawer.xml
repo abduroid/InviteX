@@ -8,7 +8,7 @@
             android:id="@+id/collectionListFragment"
             android:title="Bosh sahifa" />
         <item
-            android:id="@+id/synchronizeFragment"
+            android:id="@+id/synchronize"
             android:title="Synchronize" />
     </group>
 

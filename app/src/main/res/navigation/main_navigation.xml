@@ -21,11 +21,6 @@
         android:label="fragment_sign_up"
         tools:layout="@layout/fragment_sign_up" />
     <fragment
-        android:id="@+id/synchronizeFragment"
-        android:name="com.abduqodirov.invitex.fragments.SynchronizeFragment"
-        android:label="fragment_synchronize"
-        tools:layout="@layout/fragment_synchronize" />
-    <fragment
         android:id="@+id/congratsFragment"
         android:name="com.abduqodirov.invitex.fragments.CongratsFragment"
         android:label="fragment_congrats"
@@ -34,6 +29,60 @@
             android:id="@+id/action_congratsFragment_to_collectionListFragment"
             app:destination="@id/collectionListFragment" />
     </fragment>
+    <navigation
+        android:id="@+id/synchronize"
+        app:startDestination="@id/dashboardFragment" >
+        <fragment
+            android:id="@+id/synchronizeIntroFragment"
+            android:name="com.abduqodirov.invitex.fragments.SynchronizeIntroFragment"
+            android:label="fragment_synchronize"
+            tools:layout="@layout/fragment_intro_synchronize" >
+            <action
+                android:id="@+id/action_synchronizeIntroFragment_to_joinFragment"
+                app:destination="@id/joinFragment" />
+            <action
+                android:id="@+id/action_synchronizeIntroFragment_to_createWeddingFragment"
+                app:destination="@id/createWeddingFragment" />
+        </fragment>
+        <fragment
+            android:id="@+id/joinFragment"
+            android:name="com.abduqodirov.invitex.fragments.JoinFragment"
+            android:label="fragment_join"
+            tools:layout="@layout/fragment_join" >
+            <action
+                android:id="@+id/action_joinFragment_to_uploadingProgressFragment"
+                app:destination="@id/uploadingProgressFragment" />
+        </fragment>
+        <fragment
+            android:id="@+id/createWeddingFragment"
+            android:name="com.abduqodirov.invitex.fragments.CreateWeddingFragment"
+            android:label="CreateWeddingFragment" >
+            <action
+                android:id="@+id/action_createWeddingFragment_to_uploadingProgressFragment"
+                app:destination="@id/uploadingProgressFragment" />
+        </fragment>
+        <fragment
+            android:id="@+id/uploadingProgressFragment"
+            android:name="com.abduqodirov.invitex.fragments.UploadingProgressFragment"
+            android:label="UploadingProgressFragment" >
+            <action
+                android:id="@+id/action_uploadingProgressFragment_to_synchronizeIntroFragment"
+                app:destination="@id/synchronizeIntroFragment" />
+            <action
+                android:id="@+id/action_uploadingProgressFragment_to_dashboardFragment"
+                app:destination="@id/dashboardFragment"
+                app:popUpTo="@+id/collectionListFragment" />
+        </fragment>
+        <fragment
+            android:id="@+id/dashboardFragment"
+            android:name="com.abduqodirov.invitex.DashboardFragment"
+            android:label="fragment_dashboard"
+            tools:layout="@layout/fragment_dashboard" >
+            <action
+                android:id="@+id/action_dashboardFragment_to_synchronizeIntroFragment"
+                app:destination="@id/synchronizeIntroFragment" />
+        </fragment>
+    </navigation>
     <!--    <fragment-->
 <!--        android:id="@+id/mainListFragment"-->
 <!--        android:name="com.abduqodirov.invitex.mainList.MainListsFragment"-->

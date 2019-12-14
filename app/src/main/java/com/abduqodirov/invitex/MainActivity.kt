@@ -1,8 +1,6 @@
 package com.abduqodirov.invitex
 
 import android.os.Bundle
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.snackbar.Snackbar
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
@@ -31,7 +29,7 @@ class MainActivity : AppCompatActivity() {
         // menu should be considered as top level destinations.
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.collectionListFragment, R.id.synchronizeFragment, R.id.signUpFragment
+                R.id.collectionListFragment, R.id.synchronizeIntroFragment, R.id.signUpFragment
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
