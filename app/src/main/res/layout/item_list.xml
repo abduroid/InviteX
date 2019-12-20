@@ -7,7 +7,7 @@
 
         <variable
             name="mehmon"
-            type="com.abduqodirov.invitex.database.Mehmon" />
+            type="com.abduqodirov.invitex.models.Mehmon" />
 
         <variable
             name="aytilganClickListener"
@@ -17,25 +17,26 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        app:collapsed="@{mehmon}">
 
         <TextView
-            android:id="@+id/textView2"
-            android:layout_width="wrap_content"
+            android:id="@+id/mehmonIsmText"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
             android:text="@{mehmon.ism}"
             android:textSize="30sp"
             app:chizilgan="@{mehmon}"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.045"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/isAytilganCheckBox"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Mamaqosim" />
 
         <CheckBox
-            android:id="@+id/checkBox"
+            android:id="@+id/isAytilganCheckBox"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_marginTop="16dp"
@@ -46,5 +47,19 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:id="@+id/seperater"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
+            android:background="#007C7C7C"
+            android:backgroundTint="#00000000"
+            android:foreground="#000000"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/isAytilganCheckBox"
+            app:layout_constraintStart_toStartOf="@+id/mehmonIsmText"
+            app:layout_constraintTop_toBottomOf="@+id/mehmonIsmText" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

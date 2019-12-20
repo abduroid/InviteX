@@ -38,9 +38,11 @@ class CreateWeddingFragment : Fragment() {
         }
 
         binding.createButton.setOnClickListener {
+
+            viewModel.createNewFirestoreDatabase()
+
             this.findNavController()
                 .navigate(CreateWeddingFragmentDirections.actionCreateWeddingFragmentToUploadingProgressFragment())
-            viewModel.createNewFirestoreDatabase()
         }
 
         binding.viewModel = viewModel

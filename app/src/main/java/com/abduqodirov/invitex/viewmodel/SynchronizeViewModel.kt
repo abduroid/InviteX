@@ -13,9 +13,9 @@ import kotlinx.coroutines.*
 class SynchronizeViewModel(val database: MehmonDatabaseDao, application: Application) :
     AndroidViewModel(application) {
 
+    private val JUST_FINISHED_VALUE: Int = 18
     val username = MutableLiveData<String>()
     val userEnteredWeddingId = MutableLiveData<String>()
-    val weddingId = MutableLiveData<String>()
 
     val uploadingProgress = MutableLiveData<Int>()
     var sizeToBeUploaded = 0
@@ -26,11 +26,6 @@ class SynchronizeViewModel(val database: MehmonDatabaseDao, application: Applica
     private var sharedPreferences =
         application.getSharedPreferences("keyim", Context.MODE_PRIVATE)
 
-    init {
-        if (CloudFirestoreRepo.isFirestoreConnected()) {
-            weddingId.value = CloudFirestoreRepo.weddingId
-        }
-    }
 
     fun createNewFirestoreDatabase() {
 
@@ -40,18 +35,12 @@ class SynchronizeViewModel(val database: MehmonDatabaseDao, application: Applica
 
         CloudFirestoreRepo.initializeFireStore(cardAmount, username.value!!,
             ConnectedClickListener {
-                weddingId.value = it
-                weddingId.postValue(weddingId.value)
                 persistString("userEnteredWeddingId", it)
                 persistString("username", username.value!!)
 
                 uploadOfflineMehmons()
             })
-//
-//        with(sharedPreferences.edit()) {
-//            putStringSet("members", mutableSetOf(username.value!!))
-//            commit()
-//        }
+
         //TODO userEnteredWeddingId docga listener qo'yib yangi member qo'shilganda uni sharedprefdagi membersga qo'shish
         //TODO va singlelistviewmodelda uni mehmonlariga listener qo'yish
 
@@ -82,12 +71,15 @@ class SynchronizeViewModel(val database: MehmonDatabaseDao, application: Applica
 
                 sizeToBeUploaded = listMehmon.size - 1
 
-
                 for (item in listMehmon) {
                     CloudFirestoreRepo.sendToFireStore(item)
-                        //TODO Progressss tugamasidan back bosilsa dialog ko'rsatish kerak
+                    //TODO Progressss tugamasidan back bosilsa dialog ko'rsatish kerak
                     uploadingProgress.postValue(listMehmon.indexOf(item))
                 }
+
+                sizeToBeUploaded = JUST_FINISHED_VALUE
+                uploadingProgress.postValue(JUST_FINISHED_VALUE)
+
             }
         }
 

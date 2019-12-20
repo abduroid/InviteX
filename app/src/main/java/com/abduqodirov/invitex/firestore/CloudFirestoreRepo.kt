@@ -1,9 +1,8 @@
 package com.abduqodirov.invitex.firestore
 
-import com.abduqodirov.invitex.database.Mehmon
+import com.abduqodirov.invitex.models.Mehmon
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.MetadataChanges
 
 object CloudFirestoreRepo {
 

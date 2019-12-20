@@ -6,14 +6,17 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.abduqodirov.invitex.database.Mehmon
+import com.abduqodirov.invitex.models.Mehmon
 import com.abduqodirov.invitex.databinding.ItemListBinding
 import com.abduqodirov.invitex.databinding.MemberNameHeaderBinding
 
 private const val ITEM_VIEW_TYPE_MEMBER_NAME = 0
 private const val ITEM_VIEW_TYPE_ITEM = 1
 
-class SingleListRecycleViewAdapter(val aytilganClickListener: AytilganClickListener) :
+class SingleListRecycleViewAdapter(
+    val aytilganClickListener: AytilganClickListener,
+    val holdMenuClickListener: HoldMenuClickListener
+) :
     ListAdapter<Mehmon,
             RecyclerView.ViewHolder>(MehmonDiffCallBack()) {
 
@@ -37,11 +40,16 @@ class SingleListRecycleViewAdapter(val aytilganClickListener: AytilganClickListe
         val mehmonItem = getItem(position)
         when (holder) {
             is MehmonViewHolder -> {
-                holder.bind(item = mehmonItem, aytilganClickListener = aytilganClickListener)
+                holder.bind(
+                    item = mehmonItem,
+                    aytilganClickListener = aytilganClickListener,
+                    holdMenuClickListener = holdMenuClickListener
+                        //TODO fuck element va memberlarga qo'yilmasligi kerak
+                )
             }
 
             is MemberNameViewHolder -> {
-                holder.bind(memberName = mehmonItem.ism)
+                holder.bind(member = mehmonItem)
             }
         }
 
@@ -50,8 +58,8 @@ class SingleListRecycleViewAdapter(val aytilganClickListener: AytilganClickListe
     class MemberNameViewHolder private constructor(val binding: MemberNameHeaderBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(memberName: String) {
-            binding.memberNameText.text = memberName
+        fun bind(member: Mehmon) {
+            binding.member = member
             binding.executePendingBindings()
         }
 
@@ -68,13 +76,24 @@ class SingleListRecycleViewAdapter(val aytilganClickListener: AytilganClickListe
     class MehmonViewHolder private constructor(val binding: ItemListBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: Mehmon, aytilganClickListener: AytilganClickListener) {
+        fun bind(
+            item: Mehmon,
+            aytilganClickListener: AytilganClickListener,
+            holdMenuClickListener: HoldMenuClickListener
+        ) {
             if (item.ism == "fuck") {
                 binding.root.visibility = View.INVISIBLE
             } else {
                 binding.root.visibility = View.VISIBLE
                 //TODO databinding variable for height and other appearance attributes
             }
+
+            binding.root.setOnLongClickListener {
+                holdMenuClickListener.onHold(mehmon = item)
+
+                return@setOnLongClickListener true
+            }
+
             //TODO watch about how RecyclerView re-use views again
             binding.mehmon = item
             binding.aytilganClickListener = aytilganClickListener
@@ -108,3 +127,11 @@ class MehmonDiffCallBack : DiffUtil.ItemCallback<Mehmon>() {
 class AytilganClickListener(val aytilganClickListener: (mehmon: Mehmon) -> Unit) {
     fun onChecked(mehmon: Mehmon) = aytilganClickListener(mehmon)
 }
+
+class HoldMenuClickListener(val holdMenuClickListener: (mehmon: Mehmon) -> Unit) {
+    fun onHold(mehmon: Mehmon) = holdMenuClickListener(mehmon)
+}
+
+//class CollapseClickListener(val collapsClickListener: (member: Mehmon) -> Unit) {
+//    fun onCollapsed(member: Mehmon) = collapsClickListener(member)
+//}

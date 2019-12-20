@@ -1,32 +1,44 @@
 package com.abduqodirov.invitex.fragments
 
 import android.content.Context
+import android.content.DialogInterface
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
+import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.abduqodirov.invitex.R
-import com.abduqodirov.invitex.viewmodel.ListViewModelFactory
 import com.abduqodirov.invitex.adapters.AytilganClickListener
+import com.abduqodirov.invitex.adapters.HoldMenuClickListener
 import com.abduqodirov.invitex.adapters.SingleListRecycleViewAdapter
-import com.abduqodirov.invitex.database.Mehmon
 import com.abduqodirov.invitex.database.MehmonDatabase
 import com.abduqodirov.invitex.databinding.FragmentSingleListBinding
 import com.abduqodirov.invitex.firestore.CloudFirestoreRepo
+import com.abduqodirov.invitex.models.Mehmon
+import com.abduqodirov.invitex.viewmodel.ListViewModelFactory
 import com.abduqodirov.invitex.viewmodel.SingleListViewModel
+import kotlinx.android.synthetic.main.fragment_single_list.*
+
 
 private const val ARG_OBJECT = "object"
 
+private const val DIALOG_TASK_EDIT = 0
+private const val DIALOG_TASK_DELETE = 1
+private const val DIALOG_TASK_MOVE = 2
+
 class SingleListFragment : Fragment() {
+
 
     private var toifa: String = ""
     private lateinit var binding: FragmentSingleListBinding
+
+    private lateinit var viewModel: SingleListViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,7 +59,7 @@ class SingleListFragment : Fragment() {
             application = application
         )
 
-        val viewModel =
+        viewModel =
             ViewModelProviders.of(this, viewModelFactory).get(
                 SingleListViewModel::class.java
             )
@@ -57,9 +69,19 @@ class SingleListFragment : Fragment() {
         binding.viewModel = viewModel
 
         val mAdapter =
-            SingleListRecycleViewAdapter(AytilganClickListener { mehmon ->
-                viewModel.onMehmonChecked(mehmon)
-            })
+            SingleListRecycleViewAdapter(
+                AytilganClickListener { mehmon ->
+                    viewModel.onMehmonChecked(mehmon)
+                },
+                HoldMenuClickListener {
+
+                    showMainTasksDialog(it)
+
+                }
+//                CollapseClickListener {member ->
+//                    viewModel.onCollapseMember(member)
+//                }
+            )
 
         binding.mainList.apply {
             adapter = mAdapter
@@ -70,18 +92,21 @@ class SingleListFragment : Fragment() {
             toifa = getString(ARG_OBJECT)
         }
 
-        val mezbon = listOf(Mehmon(ism = CloudFirestoreRepo.username, toifa = "mezbon"))
+        val mezbon = listOf(
+            Mehmon(
+                ism = CloudFirestoreRepo.username,
+                toifa = "mezbon"
+            )
+        )
 
-        viewModel.localSpecificMehmons(toifa)
+        viewModel.loadSpecificMehmons(toifa)
 
         viewModel.observeOfItsGuests(toifa)
 
 
         viewModel.loadMembers()
 
-        viewModel.memberlar.observe(this, Observer {
-
-            Log.i("tek", "Fragmentga kelgan memberlar: ${it}")
+        viewModel.memberlarWithoutLocal.observe(this, Observer {
 
             for (member in it) {
                 viewModel.loadFirestoreMehmons(toifa = toifa, username = member)
@@ -92,10 +117,23 @@ class SingleListFragment : Fragment() {
 
         viewModel.localGuests
             .observe(this@SingleListFragment, Observer { localGuests ->
+
+                if (localGuests.isNotEmpty()) {
+                    list_empty_text.visibility = View.GONE
+                    main_list.visibility = View.VISIBLE
+                }
+
                 mAdapter.submitList(mezbon + localGuests)
+
+                main_list.smoothScrollToPosition(0)
 
                 viewModel.toifaniBarchaMehmonlari
                     .observe(this@SingleListFragment, Observer { remoteGuests ->
+
+                        if (remoteGuests[0].isNotEmpty()) {
+                            list_empty_text.visibility = View.GONE
+                            main_list.visibility = View.VISIBLE
+                        }
 
                         val firestoreMehmonlar = ArrayList<Mehmon>()
 
@@ -108,19 +146,54 @@ class SingleListFragment : Fragment() {
                     })
             })
 
-
-
+//        viewModel.getLocalSearchResults("idam").observe(this@SingleListFragment, Observer {
+//            Log.i("searchm", "${it.distinct()}")
+//        })
 
         binding.lifecycleOwner = this
 
         return binding.root
     }
 
+    private fun showMainTasksDialog(mehmon: Mehmon) {
+        val builder = AlertDialog.Builder(activity!!)
+
+        builder.setTitle(getString(R.string.select_task_with_mehmon))
+        builder.setItems(R.array.tasks_with_mehmon,
+            DialogInterface.OnClickListener { dialog, which ->
+                when (which) {
+                    DIALOG_TASK_DELETE -> viewModel.deleteMehmon(mehmon)
+                    DIALOG_TASK_EDIT -> showRenameDialog(mehmon)
+                }
+            })
+
+        builder.show()
+
+    }
+
+    private fun showRenameDialog(mehmon: Mehmon) {
+        val builder = AlertDialog.Builder(activity!!)
+
+        val editText = EditText(activity)
+
+        builder.setView(editText)
+        builder.setTitle(getString(R.string.enter_new_name))
+
+        builder.setPositiveButton(getString(R.string.done), DialogInterface.OnClickListener { dialog, which ->
+            viewModel.renameMehmon(mehmon, editText.text.toString())
+        })
+
+        builder.setNegativeButton(getString(R.string.cancel), DialogInterface.OnClickListener { dialog, which ->
+//            dialog.dismiss()
+        })
+
+        builder.show()
+    }
+
     override fun onResume() {
         super.onResume()
 //        Hides keyboard if previously opened page had keyboard
         hideKeyboard(view)
-
     }
 
     private fun hideKeyboard(view: View?) {

@@ -13,6 +13,12 @@
         <item>ishxona</item>
     </array>
 
+    <array name="tasks_with_mehmon">
+        <item>@string/edit</item>
+        <item>@string/delete</item>
+        <item>@string/move</item>
+    </array>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_main">MainActivity</string>
@@ -29,4 +35,12 @@
     <string name="menu_tools">Tools</string>
     <string name="menu_share">Share</string>
     <string name="menu_send">Send</string>
+    <string name="emptylist">Ro\'yxat bo\'sh</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
+    <string name="move">Move</string>
+    <string name="select_task_with_mehmon">Nima qilmoqchisiz</string>
+    <string name="enter_new_name">Yangi nom kiriting</string>
+    <string name="done">TAYYOR</string>
+    <string name="cancel">Cancel</string>
 </resources>

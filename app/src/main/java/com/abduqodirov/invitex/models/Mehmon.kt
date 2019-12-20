@@ -1,4 +1,4 @@
-package com.abduqodirov.invitex.database
+package com.abduqodirov.invitex.models
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
@@ -11,7 +11,7 @@ data class Mehmon(
     var mehmonId: Long = 0L,
 
     @ColumnInfo(name = "caller")
-    val caller: String = "local",
+    var caller: String = "local",
 
     @ColumnInfo(name = "ism")
     val ism: String = "",
@@ -20,5 +20,8 @@ data class Mehmon(
     val toifa: String = "",
 
     @ColumnInfo(name = "isAytilgan")
-    var isAytilgan: Boolean = false
+    var isAytilgan: Boolean = false,
+
+    @ColumnInfo(name = "isCollapsed")
+    var isCollapsed: Boolean = false
 )

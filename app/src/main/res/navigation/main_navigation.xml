@@ -81,7 +81,15 @@
             <action
                 android:id="@+id/action_dashboardFragment_to_synchronizeIntroFragment"
                 app:destination="@id/synchronizeIntroFragment" />
+            <action
+                android:id="@+id/action_dashboardFragment_to_showCodeFragment"
+                app:destination="@id/showCodeFragment" />
         </fragment>
+        <fragment
+            android:id="@+id/showCodeFragment"
+            android:name="com.abduqodirov.invitex.ShowCodeFragment"
+            android:label="fragment_show_code"
+            tools:layout="@layout/fragment_show_code" />
     </navigation>
     <!--    <fragment-->
 <!--        android:id="@+id/mainListFragment"-->

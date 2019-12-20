@@ -47,9 +47,12 @@ class JoinFragment : Fragment() {
         binding.viewModel = viewModel
 
         binding.joinButton.setOnClickListener {
+
             viewModel.joinToExistingDatabase()
+
             this.findNavController()
                 .navigate(JoinFragmentDirections.actionJoinFragmentToUploadingProgressFragment())
+
         }
 
         return binding.root

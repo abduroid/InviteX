@@ -6,12 +6,13 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.abduqodirov.invitex.MembersManager
-import com.abduqodirov.invitex.database.Mehmon
+import com.abduqodirov.invitex.models.Mehmon
 import com.abduqodirov.invitex.database.MehmonDatabaseDao
 import com.abduqodirov.invitex.firestore.CloudFirestoreRepo
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.MetadataChanges
 import kotlinx.coroutines.*
+import kotlin.collections.ArrayList
 
 class SingleListViewModel(
     val database: MehmonDatabaseDao,
@@ -21,6 +22,7 @@ class SingleListViewModel(
     private var viewModelJob = Job()
     private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
+    val memberlarWithoutLocal = MutableLiveData<List<String>>()
     val memberlar = MutableLiveData<List<String>>()
 
     val ism = MutableLiveData<String>()
@@ -30,8 +32,9 @@ class SingleListViewModel(
     var toifaniBarchaMehmonlariClassic = arrayListOf<ArrayList<Mehmon>>(arrayListOf<Mehmon>())
     var localGuests: LiveData<List<Mehmon>> = MutableLiveData<List<Mehmon>>()
 
-//    val sharedPreferences = application.getSharedPreferences("keyim", Context.MODE_PRIVATE)
+    var localSearchResults = MutableLiveData<ArrayList<Mehmon>>()
 
+    var lastItem = MutableLiveData<Mehmon>()
 
     init {
 
@@ -59,14 +62,17 @@ class SingleListViewModel(
                         val weddingDoc: Map<String, Any> = querySnapshot.data!!.toSortedMap()
                         val members: List<String> = weddingDoc["members"] as List<String>
 
+                        memberlar.postValue(members)
+
                         val listWithoutLocalUsername =
                             members.filter { member -> !member.equals(CloudFirestoreRepo.username) }
 
-                        memberlar.postValue(listWithoutLocalUsername)
+                        memberlarWithoutLocal.postValue(listWithoutLocalUsername)
 
                         for (membercha in listWithoutLocalUsername) {
                             if (!MembersManager.members.containsKey(membercha)) {
-                                MembersManager.members[membercha] = listWithoutLocalUsername.indexOf(membercha)
+                                MembersManager.members[membercha] =
+                                    listWithoutLocalUsername.indexOf(membercha)
                             }
                         }
 
@@ -82,7 +88,7 @@ class SingleListViewModel(
 
     }
 
-    fun localSpecificMehmons(toifa: String): LiveData<List<Mehmon>> {
+    fun loadSpecificMehmons(toifa: String): LiveData<List<Mehmon>> {
 
         this.toifa.value = toifa
         localGuests = database.getSpecificMehmons(toifa)
@@ -127,9 +133,6 @@ class SingleListViewModel(
         toifa: String
     ): MutableLiveData<ArrayList<Mehmon>> {
 
-
-        Log.i("tek", "GetGuests men hozir $username bilan ishlayman")
-
         val mehmons = MutableLiveData<ArrayList<Mehmon>>()
 
         val db = FirebaseFirestore.getInstance()
@@ -143,7 +146,10 @@ class SingleListViewModel(
                     return@addSnapshotListener
                 }
                 val mehmonlar = ArrayList<Mehmon>()
-                val mezbon = Mehmon(ism = username, toifa = "mezbon")
+                val mezbon = Mehmon(
+                    ism = username,
+                    toifa = "mezbon"
+                )
                 mehmonlar.add(mezbon)
 
 
@@ -177,7 +183,7 @@ class SingleListViewModel(
                         isAytilgan = false
                     )
 
-                    for(i in 1..kerakliArray) {
+                    for (i in 1..kerakliArray) {
                         toifaniBarchaMehmonlariClassic.add(arrayListOf<Mehmon>())
                     }
                     if (toifaniBarchaMehmonlariClassic[kerakliArray].contains(checkedVariant) ||
@@ -193,10 +199,11 @@ class SingleListViewModel(
                 }
 
 
-                for(i in 1..kerakliArray){
-                    toifaniBarchaMehmonlari.value!!.add(arrayListOf<Mehmon>())
+                for (i in 1..kerakliArray) {
+                    toifaniBarchaMehmonlari.value!!.add(arrayListOf())
                 }
-                toifaniBarchaMehmonlari.value!![kerakliArray] = toifaniBarchaMehmonlariClassic[kerakliArray]
+                toifaniBarchaMehmonlari.value!![kerakliArray] =
+                    toifaniBarchaMehmonlariClassic[kerakliArray]
 
                 toifaniBarchaMehmonlari.postValue(toifaniBarchaMehmonlari.value)
 
@@ -207,18 +214,41 @@ class SingleListViewModel(
         return mehmons
     }
 
+//    @RequiresApi(Build.VERSION_CODES.N)
+//    fun getRemoteSearchResults(searchQuery: String): LiveData<List<Mehmon>> {
+//
+//        var result = MutableLiveData<List<Mehmon>>()
+//
+//        result.value = toifaniBarchaMehmonlari.value!!.stream().filter { t: Mehmon -> t.ism == searchQuery }.collect(Collectors.toList())
+//
+//        return result
+//    }
+
+    fun loadLocalSearchResults(searchQuery: String) {
+
+        database.getSearchResults(searchQuery)
+
+    }
 
     //TODO firestoredan kelgan mehmonlarni ro'yxati uchun boshqa alohida mutablelivedata<list> yaratish
     //TODO ularni boshiga memberNameheader elementi qo'shish, usernameni ko'rsatish. Va recyclerviewda uni formatlab ko'rsatish va spinner qo'yish
 
 
-    fun addLocalMehmon() {
+    fun addNewMehmon() {
 
         //TODO odamga o'xshab norm ism yozmasa qo'shmaslik kerak.
-        val mehmonForLocal = Mehmon(ism = ism.value!!, toifa = toifa.value!!)
+        val mehmonForLocal = Mehmon(
+            ism = ism.value!!,
+            toifa = toifa.value!!
+        )
         var mehmonForFirestore: Mehmon
         uiScope.launch {
             val localMehmonId = insertToRoom(mehmonForLocal)
+
+            withContext(Dispatchers.IO) {
+                lastItem.postValue(database.get(localMehmonId))
+            }
+
 
             mehmonForFirestore = Mehmon(
                 mehmonId = localMehmonId,
@@ -243,13 +273,98 @@ class SingleListViewModel(
             //Anyway changes its previous state.
             isAytilgan = !oldMehmon.isAytilgan
         )
-        if (oldMehmon.caller == "local") {
+        if (isMehmonLocal(newMehmon)) {
             uiScope.launch {
                 updateOnRoom(newMehmon)
             }
         }
-            CloudFirestoreRepo.updateItemChecked(newMehmon)
+        CloudFirestoreRepo.updateItemChecked(newMehmon)
 
+    }
+
+//    fun onCollapseMember(member: Mehmon) {
+//        if (member.ism == "local" || member.ism == CloudFirestoreRepo.username) {
+//            uiScope.launch {
+//                withContext(Dispatchers.IO) {
+//                    for (mehmon in database.getAllMehmons()) {
+//                        if (mehmon.caller == member.ism) {
+//                            updateOnRoom(collapseChanger(mehmon = mehmon))
+//                        }
+//                    }
+//                }
+//            }
+//        } else {
+//            val kerakliArray = MembersManager.members.getValue(member.ism)
+//
+//            for (mehmon in toifaniBarchaMehmonlariClassic[kerakliArray]) {
+//
+//                if (mehmon.toifa != "mezbon") {
+//
+//                    val indexOfMehmon = toifaniBarchaMehmonlariClassic[kerakliArray].indexOf(mehmon)
+//
+//                    toifaniBarchaMehmonlariClassic[kerakliArray][indexOfMehmon] =
+//                        collapseChanger(mehmon)
+//
+//                    Log.i("jing", "It's firestore mehmon collapsed or expanded")
+//                    toifaniBarchaMehmonlari.value!![kerakliArray] =
+//                        toifaniBarchaMehmonlariClassic[kerakliArray]
+//
+//                    toifaniBarchaMehmonlari.value = toifaniBarchaMehmonlari.value
+//                }
+//            }
+//        }
+//    }
+//
+//    private fun collapseChanger(mehmon: Mehmon) : Mehmon {
+//
+//        val workerMehmon = Mehmon(
+//            mehmonId = mehmon.mehmonId,
+//            ism = mehmon.ism,
+//            toifa = mehmon.toifa,
+//            caller = mehmon.caller,
+//            isAytilgan = mehmon.isAytilgan,
+//            isCollapsed = !mehmon.isCollapsed
+//        )
+//
+//        return workerMehmon
+//    }
+
+    fun renameMehmon(oldMehmon: Mehmon, newIsm: String) {
+
+        val newMehmon = Mehmon(
+            ism = newIsm,
+            mehmonId = oldMehmon.mehmonId,
+            isCollapsed = oldMehmon.isCollapsed,
+            isAytilgan = oldMehmon.isAytilgan,
+            toifa = oldMehmon.toifa,
+            caller = oldMehmon.caller
+        )
+
+
+        if (isMehmonLocal(newMehmon)) {
+            uiScope.launch {
+                updateOnRoom(newMehmon)
+            }
+        }
+
+    }
+
+    fun deleteMehmon(mehmon: Mehmon) {
+        if (isMehmonLocal(mehmon)) {
+            uiScope.launch {
+                deleteFromRoom(mehmon)
+            }
+        }
+    }
+
+    private fun isMehmonLocal(mehmon: Mehmon): Boolean {
+        return mehmon.caller == "local" || mehmon.caller == CloudFirestoreRepo.username
+    }
+
+    private suspend fun deleteFromRoom(mehmon: Mehmon) {
+        withContext(Dispatchers.IO) {
+            database.deleteMehmon(mehmon)
+        }
     }
 
     private suspend fun insertToRoom(mehmon: Mehmon): Long {
@@ -263,6 +378,7 @@ class SingleListViewModel(
     private suspend fun updateOnRoom(mehmon: Mehmon) {
         withContext(Dispatchers.IO) {
             database.update(mehmon)
+            Log.i("jinga", "updated")
         }
     }
 }
