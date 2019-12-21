@@ -16,7 +16,6 @@
     <array name="tasks_with_mehmon">
         <item>@string/edit</item>
         <item>@string/delete</item>
-        <item>@string/move</item>
     </array>
 
     <!-- TODO: Remove or change this placeholder text -->
@@ -43,4 +42,5 @@
     <string name="enter_new_name">Yangi nom kiriting</string>
     <string name="done">TAYYOR</string>
     <string name="cancel">Cancel</string>
+    <string name="there_is_no_internet">There is no internet</string>
 </resources>

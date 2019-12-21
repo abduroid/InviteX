@@ -3,6 +3,7 @@ package com.abduqodirov.invitex.firestore
 import com.abduqodirov.invitex.models.Mehmon
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import java.lang.StringBuilder
 
 object CloudFirestoreRepo {
 
@@ -97,25 +98,70 @@ object CloudFirestoreRepo {
 
     }
 
-    fun updateItemChecked(mehmon: Mehmon) {
+//    fun updateItemChecked(mehmon: Mehmon) {
+//
+//        if (isFirestoreConnected()) {
+//
+//            weddingsCollection.document(weddingId).collection("${getCallerOfMehmon(mehmon)}-${mehmon.toifa}")
+//                .document("${mehmon.mehmonId}")
+//                .update("aytilgan", mehmon.isAytilgan)
+//        }
+//    }
+
+    fun updateItemOnFirestore(mehmon: Mehmon, completedClickListener: CompletedClickListener) {
 
         if (isFirestoreConnected()) {
-            val mehmonUsername: String = if (mehmon.caller == "local") {
-                username
-            } else {
-                mehmon.caller
-            }
-
-            weddingsCollection.document(weddingId).collection("${mehmonUsername}-${mehmon.toifa}")
+            weddingsCollection.document(weddingId)
+                .collection("${getCallerOfMehmon(mehmon)}-${mehmon.toifa}")
                 .document("${mehmon.mehmonId}")
-                .update("aytilgan", mehmon.isAytilgan)
+                .set(mehmon)
+                .addOnSuccessListener {
+                    completedClickListener.onFinished(isSuccessful = true, result = "Result is $it")
+                }
+                .addOnFailureListener {
+                    completedClickListener.onFinished(
+                        isSuccessful = false,
+                        result = "Exception: $it"
+                    )
+                }
         }
     }
 
     fun isFirestoreConnected() = weddingId.isNotEmpty() && username.isNotEmpty()
 
+    fun deleteMehmonFromFirestore(mehmon: Mehmon, completedClickListener: CompletedClickListener) {
+        if (isFirestoreConnected()) {
+            weddingsCollection.document(weddingId)
+                .collection("${getCallerOfMehmon(mehmon)}-${mehmon.toifa}")
+                .document("${mehmon.mehmonId}")
+                .delete()
+                .addOnSuccessListener {
+                    completedClickListener.onFinished(isSuccessful = true, result = "Result is $it")
+                }
+                .addOnFailureListener {
+                    completedClickListener.onFinished(
+                        isSuccessful = false,
+                        result = "Exception: $it"
+                    )
+                }
+        }
+    }
+
+    private fun getCallerOfMehmon(mehmon: Mehmon): String {
+        return if (mehmon.caller == "local") {
+            username
+        } else {
+            mehmon.caller
+        }
+    }
+
 }
 
 class ConnectedClickListener(val connectedClickListener: (weddingId: String) -> Unit) {
     fun onConnect(weddingId: String) = connectedClickListener(weddingId)
+}
+
+class CompletedClickListener(val completedClickListener: (result: String, isSuccessful: Boolean) -> Unit) {
+    fun onFinished(result: String, isSuccessful: Boolean) =
+        completedClickListener(result, isSuccessful)
 }

@@ -12,12 +12,22 @@ import androidx.navigation.fragment.findNavController
 import com.abduqodirov.invitex.R
 import com.abduqodirov.invitex.database.MehmonDatabase
 import com.abduqodirov.invitex.databinding.FragmentCreateWeddingBinding
+import com.abduqodirov.invitex.util.isInternetAvailable
 import com.abduqodirov.invitex.viewmodel.ListViewModelFactory
 import com.abduqodirov.invitex.viewmodel.SynchronizeViewModel
 
 class CreateWeddingFragment : Fragment() {
 
     private lateinit var binding: FragmentCreateWeddingBinding
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        if (!isInternetAvailable(activity!!)) {
+            this.findNavController().navigate(R.id.action_global_noInternet)
+        }
+    }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

@@ -2,6 +2,8 @@ package com.abduqodirov.invitex.fragments
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -38,6 +40,15 @@ class UploadingProgressFragment : Fragment(R.layout.fragment_progress_uploading)
                     .navigate(UploadingProgressFragmentDirections.actionUploadingProgressFragmentToDashboardFragment())
             }
         })
+
+        requireActivity().onBackPressedDispatcher.addCallback(
+            this,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    Toast.makeText(activity, "Iltimos kuting", Toast.LENGTH_SHORT).show()
+                }
+            }
+        )
 
     }
 

@@ -80,7 +80,9 @@
             tools:layout="@layout/fragment_dashboard" >
             <action
                 android:id="@+id/action_dashboardFragment_to_synchronizeIntroFragment"
-                app:destination="@id/synchronizeIntroFragment" />
+                app:destination="@id/synchronizeIntroFragment"
+                app:popUpTo="@+id/dashboardFragment"
+                app:popUpToInclusive="true" />
             <action
                 android:id="@+id/action_dashboardFragment_to_showCodeFragment"
                 app:destination="@id/showCodeFragment" />
@@ -90,6 +92,15 @@
             android:name="com.abduqodirov.invitex.ShowCodeFragment"
             android:label="fragment_show_code"
             tools:layout="@layout/fragment_show_code" />
+        <fragment
+            android:id="@+id/noInternet"
+            android:name="com.abduqodirov.invitex.NoInternet"
+            android:label="fragment_no_internet"
+            tools:layout="@layout/fragment_no_internet" />
+        <action
+            android:id="@+id/action_global_noInternet"
+            app:destination="@id/noInternet"
+            app:popUpTo="@+id/synchronizeIntroFragment" />
     </navigation>
     <!--    <fragment-->
 <!--        android:id="@+id/mainListFragment"-->

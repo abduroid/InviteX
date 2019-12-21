@@ -125,7 +125,7 @@ class SingleListFragment : Fragment() {
 
                 mAdapter.submitList(mezbon + localGuests)
 
-                main_list.smoothScrollToPosition(0)
+//                main_list.smoothScrollToPosition(0)
 
                 viewModel.toifaniBarchaMehmonlari
                     .observe(this@SingleListFragment, Observer { remoteGuests ->
@@ -175,6 +175,8 @@ class SingleListFragment : Fragment() {
         val builder = AlertDialog.Builder(activity!!)
 
         val editText = EditText(activity)
+        editText.setText(mehmon.ism)
+        editText.requestFocus()
 
         builder.setView(editText)
         builder.setTitle(getString(R.string.enter_new_name))
@@ -188,6 +190,8 @@ class SingleListFragment : Fragment() {
         })
 
         builder.show()
+
+
     }
 
     override fun onResume() {

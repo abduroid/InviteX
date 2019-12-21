@@ -9,6 +9,7 @@ import com.abduqodirov.invitex.MembersManager
 import com.abduqodirov.invitex.models.Mehmon
 import com.abduqodirov.invitex.database.MehmonDatabaseDao
 import com.abduqodirov.invitex.firestore.CloudFirestoreRepo
+import com.abduqodirov.invitex.firestore.CompletedClickListener
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.MetadataChanges
 import kotlinx.coroutines.*
@@ -278,7 +279,14 @@ class SingleListViewModel(
                 updateOnRoom(newMehmon)
             }
         }
-        CloudFirestoreRepo.updateItemChecked(newMehmon)
+
+        CloudFirestoreRepo.updateItemOnFirestore(
+            newMehmon,
+            CompletedClickListener { result, isSuccessful ->
+
+                //TODO callback for completed updating
+
+            })
 
     }
 
@@ -347,6 +355,13 @@ class SingleListViewModel(
             }
         }
 
+        CloudFirestoreRepo.updateItemOnFirestore(
+            newMehmon,
+            CompletedClickListener { result, isSuccessful ->
+
+            })
+
+        //TODO snackbar chiqarish kerak
     }
 
     fun deleteMehmon(mehmon: Mehmon) {
@@ -355,6 +370,13 @@ class SingleListViewModel(
                 deleteFromRoom(mehmon)
             }
         }
+
+        CloudFirestoreRepo.deleteMehmonFromFirestore(
+            mehmon,
+            CompletedClickListener { result, isSuccessful ->
+
+            })
+        //TODO snackbar chiqarish kerak
     }
 
     private fun isMehmonLocal(mehmon: Mehmon): Boolean {
