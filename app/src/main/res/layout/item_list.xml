@@ -61,5 +61,6 @@
             app:layout_constraintEnd_toEndOf="@id/isAytilganCheckBox"
             app:layout_constraintStart_toStartOf="@+id/mehmonIsmText"
             app:layout_constraintTop_toBottomOf="@+id/mehmonIsmText" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

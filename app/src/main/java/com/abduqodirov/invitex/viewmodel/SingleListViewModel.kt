@@ -1,7 +1,9 @@
 package com.abduqodirov.invitex.viewmodel
 
 import android.app.Application
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -13,6 +15,7 @@ import com.abduqodirov.invitex.firestore.CompletedClickListener
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.MetadataChanges
 import kotlinx.coroutines.*
+import java.lang.reflect.Member
 import kotlin.collections.ArrayList
 
 class SingleListViewModel(
@@ -29,7 +32,7 @@ class SingleListViewModel(
     val ism = MutableLiveData<String>()
     val toifa = MutableLiveData<String>()
 
-    val toifaniBarchaMehmonlari = MutableLiveData<ArrayList<ArrayList<Mehmon>>>()
+    val toifaniBarchaMehmonlari = MutableLiveData<ArrayList<List<Mehmon>>>()
     var toifaniBarchaMehmonlariClassic = arrayListOf<ArrayList<Mehmon>>(arrayListOf<Mehmon>())
     var localGuests: LiveData<List<Mehmon>> = MutableLiveData<List<Mehmon>>()
 
@@ -112,9 +115,19 @@ class SingleListViewModel(
                     }
 
                     for (document in querySnapshot!!) {
-                        val mehmon = document.toObject(Mehmon::class.java)
+                        val rawMehmon = document.toObject(Mehmon::class.java)
+
+                        val collapsingAdaptedMehmon = Mehmon(
+                            ism = rawMehmon.ism,
+                            toifa = rawMehmon.toifa,
+                            caller = rawMehmon.caller,
+                            mehmonId = rawMehmon.mehmonId,
+                            isCollapsed = MembersManager.membersCollapsed.get(CloudFirestoreRepo.username) ?: false,
+                            isAytilgan = rawMehmon.isAytilgan
+                        )
+
                         uiScope.launch {
-                            updateOnRoom(mehmon)
+                            updateOnRoom(collapsingAdaptedMehmon)
                         }
                     }
 
@@ -123,12 +136,14 @@ class SingleListViewModel(
 
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     fun loadFirestoreMehmons(toifa: String, username: String) {
         if (CloudFirestoreRepo.isFirestoreConnected()) {
             getGuestsOfMember(username = username, toifa = toifa)
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     private fun getGuestsOfMember(
         username: String,
         toifa: String
@@ -153,49 +168,37 @@ class SingleListViewModel(
                 )
                 mehmonlar.add(mezbon)
 
+                val kerakliArray = MembersManager.members.get(username)!! //TODO null check
+
+                toifaniBarchaMehmonlariClassic[kerakliArray].clear()
 
                 for (document in querySnapshot!!) {
-                    val mehmon = document.toObject(Mehmon::class.java)
-                    mehmonlar.add(mehmon)
+                    val rawMehmon = document.toObject(Mehmon::class.java)
+
+                    val collapseAdaptedMehmon = Mehmon(
+                        ism = rawMehmon.ism,
+                        isCollapsed = MembersManager.membersCollapsed.get(username) ?: false,
+                        caller = rawMehmon.caller,
+                        toifa = rawMehmon.toifa,
+                        isAytilgan = rawMehmon.isAytilgan,
+                        mehmonId = rawMehmon.mehmonId
+                    )
+
+                    mehmonlar.add(collapseAdaptedMehmon)
                 }
 
 
-                var kerakliArray: Int = 0
-
                 for (mehmon in mehmonlar) {
 
+                    Log.i("sarb", "${mehmonlar.indexOf(mehmon)}")
 
-                    kerakliArray = MembersManager.members.get(username)!! //TODO null check
 
-
-                    val checkedVariant = Mehmon(
-                        mehmonId = mehmon.mehmonId,
-                        ism = mehmon.ism,
-                        toifa = mehmon.toifa,
-                        caller = mehmon.caller,
-                        isAytilgan = true
-                    )
-
-                    val uncheckedVariant = Mehmon(
-                        mehmonId = mehmon.mehmonId,
-                        ism = mehmon.ism,
-                        toifa = mehmon.toifa,
-                        caller = mehmon.caller,
-                        isAytilgan = false
-                    )
 
                     for (i in 1..kerakliArray) {
                         toifaniBarchaMehmonlariClassic.add(arrayListOf<Mehmon>())
                     }
-                    if (toifaniBarchaMehmonlariClassic[kerakliArray].contains(checkedVariant) ||
-                        toifaniBarchaMehmonlariClassic[kerakliArray].contains(uncheckedVariant)
-                    ) {
-                        toifaniBarchaMehmonlariClassic[kerakliArray].remove(checkedVariant)
-                        toifaniBarchaMehmonlariClassic[kerakliArray].remove(uncheckedVariant)
-                        toifaniBarchaMehmonlariClassic[kerakliArray].add(mehmon)
-                    } else {
-                        toifaniBarchaMehmonlariClassic[kerakliArray].add(mehmon)
-                    }
+                    toifaniBarchaMehmonlariClassic[kerakliArray].removeIf { t: Mehmon -> t.mehmonId == mehmon.mehmonId }
+                    toifaniBarchaMehmonlariClassic[kerakliArray].add(mehmon)
 
                 }
 
@@ -238,9 +241,14 @@ class SingleListViewModel(
     fun addNewMehmon() {
 
         //TODO odamga o'xshab norm ism yozmasa qo'shmaslik kerak.
+
+        val isCollapsed: Boolean =
+            MembersManager.membersCollapsed.get(CloudFirestoreRepo.username) ?: false
+
         val mehmonForLocal = Mehmon(
             ism = ism.value!!,
-            toifa = toifa.value!!
+            toifa = toifa.value!!,
+            isCollapsed = isCollapsed
         )
         var mehmonForFirestore: Mehmon
         uiScope.launch {
@@ -290,52 +298,51 @@ class SingleListViewModel(
 
     }
 
-//    fun onCollapseMember(member: Mehmon) {
-//        if (member.ism == "local" || member.ism == CloudFirestoreRepo.username) {
-//            uiScope.launch {
-//                withContext(Dispatchers.IO) {
-//                    for (mehmon in database.getAllMehmons()) {
-//                        if (mehmon.caller == member.ism) {
-//                            updateOnRoom(collapseChanger(mehmon = mehmon))
-//                        }
-//                    }
-//                }
-//            }
-//        } else {
-//            val kerakliArray = MembersManager.members.getValue(member.ism)
-//
-//            for (mehmon in toifaniBarchaMehmonlariClassic[kerakliArray]) {
-//
-//                if (mehmon.toifa != "mezbon") {
-//
-//                    val indexOfMehmon = toifaniBarchaMehmonlariClassic[kerakliArray].indexOf(mehmon)
-//
-//                    toifaniBarchaMehmonlariClassic[kerakliArray][indexOfMehmon] =
-//                        collapseChanger(mehmon)
-//
-//                    Log.i("jing", "It's firestore mehmon collapsed or expanded")
-//                    toifaniBarchaMehmonlari.value!![kerakliArray] =
-//                        toifaniBarchaMehmonlariClassic[kerakliArray]
-//
-//                    toifaniBarchaMehmonlari.value = toifaniBarchaMehmonlari.value
-//                }
-//            }
-//        }
-//    }
-//
-//    private fun collapseChanger(mehmon: Mehmon) : Mehmon {
-//
-//        val workerMehmon = Mehmon(
-//            mehmonId = mehmon.mehmonId,
-//            ism = mehmon.ism,
-//            toifa = mehmon.toifa,
-//            caller = mehmon.caller,
-//            isAytilgan = mehmon.isAytilgan,
-//            isCollapsed = !mehmon.isCollapsed
-//        )
-//
-//        return workerMehmon
-//    }
+    fun onCollapseMember(member: Mehmon, isCollapsed: Boolean) {
+
+        if (member.ism == "local" || member.ism == CloudFirestoreRepo.username) {
+            uiScope.launch {
+                withContext(Dispatchers.IO) {
+                    for (mehmon in database.getAllMehmons()) {
+                        updateOnRoom(collapseChanger(mehmon = mehmon, isCollapsed = isCollapsed))
+                    }
+                }
+            }
+        } else {
+            val kerakliArray = MembersManager.members.getValue(member.ism)
+
+            for (mehmon in toifaniBarchaMehmonlariClassic[kerakliArray]) {
+
+                if (mehmon.toifa != "mezbon") {
+
+                    val indexOfMehmon = toifaniBarchaMehmonlariClassic[kerakliArray].indexOf(mehmon)
+
+                    toifaniBarchaMehmonlariClassic[kerakliArray][indexOfMehmon] =
+                        collapseChanger(mehmon, isCollapsed)
+
+                    Log.i("jing", "It's firestore mehmon collapsed or expanded")
+                    toifaniBarchaMehmonlari.value!![kerakliArray] =
+                        toifaniBarchaMehmonlariClassic[kerakliArray]
+
+                    toifaniBarchaMehmonlari.value = toifaniBarchaMehmonlari.value
+                }
+            }
+        }
+    }
+
+    private fun collapseChanger(mehmon: Mehmon, isCollapsed: Boolean): Mehmon {
+
+        val workerMehmon = Mehmon(
+            mehmonId = mehmon.mehmonId,
+            ism = mehmon.ism,
+            toifa = mehmon.toifa,
+            caller = mehmon.caller,
+            isAytilgan = mehmon.isAytilgan,
+            isCollapsed = isCollapsed
+        )
+
+        return workerMehmon
+    }
 
     fun renameMehmon(oldMehmon: Mehmon, newIsm: String) {
 
@@ -371,6 +378,7 @@ class SingleListViewModel(
             }
         }
 
+        //TODO firestoreda mehmon o'chib ketkanda Roomdan o'chmayabdi.
         CloudFirestoreRepo.deleteMehmonFromFirestore(
             mehmon,
             CompletedClickListener { result, isSuccessful ->

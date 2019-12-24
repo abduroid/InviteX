@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.marginBottom
 import androidx.databinding.BindingAdapter
 import com.abduqodirov.invitex.models.Mehmon
 import kotlin.math.roundToInt
@@ -26,12 +27,12 @@ fun TextView.setChizilgan(mehmon: Mehmon?) {
 fun ConstraintLayout.setCollapsed(mehmon: Mehmon?) {
     mehmon?.let {
 
-
         maxHeight = if (mehmon.isCollapsed) {
             0
         } else {
             dpToPx(80, context)
         }
+
     }
 }
 

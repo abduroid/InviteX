@@ -3,6 +3,7 @@ package com.abduqodirov.invitex.fragments
 import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,8 +14,10 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.abduqodirov.invitex.MembersManager
 import com.abduqodirov.invitex.R
 import com.abduqodirov.invitex.adapters.AytilganClickListener
+import com.abduqodirov.invitex.adapters.CollapseClickListener
 import com.abduqodirov.invitex.adapters.HoldMenuClickListener
 import com.abduqodirov.invitex.adapters.SingleListRecycleViewAdapter
 import com.abduqodirov.invitex.database.MehmonDatabase
@@ -77,10 +80,28 @@ class SingleListFragment : Fragment() {
 
                     showMainTasksDialog(it)
 
+                },
+                CollapseClickListener { member, isCollapsed ->
+
+                    //TODO Avvalgi yozilgan collapsed va yangi kelgan eventdagi boolean bir xil bo'lmasa keyin bajaradi. Aks xolda shunchaki icon almashadi
+                    if (!MembersManager.membersCollapsed.containsKey(member.ism)) {
+                        viewModel.onCollapseMember(member = member, isCollapsed = isCollapsed)
+                    } else if (MembersManager.membersCollapsed.getValue(member.ism) != isCollapsed) {
+                        viewModel.onCollapseMember(member = member, isCollapsed = isCollapsed)
+                    }
+
+                    if (!MembersManager.membersCollapsed.containsKey(member.ism)) {
+                        Log.i("naza", "Oldin yozilmagan ekan yozyabman")
+                        MembersManager.membersCollapsed.put(member.ism, isCollapsed)
+                        Log.i("naza", "${MembersManager.membersCollapsed[member.ism]}")
+                    } else {
+                        Log.i("naza", "Bor ekan yangilayabman")
+                        MembersManager.membersCollapsed[member.ism] = isCollapsed
+                        Log.i("naza", "${MembersManager.membersCollapsed[member.ism]}")
+                    }
+
+
                 }
-//                CollapseClickListener {member ->
-//                    viewModel.onCollapseMember(member)
-//                }
             )
 
         binding.mainList.apply {
@@ -124,6 +145,7 @@ class SingleListFragment : Fragment() {
                 }
 
                 mAdapter.submitList(mezbon + localGuests)
+
 
 //                main_list.smoothScrollToPosition(0)
 
@@ -181,16 +203,19 @@ class SingleListFragment : Fragment() {
         builder.setView(editText)
         builder.setTitle(getString(R.string.enter_new_name))
 
-        builder.setPositiveButton(getString(R.string.done), DialogInterface.OnClickListener { dialog, which ->
-            viewModel.renameMehmon(mehmon, editText.text.toString())
-        })
+        builder.setPositiveButton(
+            getString(R.string.done),
+            DialogInterface.OnClickListener { dialog, which ->
+                viewModel.renameMehmon(mehmon, editText.text.toString())
+            })
 
-        builder.setNegativeButton(getString(R.string.cancel), DialogInterface.OnClickListener { dialog, which ->
-//            dialog.dismiss()
-        })
+        builder.setNegativeButton(
+            getString(R.string.cancel),
+            DialogInterface.OnClickListener { dialog, which ->
+                //            dialog.dismiss()
+            })
 
         builder.show()
-
 
     }
 

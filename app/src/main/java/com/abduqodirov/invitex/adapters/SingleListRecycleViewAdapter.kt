@@ -1,5 +1,6 @@
 package com.abduqodirov.invitex.adapters
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,7 +16,8 @@ private const val ITEM_VIEW_TYPE_ITEM = 1
 
 class SingleListRecycleViewAdapter(
     val aytilganClickListener: AytilganClickListener,
-    val holdMenuClickListener: HoldMenuClickListener
+    val holdMenuClickListener: HoldMenuClickListener,
+    val collapseClickListener: CollapseClickListener
 ) :
     ListAdapter<Mehmon,
             RecyclerView.ViewHolder>(MehmonDiffCallBack()) {
@@ -49,7 +51,7 @@ class SingleListRecycleViewAdapter(
             }
 
             is MemberNameViewHolder -> {
-                holder.bind(member = mehmonItem)
+                holder.bind(member = mehmonItem, collapseClickListener = collapseClickListener)
             }
         }
 
@@ -58,8 +60,13 @@ class SingleListRecycleViewAdapter(
     class MemberNameViewHolder private constructor(val binding: MemberNameHeaderBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(member: Mehmon) {
+        fun bind(member: Mehmon, collapseClickListener: CollapseClickListener) {
             binding.member = member
+            binding.expandCollapseButton.setOnCheckedChangeListener { buttonView, isCollapsed ->
+                Log.i("sev", "Checkbox triggered and its value: $isCollapsed")
+                collapseClickListener.onCollapsed(member = member, isCollapsed = isCollapsed)
+            }
+
             binding.executePendingBindings()
         }
 
@@ -88,7 +95,7 @@ class SingleListRecycleViewAdapter(
                 //TODO databinding variable for height and other appearance attributes
             }
 
-            binding.root.setOnLongClickListener {
+            binding.mehmonIsmText.setOnLongClickListener {
                 holdMenuClickListener.onHold(mehmon = item)
 
                 return@setOnLongClickListener true
@@ -132,6 +139,6 @@ class HoldMenuClickListener(val holdMenuClickListener: (mehmon: Mehmon) -> Unit)
     fun onHold(mehmon: Mehmon) = holdMenuClickListener(mehmon)
 }
 
-//class CollapseClickListener(val collapsClickListener: (member: Mehmon) -> Unit) {
-//    fun onCollapsed(member: Mehmon) = collapsClickListener(member)
-//}
+class CollapseClickListener(val collapsClickListener: (member: Mehmon, isCollapsed: Boolean) -> Unit) {
+    fun onCollapsed(member: Mehmon, isCollapsed: Boolean) = collapsClickListener(member, isCollapsed)
+}
