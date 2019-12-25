@@ -32,6 +32,8 @@ class MainActivity : AppCompatActivity() {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+
+        PACKAGE_NAME = application.applicationContext.packageName
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -43,5 +45,9 @@ class MainActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.mynavhostfragment)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
+    }
+
+    companion object {
+        var PACKAGE_NAME: String = ""
     }
 }

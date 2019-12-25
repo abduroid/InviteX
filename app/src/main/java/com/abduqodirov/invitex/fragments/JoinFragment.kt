@@ -60,6 +60,11 @@ class JoinFragment : Fragment() {
 
         }
 
+        val fragment = HelpFragment()
+
+        binding.getQrHelpTextLink.setOnClickListener {
+            fragment.show(activity!!.supportFragmentManager, getString(R.string.where_i_can_get_code_text))
+        }
         return binding.root
     }
 

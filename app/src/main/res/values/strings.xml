@@ -43,4 +43,22 @@
     <string name="done">TAYYOR</string>
     <string name="cancel">Cancel</string>
     <string name="there_is_no_internet">There is no internet</string>
+    <string name="search">Izlash</string>
+
+    <!--Help textlar -->
+    <string name="what_are_these_even_link">What are these even</string>
+
+    <string name="what_are_these_even_text">Agar birinchi blah blah blah blah blah blah blah blah
+        blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah
+        blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah
+        blah blah blah blah blah blah</string>
+
+    <string name="where_i_can_get_code_link">Where I can get code</string>
+    <string name="where_i_can_get_code_text">Create code blah blah blah blah blah blah blah blah blah
+        blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah
+        blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah
+        blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah
+        blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah
+        blah blah blah
+    </string>
 </resources>

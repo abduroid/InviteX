@@ -12,6 +12,8 @@ class SynchronizeIntroFragment : Fragment(R.layout.fragment_intro_synchronize) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val fragment = HelpFragment()
+
         createButton.setOnClickListener {
             this.findNavController()
                 .navigate(SynchronizeIntroFragmentDirections.actionSynchronizeIntroFragmentToCreateWeddingFragment())
@@ -20,6 +22,10 @@ class SynchronizeIntroFragment : Fragment(R.layout.fragment_intro_synchronize) {
         joinButton.setOnClickListener {
             this.findNavController()
                 .navigate(SynchronizeIntroFragmentDirections.actionSynchronizeIntroFragmentToJoinFragment())
+        }
+
+        whatAreTheseTextLink.setOnClickListener {
+            fragment.show(activity!!.supportFragmentManager, getString(R.string.what_are_these_even_text))
         }
     }
 
