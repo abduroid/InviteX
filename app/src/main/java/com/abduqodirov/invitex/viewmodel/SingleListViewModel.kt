@@ -15,7 +15,6 @@ import com.abduqodirov.invitex.firestore.CompletedClickListener
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.MetadataChanges
 import kotlinx.coroutines.*
-import java.lang.reflect.Member
 import kotlin.collections.ArrayList
 
 class SingleListViewModel(
@@ -26,8 +25,7 @@ class SingleListViewModel(
     private var viewModelJob = Job()
     private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
-    val memberlarWithoutLocal = MutableLiveData<List<String>>()
-    val memberlar = MutableLiveData<List<String>>()
+    val localFirstMembers = MutableLiveData<List<String>>()
 
     val ism = MutableLiveData<String>()
     val toifa = MutableLiveData<String>()
@@ -66,17 +64,21 @@ class SingleListViewModel(
                         val weddingDoc: Map<String, Any> = querySnapshot.data!!.toSortedMap()
                         val members: List<String> = weddingDoc["members"] as List<String>
 
-                        memberlar.postValue(members)
-
                         val listWithoutLocalUsername =
                             members.filter { member -> !member.equals(CloudFirestoreRepo.username) }
 
-                        memberlarWithoutLocal.postValue(listWithoutLocalUsername)
+                        //TODO duplicate code
+                        val localMezbon = listOf(CloudFirestoreRepo.username)
 
-                        for (membercha in listWithoutLocalUsername) {
+
+                        val localFirstMembersClassic = localMezbon + listWithoutLocalUsername
+
+                        localFirstMembers.postValue(localFirstMembersClassic)
+
+                        for (membercha in localFirstMembersClassic) {
                             if (!MembersManager.members.containsKey(membercha)) {
                                 MembersManager.members[membercha] =
-                                    listWithoutLocalUsername.indexOf(membercha)
+                                    localFirstMembersClassic.indexOf(membercha)
                             }
                         }
 
@@ -99,6 +101,10 @@ class SingleListViewModel(
 
         return database.getSpecificMehmons(toifa)
 
+    }
+
+    fun setToifa(toifa: String) {
+        this.toifa.value = toifa
     }
 
     fun observeOfItsGuests(toifa: String) {
@@ -170,6 +176,11 @@ class SingleListViewModel(
 
                 val kerakliArray = MembersManager.members.get(username)!! //TODO null check
 
+                //Initializes array to avoid IndexOutOfBoundException
+                for (i in 1..kerakliArray) {
+                    toifaniBarchaMehmonlariClassic.add(arrayListOf<Mehmon>())
+                }
+
                 toifaniBarchaMehmonlariClassic[kerakliArray].clear()
 
                 for (document in querySnapshot!!) {
@@ -188,19 +199,18 @@ class SingleListViewModel(
                 }
 
 
-                for (mehmon in mehmonlar) {
+//                for (mehmon in mehmonlar) {
+//
+//                    Log.i("sarb", "${mehmonlar.indexOf(mehmon)}")
+//
+//
+//
+//                    toifaniBarchaMehmonlariClassic[kerakliArray].removeIf { t: Mehmon -> t.mehmonId == mehmon.mehmonId }
+//                    toifaniBarchaMehmonlariClassic[kerakliArray].add(mehmon)
+//
+//                }
 
-                    Log.i("sarb", "${mehmonlar.indexOf(mehmon)}")
-
-
-
-                    for (i in 1..kerakliArray) {
-                        toifaniBarchaMehmonlariClassic.add(arrayListOf<Mehmon>())
-                    }
-                    toifaniBarchaMehmonlariClassic[kerakliArray].removeIf { t: Mehmon -> t.mehmonId == mehmon.mehmonId }
-                    toifaniBarchaMehmonlariClassic[kerakliArray].add(mehmon)
-
-                }
+                toifaniBarchaMehmonlariClassic[kerakliArray] = mehmonlar
 
 
                 for (i in 1..kerakliArray) {
@@ -300,15 +310,15 @@ class SingleListViewModel(
 
     fun onCollapseMember(member: Mehmon, isCollapsed: Boolean) {
 
-        if (member.ism == "local" || member.ism == CloudFirestoreRepo.username) {
-            uiScope.launch {
-                withContext(Dispatchers.IO) {
-                    for (mehmon in database.getAllMehmons()) {
-                        updateOnRoom(collapseChanger(mehmon = mehmon, isCollapsed = isCollapsed))
-                    }
-                }
-            }
-        } else {
+//        if (member.ism == "local" || member.ism == CloudFirestoreRepo.username) {
+//            uiScope.launch {
+//                withContext(Dispatchers.IO) {
+//                    for (mehmon in database.getAllMehmons()) {
+//                        updateOnRoom(collapseChanger(mehmon = mehmon, isCollapsed = isCollapsed))
+//                    }
+//                }
+//            }
+//        } else {
             val kerakliArray = MembersManager.members.getValue(member.ism)
 
             for (mehmon in toifaniBarchaMehmonlariClassic[kerakliArray]) {
@@ -327,7 +337,7 @@ class SingleListViewModel(
                     toifaniBarchaMehmonlari.value = toifaniBarchaMehmonlari.value
                 }
             }
-        }
+//        }
     }
 
     private fun collapseChanger(mehmon: Mehmon, isCollapsed: Boolean): Mehmon {

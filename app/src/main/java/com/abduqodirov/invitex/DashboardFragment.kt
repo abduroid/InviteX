@@ -51,7 +51,7 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
 
         viewModel.loadMembers()
 
-        viewModel.memberlar.observe(this, Observer {
+        viewModel.localFirstMembers.observe(this, Observer {
             mAdapter.submitList(it)
             Log.i("billie", "$it")
         })

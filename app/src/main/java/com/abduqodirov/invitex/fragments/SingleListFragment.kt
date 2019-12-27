@@ -2,6 +2,7 @@ package com.abduqodirov.invitex.fragments
 
 import android.content.Context
 import android.content.DialogInterface
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -9,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -43,6 +45,7 @@ class SingleListFragment : Fragment() {
 
     private lateinit var viewModel: SingleListViewModel
 
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -113,60 +116,65 @@ class SingleListFragment : Fragment() {
             toifa = getString(ARG_OBJECT)
         }
 
-        val mezbon = listOf(
-            Mehmon(
-                ism = CloudFirestoreRepo.username,
-                toifa = "mezbon"
-            )
-        )
 
-        viewModel.loadSpecificMehmons(toifa)
+//        viewModel.observeOfItsGuests(toifa)
 
-        viewModel.observeOfItsGuests(toifa)
+        //TODO shuni bitta viewmodel bilan hal qilish kerak yoki undanam yaxshisi Har bir tab uchun fragment ishlatmasdan performance jihatdan yaxshiroq usul topish. Little Panda akadan so'rab ko'rish
+        viewModel.setToifa(toifa = toifa)
 
 
-        viewModel.loadMembers()
+        if (CloudFirestoreRepo.isFirestoreConnected()) {
+            viewModel.loadMembers()
 
-        viewModel.memberlarWithoutLocal.observe(this, Observer {
+            viewModel.localFirstMembers.observe(this, Observer {
 
-            for (member in it) {
-                viewModel.loadFirestoreMehmons(toifa = toifa, username = member)
-            }
-
-        })
-
-
-        viewModel.localGuests
-            .observe(this@SingleListFragment, Observer { localGuests ->
-
-                if (localGuests.isNotEmpty()) {
-                    list_empty_text.visibility = View.GONE
-                    main_list.visibility = View.VISIBLE
+                for (member in it) {
+                    viewModel.loadFirestoreMehmons(toifa = toifa, username = member)
                 }
 
-                mAdapter.submitList(mezbon + localGuests)
+            })
+
+            viewModel.toifaniBarchaMehmonlari
+                .observe(this@SingleListFragment, Observer { remoteGuests ->
+
+                    //TODO har bir list ichiga element yo'q paytda element yo'qligi haqida object. Uni recyclerViewda bitta TextViewda ko'rsatib element yo'qligini bildirish
+
+                    if (remoteGuests[0].isNotEmpty()) {
+                        list_empty_text.visibility = View.GONE
+                        main_list.visibility = View.VISIBLE
+                    }
+
+                    val firestoreMehmonlar = ArrayList<Mehmon>()
+
+                    for (guests in remoteGuests) {
+                        firestoreMehmonlar.addAll(guests)
+                    }
+
+
+                    mAdapter.submitList(firestoreMehmonlar)
+                })
+
+        } else {
+            viewModel.loadSpecificMehmons(toifa)
+
+            viewModel.localGuests
+                .observe(this@SingleListFragment, Observer { localGuests ->
+
+                    if (localGuests.isNotEmpty()) {
+                        list_empty_text.visibility = View.GONE
+                        main_list.visibility = View.VISIBLE
+                    }
+
+                    mAdapter.submitList(localGuests)
+                })
+        }
+
 
 
 //                main_list.smoothScrollToPosition(0)
 
-                viewModel.toifaniBarchaMehmonlari
-                    .observe(this@SingleListFragment, Observer { remoteGuests ->
-
-                        if (remoteGuests[0].isNotEmpty()) {
-                            list_empty_text.visibility = View.GONE
-                            main_list.visibility = View.VISIBLE
-                        }
-
-                        val firestoreMehmonlar = ArrayList<Mehmon>()
-
-                        for (guests in remoteGuests) {
-                            firestoreMehmonlar.addAll(guests)
-                        }
 
 
-                        mAdapter.submitList(mezbon + localGuests + firestoreMehmonlar)
-                    })
-            })
 
 //        viewModel.getLocalSearchResults("idam").observe(this@SingleListFragment, Observer {
 //            Log.i("searchm", "${it.distinct()}")
