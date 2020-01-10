@@ -15,6 +15,7 @@ import com.abduqodirov.invitex.databinding.FragmentCreateWeddingBinding
 import com.abduqodirov.invitex.util.isInternetAvailable
 import com.abduqodirov.invitex.viewmodel.ListViewModelFactory
 import com.abduqodirov.invitex.viewmodel.SynchronizeViewModel
+import com.google.android.material.snackbar.Snackbar
 
 class CreateWeddingFragment : Fragment() {
 
@@ -49,10 +50,14 @@ class CreateWeddingFragment : Fragment() {
 
         binding.createButton.setOnClickListener {
 
-            viewModel.createNewFirestoreDatabase()
+            if (viewModel.username.value.isNullOrEmpty()) {
+                Snackbar.make(view!!, "Username kiritishingiz shart", Snackbar.LENGTH_SHORT).show()
+            } else {
+                viewModel.createNewFirestoreDatabase()
 
-            this.findNavController()
-                .navigate(CreateWeddingFragmentDirections.actionCreateWeddingFragmentToUploadingProgressFragment())
+                this.findNavController()
+                    .navigate(CreateWeddingFragmentDirections.actionCreateWeddingFragmentToUploadingProgressFragment())
+            }
         }
 
         binding.viewModel = viewModel

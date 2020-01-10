@@ -4,15 +4,20 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.abduqodirov.invitex.MembersManager
+import com.abduqodirov.invitex.R
+import com.abduqodirov.invitex.databinding.ItemEmptyListBinding
 import com.abduqodirov.invitex.models.Mehmon
 import com.abduqodirov.invitex.databinding.ItemListBinding
 import com.abduqodirov.invitex.databinding.MemberNameHeaderBinding
 
 private const val ITEM_VIEW_TYPE_MEMBER_NAME = 0
 private const val ITEM_VIEW_TYPE_ITEM = 1
+private const val ITEM_VIEW_TYPE_EMPTY = 2
 
 class SingleListRecycleViewAdapter(
     val aytilganClickListener: AytilganClickListener,
@@ -25,6 +30,7 @@ class SingleListRecycleViewAdapter(
     override fun getItemViewType(position: Int): Int {
         return when (getItem(position).toifa) {
             "mezbon" -> ITEM_VIEW_TYPE_MEMBER_NAME
+            "empty" -> ITEM_VIEW_TYPE_EMPTY
             else -> ITEM_VIEW_TYPE_ITEM
         }
     }
@@ -33,6 +39,7 @@ class SingleListRecycleViewAdapter(
         return when (viewType) {
             ITEM_VIEW_TYPE_MEMBER_NAME -> MemberNameViewHolder.from(parent)
             ITEM_VIEW_TYPE_ITEM -> MehmonViewHolder.from(parent)
+            ITEM_VIEW_TYPE_EMPTY -> TextViewViewHolder.from(parent)
             else -> throw ClassCastException("Unknown viewType $viewType")
         }
     }
@@ -46,12 +53,34 @@ class SingleListRecycleViewAdapter(
                     item = mehmonItem,
                     aytilganClickListener = aytilganClickListener,
                     holdMenuClickListener = holdMenuClickListener
-                        //TODO fuck element va memberlarga qo'yilmasligi kerak
+                    //TODO fuck element va memberlarga qo'yilmasligi kerak
                 )
             }
 
             is MemberNameViewHolder -> {
                 holder.bind(member = mehmonItem, collapseClickListener = collapseClickListener)
+            }
+
+            is TextViewViewHolder -> {
+                holder.bind(mehmonItem)
+            }
+
+        }
+
+    }
+
+    class TextViewViewHolder private constructor(val binding: ItemEmptyListBinding): RecyclerView.ViewHolder(binding.root) {
+
+        fun bind(mehmon: Mehmon) {
+            binding.mehmon = mehmon
+            binding.executePendingBindings()
+        }
+
+        companion object {
+            fun from(parent: ViewGroup): TextViewViewHolder {
+                val layoutInflater = LayoutInflater.from(parent.context)
+                val binding = ItemEmptyListBinding.inflate(layoutInflater, parent, false)
+                return TextViewViewHolder(binding)
             }
         }
 
@@ -62,6 +91,9 @@ class SingleListRecycleViewAdapter(
 
         fun bind(member: Mehmon, collapseClickListener: CollapseClickListener) {
             binding.member = member
+
+            binding.expandCollapseButton.isChecked = MembersManager.membersCollapsed.get(member.ism) ?: false
+
             binding.expandCollapseButton.setOnCheckedChangeListener { buttonView, isCollapsed ->
                 Log.i("sev", "Checkbox triggered and its value: $isCollapsed")
                 collapseClickListener.onCollapsed(member = member, isCollapsed = isCollapsed)
@@ -95,7 +127,8 @@ class SingleListRecycleViewAdapter(
                 //TODO databinding variable for height and other appearance attributes
             }
 
-            binding.mehmonIsmText.setOnLongClickListener {
+
+            binding.rootOfItem.setOnLongClickListener {
                 holdMenuClickListener.onHold(mehmon = item)
 
                 return@setOnLongClickListener true

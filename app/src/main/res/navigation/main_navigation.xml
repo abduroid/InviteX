@@ -6,25 +6,24 @@
     app:startDestination="@id/collectionListFragment">
 
     <!-- TODO animatsiyalar qo'yish-->
-        <fragment
-            android:id="@+id/collectionListFragment"
-            android:name="com.abduqodirov.invitex.fragments.CollectionListFragment"
-            android:label="CollectionsListFragment"
-            tools:layout="@layout/fragment_collection_list">
-            <action
-                android:id="@+id/action_collectionListFragment_to_congratsFragment"
-                app:destination="@id/congratsFragment" />
-        </fragment>
+    <fragment
+        android:id="@+id/collectionListFragment"
+        android:name="com.abduqodirov.invitex.fragments.CollectionListFragment"
+        android:label="Ro'yxat"
+        tools:layout="@layout/fragment_collection_list">
+        <action
+            android:id="@+id/action_collectionListFragment_to_congratsFragment"
+            app:destination="@id/congratsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/signUpFragment"
         android:name="com.abduqodirov.invitex.fragments.SignUpFragment"
-        android:label="fragment_sign_up"
+        android:label="Avtorizatsiyadan o'tish"
         tools:layout="@layout/fragment_sign_up" />
     <fragment
         android:id="@+id/congratsFragment"
         android:name="com.abduqodirov.invitex.fragments.CongratsFragment"
-        android:label="fragment_congrats"
-        tools:layout="@layout/fragment_congrats" >
+        tools:layout="@layout/fragment_congrats">
         <action
             android:id="@+id/action_congratsFragment_to_collectionListFragment"
             app:destination="@id/collectionListFragment" />
@@ -35,8 +34,8 @@
         <fragment
             android:id="@+id/synchronizeIntroFragment"
             android:name="com.abduqodirov.invitex.fragments.SynchronizeIntroFragment"
-            android:label="fragment_synchronize"
-            tools:layout="@layout/fragment_intro_synchronize" >
+            android:label="Sinxronizatsiya"
+            tools:layout="@layout/fragment_intro_synchronize">
             <action
                 android:id="@+id/action_synchronizeIntroFragment_to_joinFragment"
                 app:destination="@id/joinFragment" />
@@ -47,8 +46,8 @@
         <fragment
             android:id="@+id/joinFragment"
             android:name="com.abduqodirov.invitex.fragments.JoinFragment"
-            android:label="fragment_join"
-            tools:layout="@layout/fragment_join" >
+            android:label="Ulanish"
+            tools:layout="@layout/fragment_join">
             <action
                 android:id="@+id/action_joinFragment_to_uploadingProgressFragment"
                 app:destination="@id/uploadingProgressFragment" />
@@ -56,7 +55,7 @@
         <fragment
             android:id="@+id/createWeddingFragment"
             android:name="com.abduqodirov.invitex.fragments.CreateWeddingFragment"
-            android:label="CreateWeddingFragment" >
+            android:label="Daftar ochish">
             <action
                 android:id="@+id/action_createWeddingFragment_to_uploadingProgressFragment"
                 app:destination="@id/uploadingProgressFragment" />
@@ -66,9 +65,6 @@
             android:name="com.abduqodirov.invitex.fragments.UploadingProgressFragment"
             android:label="UploadingProgressFragment" >
             <action
-                android:id="@+id/action_uploadingProgressFragment_to_synchronizeIntroFragment"
-                app:destination="@id/synchronizeIntroFragment" />
-            <action
                 android:id="@+id/action_uploadingProgressFragment_to_dashboardFragment"
                 app:destination="@id/dashboardFragment"
                 app:popUpTo="@+id/collectionListFragment" />
@@ -76,11 +72,11 @@
         <fragment
             android:id="@+id/dashboardFragment"
             android:name="com.abduqodirov.invitex.DashboardFragment"
-            android:label="fragment_dashboard"
-            tools:layout="@layout/fragment_dashboard" >
+            android:label="To'yga aytuvchilar"
+            tools:layout="@layout/fragment_dashboard">
             <action
-                android:id="@+id/action_dashboardFragment_to_synchronizeIntroFragment"
-                app:destination="@id/synchronizeIntroFragment"
+                android:id="@+id/action_dashboardFragment_to_authFragment"
+                app:destination="@id/authFragment"
                 app:popUpTo="@+id/dashboardFragment"
                 app:popUpToInclusive="true" />
             <action
@@ -90,7 +86,7 @@
         <fragment
             android:id="@+id/showCodeFragment"
             android:name="com.abduqodirov.invitex.ShowCodeFragment"
-            android:label="fragment_show_code"
+            android:label="A'zo qo'shish"
             tools:layout="@layout/fragment_show_code" />
         <fragment
             android:id="@+id/noInternet"
@@ -101,18 +97,18 @@
             android:id="@+id/action_global_noInternet"
             app:destination="@id/noInternet"
             app:popUpTo="@+id/synchronizeIntroFragment" />
+        <fragment
+            android:id="@+id/authFragment"
+            android:name="com.abduqodirov.invitex.AuthFragment"
+            android:label="Autorizatsiyadan o'tish"
+            tools:layout="@layout/fragment_auth">
+            <action
+                android:id="@+id/action_authFragment_to_synchronizeIntroFragment"
+                app:destination="@id/synchronizeIntroFragment"
+                app:popUpTo="@id/authFragment"
+                app:popUpToInclusive="true" />
+        </fragment>
     </navigation>
-    <!--    <fragment-->
-<!--        android:id="@+id/mainListFragment"-->
-<!--        android:name="com.abduqodirov.invitex.mainList.MainListsFragment"-->
-<!--        android:label="MainListsFragment">-->
-<!--        <action-->
-<!--            android:id="@+id/action_mainListFragment_to_intro_nested_navigation2"-->
-<!--            app:destination="@id/intro_nested_navigation" />-->
-<!--    </fragment>-->
-<!--    <action-->
-<!--        android:id="@+id/action_global_mainListFragment"-->
-<!--        app:destination="@+id/mainListFragment" />-->
 
 
 </navigation>

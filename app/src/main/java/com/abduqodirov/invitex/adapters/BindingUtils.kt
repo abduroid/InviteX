@@ -1,16 +1,22 @@
 package com.abduqodirov.invitex.adapters
 
 import android.content.Context
+import android.content.res.Resources
+import android.content.res.TypedArray
 import android.graphics.Paint
-import android.text.Layout
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.view.marginBottom
+import androidx.constraintlayout.widget.Constraints
+import androidx.core.view.marginTop
 import androidx.databinding.BindingAdapter
+import com.abduqodirov.invitex.MembersManager
+import com.abduqodirov.invitex.R
 import com.abduqodirov.invitex.models.Mehmon
+import org.w3c.dom.Text
 import kotlin.math.roundToInt
 
 @BindingAdapter("chizilgan")
@@ -23,14 +29,38 @@ fun TextView.setChizilgan(mehmon: Mehmon?) {
     }
 }
 
+@BindingAdapter("memberBackground")
+fun ConstraintLayout.setMemberBackground(member: Mehmon?) {
+
+    member?.let {
+
+//        setBackgroundColor(
+//            getColorFromMembers(
+//                it.ism,
+//                resources.obtainTypedArray(R.array.mezbonColors)
+//            )
+//        )
+    }
+
+}
+
+private fun getColorFromMembers(memberIsm: String, colors: TypedArray): Int {
+
+    val indexOfMember = MembersManager.members.getValue(memberIsm)
+
+    val color: Int = colors.getColor(indexOfMember, 0)
+
+    return color
+}
+
 @BindingAdapter("collapsed")
 fun ConstraintLayout.setCollapsed(mehmon: Mehmon?) {
     mehmon?.let {
 
-        maxHeight = if (mehmon.isCollapsed) {
+        layoutParams.height = if (mehmon.isCollapsed) {
             0
         } else {
-            dpToPx(80, context)
+            Constraints.LayoutParams.WRAP_CONTENT
         }
 
     }

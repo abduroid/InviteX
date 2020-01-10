@@ -13,14 +13,13 @@
         android:id="@+id/memberSeperater"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp">
+        app:memberBackground="@{member}">
 
         <TextView
             android:id="@+id/memberNameText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
             android:text="@{member.ism}"
             android:textSize="24sp"

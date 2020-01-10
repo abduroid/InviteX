@@ -12,9 +12,12 @@ import androidx.navigation.fragment.findNavController
 import com.abduqodirov.invitex.R
 import com.abduqodirov.invitex.database.MehmonDatabase
 import com.abduqodirov.invitex.databinding.FragmentJoinBinding
+import com.abduqodirov.invitex.firestore.CloudFirestoreRepo
+import com.abduqodirov.invitex.firestore.CompletedClickListener
 import com.abduqodirov.invitex.util.isInternetAvailable
 import com.abduqodirov.invitex.viewmodel.ListViewModelFactory
 import com.abduqodirov.invitex.viewmodel.SynchronizeViewModel
+import com.google.android.material.snackbar.Snackbar
 
 class JoinFragment : Fragment() {
 
@@ -53,17 +56,30 @@ class JoinFragment : Fragment() {
 
         binding.joinButton.setOnClickListener {
 
-            viewModel.joinToExistingDatabase()
+            if (viewModel.username.value.isNullOrBlank() || viewModel.userEnteredWeddingId.value.isNullOrBlank()) {
+                Snackbar.make(view!!, "Barcha fieldlar to'ldirilishi shart", Snackbar.LENGTH_SHORT).show()
+            } else {
 
-            this.findNavController()
-                .navigate(JoinFragmentDirections.actionJoinFragmentToUploadingProgressFragment())
+                CloudFirestoreRepo.isThereWeddingWithPassedId(viewModel.userEnteredWeddingId.value!!, CompletedClickListener { _, isSuccessful ->
+                    if (isSuccessful) {
+                        viewModel.joinToExistingDatabase()
+                        this.findNavController().navigate(JoinFragmentDirections.actionJoinFragmentToUploadingProgressFragment())
+                    } else {
+                        Snackbar.make(view!!, "Bunday weddingId yo'q", Snackbar.LENGTH_SHORT).show()
+                    }
+                })
+            }
+
 
         }
 
         val fragment = HelpFragment()
 
         binding.getQrHelpTextLink.setOnClickListener {
-            fragment.show(activity!!.supportFragmentManager, getString(R.string.where_i_can_get_code_text))
+            fragment.show(
+                activity!!.supportFragmentManager,
+                getString(R.string.where_i_can_get_code_text)
+            )
         }
         return binding.root
     }

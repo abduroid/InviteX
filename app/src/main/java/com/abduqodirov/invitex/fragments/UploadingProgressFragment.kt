@@ -10,7 +10,6 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.abduqodirov.invitex.R
 import com.abduqodirov.invitex.database.MehmonDatabase
-import com.abduqodirov.invitex.firestore.CloudFirestoreRepo
 import com.abduqodirov.invitex.viewmodel.ListViewModelFactory
 import com.abduqodirov.invitex.viewmodel.SynchronizeViewModel
 import kotlinx.android.synthetic.main.fragment_progress_uploading.*
@@ -36,10 +35,11 @@ class UploadingProgressFragment : Fragment(R.layout.fragment_progress_uploading)
             uploadingProgress.progress = it
 
             if (uploadingProgress.max == it) {
-                this.findNavController()
-                    .navigate(UploadingProgressFragmentDirections.actionUploadingProgressFragmentToDashboardFragment())
+                this.findNavController().navigate(UploadingProgressFragmentDirections.actionUploadingProgressFragmentToDashboardFragment())
             }
         })
+
+        //TODO Bug bor shu yerda
 
         requireActivity().onBackPressedDispatcher.addCallback(
             this,

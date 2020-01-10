@@ -15,11 +15,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "469405114557-ekil79fkj0bq862ch7pb1vpbl8kjs42q.apps.googleusercontent.com",
+          "client_id": "469405114557-6fd7s8osbpjlvetce4k76ffmgmrula4b.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.abduqodirov.invitex",
-            "certificate_hash": "2958a98309c5594105655a0fb10e6181079a47ca"
+            "certificate_hash": "bb2351ea6059a880cdd6934b81188f409ec03bd6"
           }
         },
         {

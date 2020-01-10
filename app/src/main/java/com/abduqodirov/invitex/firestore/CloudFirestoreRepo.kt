@@ -127,6 +127,25 @@ object CloudFirestoreRepo {
         }
     }
 
+    fun isThereWeddingWithPassedId(
+        passedId: String,
+        completedClickListener: CompletedClickListener
+    ) {
+
+        weddingsCollection.document(passedId)
+            .get().addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    completedClickListener.onFinished("Qaytdi", task.result!!.exists())
+                } else {
+                    completedClickListener.onFinished("Qaytdi", false)
+                }
+
+            }
+
+
+    }
+
+
     fun isFirestoreConnected() = weddingId.isNotEmpty() && username.isNotEmpty()
 
     fun deleteMehmonFromFirestore(mehmon: Mehmon, completedClickListener: CompletedClickListener) {

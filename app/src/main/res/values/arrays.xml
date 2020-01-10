@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="mezbonColors">
+        <item>#DDA3A3A3</item>
+        <item>#B1AAFF</item>
+        <item>#DEFFCA</item>
+        <item>#FFB1B1</item>
+    </array>
+</resources>

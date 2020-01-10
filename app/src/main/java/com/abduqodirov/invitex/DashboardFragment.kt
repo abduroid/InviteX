@@ -2,7 +2,6 @@ package com.abduqodirov.invitex
 
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -22,7 +21,7 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
 
         if (!CloudFirestoreRepo.isFirestoreConnected()) {
             this.findNavController()
-                .navigate(DashboardFragmentDirections.actionDashboardFragmentToSynchronizeIntroFragment())
+                .navigate(DashboardFragmentDirections.actionDashboardFragmentToAuthFragment())
         }
 
 
@@ -49,11 +48,11 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
             adapter = mAdapter
         }
 
+
         viewModel.loadMembers()
 
         viewModel.localFirstMembers.observe(this, Observer {
             mAdapter.submitList(it)
-            Log.i("billie", "$it")
         })
 
         addNewMemberButton.setOnClickListener {

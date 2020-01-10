@@ -36,7 +36,7 @@ class SingleListViewModel(
 
     var localSearchResults = MutableLiveData<ArrayList<Mehmon>>()
 
-    var lastItem = MutableLiveData<Mehmon>()
+    var isLastItemLocal = MutableLiveData<Boolean>()
 
     init {
 
@@ -107,40 +107,41 @@ class SingleListViewModel(
         this.toifa.value = toifa
     }
 
-    fun observeOfItsGuests(toifa: String) {
-
-        if (CloudFirestoreRepo.isFirestoreConnected()) {
-            val db = FirebaseFirestore.getInstance()
-            db.collection("weddings").document(CloudFirestoreRepo.weddingId)
-                .collection("${CloudFirestoreRepo.username}-$toifa")
-                .addSnapshotListener { querySnapshot, firebaseFirestoreException ->
-
-                    if (firebaseFirestoreException != null) {
-                        Log.w("fire error", "Listen failed.", firebaseFirestoreException)
-                        return@addSnapshotListener
-                    }
-
-                    for (document in querySnapshot!!) {
-                        val rawMehmon = document.toObject(Mehmon::class.java)
-
-                        val collapsingAdaptedMehmon = Mehmon(
-                            ism = rawMehmon.ism,
-                            toifa = rawMehmon.toifa,
-                            caller = rawMehmon.caller,
-                            mehmonId = rawMehmon.mehmonId,
-                            isCollapsed = MembersManager.membersCollapsed.get(CloudFirestoreRepo.username) ?: false,
-                            isAytilgan = rawMehmon.isAytilgan
-                        )
-
-                        uiScope.launch {
-                            updateOnRoom(collapsingAdaptedMehmon)
-                        }
-                    }
-
-                }
-        }
-
-    }
+//    fun observeOfItsGuests(toifa: String) {
+//
+//        if (CloudFirestoreRepo.isFirestoreConnected()) {
+//            val db = FirebaseFirestore.getInstance()
+//            db.collection("weddings").document(CloudFirestoreRepo.weddingId)
+//                .collection("${CloudFirestoreRepo.username}-$toifa")
+//                .addSnapshotListener { querySnapshot, firebaseFirestoreException ->
+//
+//                    if (firebaseFirestoreException != null) {
+//                        Log.w("fire error", "Listen failed.", firebaseFirestoreException)
+//                        return@addSnapshotListener
+//                    }
+//
+//                    for (document in querySnapshot!!) {
+//                        val rawMehmon = document.toObject(Mehmon::class.java)
+//
+//                        val collapsingAdaptedMehmon = Mehmon(
+//                            ism = rawMehmon.ism,
+//                            toifa = rawMehmon.toifa,
+//                            caller = rawMehmon.caller,
+//                            mehmonId = rawMehmon.mehmonId,
+//                            isCollapsed = MembersManager.membersCollapsed.get(CloudFirestoreRepo.username)
+//                                ?: false,
+//                            isAytilgan = rawMehmon.isAytilgan
+//                        )
+//
+//                        uiScope.launch {
+//                            updateOnRoom(collapsingAdaptedMehmon)
+//                        }
+//                    }
+//
+//                }
+//        }
+//
+//    }
 
     @RequiresApi(Build.VERSION_CODES.N)
     fun loadFirestoreMehmons(toifa: String, username: String) {
@@ -168,20 +169,23 @@ class SingleListViewModel(
                     return@addSnapshotListener
                 }
                 val mehmonlar = ArrayList<Mehmon>()
+
                 val mezbon = Mehmon(
                     ism = username,
                     toifa = "mezbon"
                 )
-                mehmonlar.add(mezbon)
 
                 val kerakliArray = MembersManager.members.get(username)!! //TODO null check
+                val emptyMehmon = Mehmon(
+                    toifa = "empty",
+                    caller = username,
+                    ism = "Bo'mbo'sh"
+                )
 
                 //Initializes array to avoid IndexOutOfBoundException
                 for (i in 1..kerakliArray) {
                     toifaniBarchaMehmonlariClassic.add(arrayListOf<Mehmon>())
                 }
-
-                toifaniBarchaMehmonlariClassic[kerakliArray].clear()
 
                 for (document in querySnapshot!!) {
                     val rawMehmon = document.toObject(Mehmon::class.java)
@@ -196,26 +200,32 @@ class SingleListViewModel(
                     )
 
                     mehmonlar.add(collapseAdaptedMehmon)
+
+                    if (collapseAdaptedMehmon.caller == CloudFirestoreRepo.username) {
+                        isLastItemLocal.postValue(true)
+                    } else {
+                        isLastItemLocal.postValue(false)
+                    }
                 }
 
 
-//                for (mehmon in mehmonlar) {
-//
-//                    Log.i("sarb", "${mehmonlar.indexOf(mehmon)}")
-//
-//
-//
-//                    toifaniBarchaMehmonlariClassic[kerakliArray].removeIf { t: Mehmon -> t.mehmonId == mehmon.mehmonId }
-//                    toifaniBarchaMehmonlariClassic[kerakliArray].add(mehmon)
-//
-//                }
+                toifaniBarchaMehmonlariClassic[kerakliArray].clear()
+                toifaniBarchaMehmonlariClassic[kerakliArray].add(mezbon)
+                toifaniBarchaMehmonlariClassic[kerakliArray].addAll(
+                    mehmonlar.sortedWith(
+                        compareByDescending(Mehmon::mehmonId)
+                    )
+                )
 
-                toifaniBarchaMehmonlariClassic[kerakliArray] = mehmonlar
+                if (toifaniBarchaMehmonlariClassic[kerakliArray].size == 1) {
+                    toifaniBarchaMehmonlariClassic[kerakliArray].add(emptyMehmon)
+                }
 
-
+                //Initializes toifaniBarchaMehmonlari
                 for (i in 1..kerakliArray) {
                     toifaniBarchaMehmonlari.value!!.add(arrayListOf())
                 }
+
                 toifaniBarchaMehmonlari.value!![kerakliArray] =
                     toifaniBarchaMehmonlariClassic[kerakliArray]
 
@@ -263,11 +273,6 @@ class SingleListViewModel(
         var mehmonForFirestore: Mehmon
         uiScope.launch {
             val localMehmonId = insertToRoom(mehmonForLocal)
-
-            withContext(Dispatchers.IO) {
-                lastItem.postValue(database.get(localMehmonId))
-            }
-
 
             mehmonForFirestore = Mehmon(
                 mehmonId = localMehmonId,
@@ -319,24 +324,24 @@ class SingleListViewModel(
 //                }
 //            }
 //        } else {
-            val kerakliArray = MembersManager.members.getValue(member.ism)
+        val kerakliArray = MembersManager.members.getValue(member.ism)
 
-            for (mehmon in toifaniBarchaMehmonlariClassic[kerakliArray]) {
+        for (mehmon in toifaniBarchaMehmonlariClassic[kerakliArray]) {
 
-                if (mehmon.toifa != "mezbon") {
+            if (mehmon.toifa != "mezbon") {
 
-                    val indexOfMehmon = toifaniBarchaMehmonlariClassic[kerakliArray].indexOf(mehmon)
+                val indexOfMehmon = toifaniBarchaMehmonlariClassic[kerakliArray].indexOf(mehmon)
 
-                    toifaniBarchaMehmonlariClassic[kerakliArray][indexOfMehmon] =
-                        collapseChanger(mehmon, isCollapsed)
+                toifaniBarchaMehmonlariClassic[kerakliArray][indexOfMehmon] =
+                    collapseChanger(mehmon, isCollapsed)
 
-                    Log.i("jing", "It's firestore mehmon collapsed or expanded")
-                    toifaniBarchaMehmonlari.value!![kerakliArray] =
-                        toifaniBarchaMehmonlariClassic[kerakliArray]
+                Log.i("jing", "It's firestore mehmon collapsed or expanded")
+                toifaniBarchaMehmonlari.value!![kerakliArray] =
+                    toifaniBarchaMehmonlariClassic[kerakliArray]
 
-                    toifaniBarchaMehmonlari.value = toifaniBarchaMehmonlari.value
-                }
+                toifaniBarchaMehmonlari.value = toifaniBarchaMehmonlari.value
             }
+        }
 //        }
     }
 

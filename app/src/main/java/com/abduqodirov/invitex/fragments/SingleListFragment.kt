@@ -10,6 +10,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import android.widget.ImageButton
+import android.widget.Toolbar
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
@@ -28,6 +30,11 @@ import com.abduqodirov.invitex.firestore.CloudFirestoreRepo
 import com.abduqodirov.invitex.models.Mehmon
 import com.abduqodirov.invitex.viewmodel.ListViewModelFactory
 import com.abduqodirov.invitex.viewmodel.SingleListViewModel
+import com.github.amlcurran.showcaseview.ShowcaseDrawer
+import com.github.amlcurran.showcaseview.ShowcaseView
+import com.github.amlcurran.showcaseview.targets.ActionViewTarget
+import com.github.amlcurran.showcaseview.targets.ViewTarget
+import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.fragment_single_list.*
 
 
@@ -88,19 +95,11 @@ class SingleListFragment : Fragment() {
 
                     //TODO Avvalgi yozilgan collapsed va yangi kelgan eventdagi boolean bir xil bo'lmasa keyin bajaradi. Aks xolda shunchaki icon almashadi
                     if (!MembersManager.membersCollapsed.containsKey(member.ism)) {
+                        MembersManager.membersCollapsed.put(member.ism, isCollapsed)
                         viewModel.onCollapseMember(member = member, isCollapsed = isCollapsed)
                     } else if (MembersManager.membersCollapsed.getValue(member.ism) != isCollapsed) {
                         viewModel.onCollapseMember(member = member, isCollapsed = isCollapsed)
-                    }
-
-                    if (!MembersManager.membersCollapsed.containsKey(member.ism)) {
-                        Log.i("naza", "Oldin yozilmagan ekan yozyabman")
-                        MembersManager.membersCollapsed.put(member.ism, isCollapsed)
-                        Log.i("naza", "${MembersManager.membersCollapsed[member.ism]}")
-                    } else {
-                        Log.i("naza", "Bor ekan yangilayabman")
                         MembersManager.membersCollapsed[member.ism] = isCollapsed
-                        Log.i("naza", "${MembersManager.membersCollapsed[member.ism]}")
                     }
 
 
@@ -124,9 +123,10 @@ class SingleListFragment : Fragment() {
 
 
         if (CloudFirestoreRepo.isFirestoreConnected()) {
+            Log.i("katt", "Now it's connected to Firebase")
             viewModel.loadMembers()
 
-            viewModel.localFirstMembers.observe(this, Observer {
+            viewModel.localFirstMembers.observe(this@SingleListFragment, Observer {
 
                 for (member in it) {
                     viewModel.loadFirestoreMehmons(toifa = toifa, username = member)
@@ -137,12 +137,8 @@ class SingleListFragment : Fragment() {
             viewModel.toifaniBarchaMehmonlari
                 .observe(this@SingleListFragment, Observer { remoteGuests ->
 
-                    //TODO har bir list ichiga element yo'q paytda element yo'qligi haqida object. Uni recyclerViewda bitta TextViewda ko'rsatib element yo'qligini bildirish
-
-                    if (remoteGuests[0].isNotEmpty()) {
-                        list_empty_text.visibility = View.GONE
-                        main_list.visibility = View.VISIBLE
-                    }
+                    main_list.visibility = View.VISIBLE
+                    list_empty_text.visibility = View.GONE
 
                     val firestoreMehmonlar = ArrayList<Mehmon>()
 
@@ -150,11 +146,16 @@ class SingleListFragment : Fragment() {
                         firestoreMehmonlar.addAll(guests)
                     }
 
-
                     mAdapter.submitList(firestoreMehmonlar)
+
+                    //TODO boshqa userda yangilik bo'lsa ham tepaga scroll qivordi. Bo'lmaydi unaqasi, to'g'rilash kerak, faqat o'zi qo'shganda scroll bo'lisi kke
+
+
                 })
 
+
         } else {
+
             viewModel.loadSpecificMehmons(toifa)
 
             viewModel.localGuests
@@ -163,18 +164,19 @@ class SingleListFragment : Fragment() {
                     if (localGuests.isNotEmpty()) {
                         list_empty_text.visibility = View.GONE
                         main_list.visibility = View.VISIBLE
+
                     }
 
                     mAdapter.submitList(localGuests)
+
+                    //TODO onlaynga o'tkandan keyin ham shu bo'yicha davom etib, ishlayveryabdi. Observe qilaveryabdi
+                    if (!CloudFirestoreRepo.isFirestoreConnected()) {
+                        Log.i("katt", "Still working")
+                        main_list.smoothScrollToPosition(0)
+                    }
+
                 })
         }
-
-
-
-//                main_list.smoothScrollToPosition(0)
-
-
-
 
 //        viewModel.getLocalSearchResults("idam").observe(this@SingleListFragment, Observer {
 //            Log.i("searchm", "${it.distinct()}")
@@ -231,6 +233,11 @@ class SingleListFragment : Fragment() {
         super.onResume()
 //        Hides keyboard if previously opened page had keyboard
         hideKeyboard(view)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Log.i("katt", "onStop")
     }
 
     private fun hideKeyboard(view: View?) {

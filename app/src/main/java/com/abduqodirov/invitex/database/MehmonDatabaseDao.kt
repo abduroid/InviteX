@@ -16,7 +16,7 @@ interface MehmonDatabaseDao {
     @Query("SELECT * FROM mehmonlar WHERE mehmonId = :key")
     fun get(key: Long): Mehmon?
 
-    @Query("SELECT * FROM mehmonlar ORDER BY ism")
+    @Query("SELECT * FROM mehmonlar ORDER BY mehmonId")
     fun getAllMehmons(): List<Mehmon>
 
     @Query("SELECT * FROM mehmonlar WHERE toifa =  :toifa ORDER BY mehmonId DESC")

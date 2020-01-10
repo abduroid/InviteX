@@ -8,9 +8,10 @@
     <array name="toifalar">
         <item>mahalla</item>
         <item>qarindoshlar</item>
-        <item>sinfdoshlar</item>
         <item>do`stlar</item>
         <item>ishxona</item>
+        <item>sinfdoshlar</item>
+        <item>boshqa</item>
     </array>
 
     <array name="tasks_with_mehmon">
@@ -46,19 +47,15 @@
     <string name="search">Izlash</string>
 
     <!--Help textlar -->
-    <string name="what_are_these_even_link">What are these even</string>
+    <string name="what_are_these_even_link">Qaysi birini bosishni bilmayman</string>
 
-    <string name="what_are_these_even_text">Agar birinchi blah blah blah blah blah blah blah blah
-        blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah
-        blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah
-        blah blah blah blah blah blah</string>
+    <string name="what_are_these_even_text">Agar oilangizda dasturni birinchi bo\'lib siz ishlatayotkan
+        bo\'lsangiz Create ni bosing. Agar kimdir bu dasturni ishlatishni boshlagan bo\'lsa Join ni bosib o\'sha birinchi ishlatgan odamning Kodi bilan uning tizimiga ulanishingiz mumkin</string>
 
-    <string name="where_i_can_get_code_link">Where I can get code</string>
-    <string name="where_i_can_get_code_text">Create code blah blah blah blah blah blah blah blah blah
-        blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah
-        blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah
-        blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah
-        blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah
-        blah blah blah
+    <string name="where_i_can_get_code_link">Wedding IDni qayerdan olaman</string>
+    <string name="where_i_can_get_code_text">Synchronize bo\'limiga kiring va u yerdan Add tugmasini bosish orqali
+        Wedding IDni ko\'rishingiz mumkin. Agar oilangizda hali hech kim dasturni avval ishlatmagan bo\'lsa bir kishi Create tugmasini bosishi kerak
     </string>
+    <string name="empty_list">There are no item</string>
+    <string name="add_new_member">Add</string>
 </resources>
