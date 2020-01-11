@@ -11,7 +11,7 @@
         android:layout_marginStart="32dp"
         android:layout_marginEnd="32dp"
         android:gravity="center_horizontal"
-        android:text="Uploading old mehmons"
+        android:text="@string/screen_label_uploading"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

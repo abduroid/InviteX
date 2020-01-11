@@ -22,7 +22,7 @@
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:layout_marginEnd="32dp"
-        android:background="@drawable/ic_content_copy_black_24dp"
+        android:background="@drawable/icon_copy_text"
         android:foreground="?selectableItemBackground"
         app:layout_constraintBottom_toBottomOf="@+id/weddingId_text"
         app:layout_constraintEnd_toEndOf="parent"
@@ -35,7 +35,8 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:text="TextView"
+        android:text="@string/help_code_use"
+        android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/weddingId_text" />

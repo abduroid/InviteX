@@ -143,14 +143,12 @@ class SingleListViewModel(
 //
 //    }
 
-    @RequiresApi(Build.VERSION_CODES.N)
     fun loadFirestoreMehmons(toifa: String, username: String) {
         if (CloudFirestoreRepo.isFirestoreConnected()) {
             getGuestsOfMember(username = username, toifa = toifa)
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.N)
     private fun getGuestsOfMember(
         username: String,
         toifa: String
@@ -253,10 +251,6 @@ class SingleListViewModel(
         database.getSearchResults(searchQuery)
 
     }
-
-    //TODO firestoredan kelgan mehmonlarni ro'yxati uchun boshqa alohida mutablelivedata<list> yaratish
-    //TODO ularni boshiga memberNameheader elementi qo'shish, usernameni ko'rsatish. Va recyclerviewda uni formatlab ko'rsatish va spinner qo'yish
-
 
     fun addNewMehmon() {
 

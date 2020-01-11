@@ -56,30 +56,6 @@ object CloudFirestoreRepo {
             }
     }
 
-//    fun getGuestsOfMember(username: String, toifa: String): ArrayList<Mehmon> {
-//
-//        val mehmons = ArrayList<Mehmon>()
-//        weddingsCollection.document(userEnteredWeddingId).collection("$username-$toifa")
-//            .addSnapshotListener { querySnapshot, firebaseFirestoreException ->
-//                Log.i("hjht", "listener triggered")
-//
-//                if (firebaseFirestoreException != null) {
-//                    Log.w("fire error", "Listen failed.", firebaseFirestoreException)
-//                    return@addSnapshotListener
-//                }
-//
-//                for (document in querySnapshot!!) {
-//                    Log.i("hjht", "loop triggered")
-//                    val mehmon = document.toObject(Mehmon::class.java)
-//                    mehmons.plus(mehmon)
-//                    Log.i("hjht", "$mehmon")
-//                }
-//
-//            }
-//
-//        return mehmons
-//    }
-
 
     fun sendToFireStore(mehmon: Mehmon) {
         if (isFirestoreConnected()) {
@@ -97,16 +73,6 @@ object CloudFirestoreRepo {
         }
 
     }
-
-//    fun updateItemChecked(mehmon: Mehmon) {
-//
-//        if (isFirestoreConnected()) {
-//
-//            weddingsCollection.document(weddingId).collection("${getCallerOfMehmon(mehmon)}-${mehmon.toifa}")
-//                .document("${mehmon.mehmonId}")
-//                .update("aytilgan", mehmon.isAytilgan)
-//        }
-//    }
 
     fun updateItemOnFirestore(mehmon: Mehmon, completedClickListener: CompletedClickListener) {
 
@@ -145,6 +111,30 @@ object CloudFirestoreRepo {
 
     }
 
+    fun isUsernameAvailable(
+        passedId: String,
+        passedUsername: String,
+        completedClickListener: CompletedClickListener
+    ) {
+
+        weddingsCollection.document(passedId)
+            .get()
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+
+                    val weddingDoc = task.result!!.data!!.toSortedMap()
+                    val members = weddingDoc["members"] as List<String>
+
+                    if (members.contains(passedUsername)) {
+                        completedClickListener.onFinished("Bu username band", false)
+                    } else {
+                        completedClickListener.onFinished("Finished", true)
+                    }
+                } else {
+                    completedClickListener.onFinished("Xatolik yuz berdi", false)
+                }
+            }
+    }
 
     fun isFirestoreConnected() = weddingId.isNotEmpty() && username.isNotEmpty()
 

@@ -25,8 +25,7 @@ class HelpFragment : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        Log.i("dunyo", tag)
-        help_text.setText(tag)
+        help_text.text = tag
 
     }
 

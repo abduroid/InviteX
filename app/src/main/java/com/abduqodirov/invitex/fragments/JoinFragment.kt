@@ -57,17 +57,37 @@ class JoinFragment : Fragment() {
         binding.joinButton.setOnClickListener {
 
             if (viewModel.username.value.isNullOrBlank() || viewModel.userEnteredWeddingId.value.isNullOrBlank()) {
-                Snackbar.make(view!!, "Barcha fieldlar to'ldirilishi shart", Snackbar.LENGTH_SHORT).show()
-            } else {
+                Snackbar.make(view!!, "Barcha fieldlar to'ldirilishi shart", Snackbar.LENGTH_SHORT)
+                    .show()
+            }
 
-                CloudFirestoreRepo.isThereWeddingWithPassedId(viewModel.userEnteredWeddingId.value!!, CompletedClickListener { _, isSuccessful ->
-                    if (isSuccessful) {
-                        viewModel.joinToExistingDatabase()
-                        this.findNavController().navigate(JoinFragmentDirections.actionJoinFragmentToUploadingProgressFragment())
-                    } else {
-                        Snackbar.make(view!!, "Bunday weddingId yo'q", Snackbar.LENGTH_SHORT).show()
-                    }
-                })
+
+            if (!viewModel.userEnteredWeddingId.value.isNullOrEmpty() && !viewModel.username.value.isNullOrEmpty()) {
+
+                CloudFirestoreRepo.isThereWeddingWithPassedId(
+                    viewModel.userEnteredWeddingId.value!!,
+                    CompletedClickListener { _, isSuccessful ->
+                        if (isSuccessful) {
+
+                            CloudFirestoreRepo.isUsernameAvailable(viewModel.userEnteredWeddingId.value!!,
+                                viewModel.username.value!!,
+                                CompletedClickListener { resultUsername, isSuccessfulUsername ->
+                                    if (isSuccessfulUsername) {
+                                        viewModel.joinToExistingDatabase()
+                                        this.findNavController()
+                                            .navigate(JoinFragmentDirections.actionJoinFragmentToUploadingProgressFragment())
+                                    } else {
+                                        Snackbar.make(view!!, resultUsername, Snackbar.LENGTH_SHORT)
+                                            .show()
+                                    }
+                                })
+
+
+                        } else {
+                            Snackbar.make(view!!, "Bunday weddingId yo'q", Snackbar.LENGTH_SHORT)
+                                .show()
+                        }
+                    })
             }
 
 

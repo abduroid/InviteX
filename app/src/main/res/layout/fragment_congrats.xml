@@ -18,7 +18,7 @@
         app:layout_constraintVertical_bias="0.16000003"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="To'ylar muborak bo'lsin"
+        android:text="@string/congratulate"
         android:textAlignment="center" />
 
     <Button
@@ -29,6 +29,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:text="Button" />
+        android:text="@string/thanks" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

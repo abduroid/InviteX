@@ -5,7 +5,5 @@
     <corners android:topRightRadius="16dp"
         android:topLeftRadius="16dp" />
 
-    <solid android:color="@color/colorAccent" />
-
     <size android:height="4dp" />
 </shape>

@@ -6,10 +6,10 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/collectionListFragment"
-            android:title="Bosh sahifa" />
+            android:title="@string/screem_label_guests" />
         <item
             android:id="@+id/synchronize"
-            android:title="Synchronize" />
+            android:title="@string/screen_label_synchronization" />
     </group>
 
 </menu>

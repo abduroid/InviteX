@@ -46,13 +46,12 @@ private const val DIALOG_TASK_MOVE = 2
 
 class SingleListFragment : Fragment() {
 
-
     private var toifa: String = ""
     private lateinit var binding: FragmentSingleListBinding
 
     private lateinit var viewModel: SingleListViewModel
 
-    @RequiresApi(Build.VERSION_CODES.N)
+//    @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -93,13 +92,13 @@ class SingleListFragment : Fragment() {
                 },
                 CollapseClickListener { member, isCollapsed ->
 
-                    //TODO Avvalgi yozilgan collapsed va yangi kelgan eventdagi boolean bir xil bo'lmasa keyin bajaradi. Aks xolda shunchaki icon almashadi
+                    //Avvalgi yozilgan collapsed va yangi kelgan eventdagi boolean bir xil bo'lmasa keyin bajaradi. Aks xolda shunchaki icon almashadi
                     if (!MembersManager.membersCollapsed.containsKey(member.ism)) {
                         MembersManager.membersCollapsed.put(member.ism, isCollapsed)
                         viewModel.onCollapseMember(member = member, isCollapsed = isCollapsed)
                     } else if (MembersManager.membersCollapsed.getValue(member.ism) != isCollapsed) {
-                        viewModel.onCollapseMember(member = member, isCollapsed = isCollapsed)
                         MembersManager.membersCollapsed[member.ism] = isCollapsed
+                        viewModel.onCollapseMember(member = member, isCollapsed = isCollapsed)
                     }
 
 
@@ -115,15 +114,11 @@ class SingleListFragment : Fragment() {
             toifa = getString(ARG_OBJECT)
         }
 
-
-//        viewModel.observeOfItsGuests(toifa)
-
         //TODO shuni bitta viewmodel bilan hal qilish kerak yoki undanam yaxshisi Har bir tab uchun fragment ishlatmasdan performance jihatdan yaxshiroq usul topish. Little Panda akadan so'rab ko'rish
         viewModel.setToifa(toifa = toifa)
 
 
         if (CloudFirestoreRepo.isFirestoreConnected()) {
-            Log.i("katt", "Now it's connected to Firebase")
             viewModel.loadMembers()
 
             viewModel.localFirstMembers.observe(this@SingleListFragment, Observer {
@@ -170,17 +165,10 @@ class SingleListFragment : Fragment() {
                     mAdapter.submitList(localGuests)
 
                     //TODO onlaynga o'tkandan keyin ham shu bo'yicha davom etib, ishlayveryabdi. Observe qilaveryabdi
-                    if (!CloudFirestoreRepo.isFirestoreConnected()) {
-                        Log.i("katt", "Still working")
-                        main_list.smoothScrollToPosition(0)
-                    }
+
 
                 })
         }
-
-//        viewModel.getLocalSearchResults("idam").observe(this@SingleListFragment, Observer {
-//            Log.i("searchm", "${it.distinct()}")
-//        })
 
         binding.lifecycleOwner = this
 
@@ -233,11 +221,6 @@ class SingleListFragment : Fragment() {
         super.onResume()
 //        Hides keyboard if previously opened page had keyboard
         hideKeyboard(view)
-    }
-
-    override fun onStop() {
-        super.onStop()
-        Log.i("katt", "onStop")
     }
 
     private fun hideKeyboard(view: View?) {

@@ -1,61 +1,62 @@
 <resources>
-    <string name="app_name">InviteX</string>
+    <string name="app_name">Taklifnoma</string>
 
     <string name="first_launch_key">com.abduqodirov.invitex.isFirstLaunch</string>
-    <string name="enter_amount_of_cards">Taklifnomalar sonini kiriting</string>
-    <string name="tayyor_button">Tayyor</string>
 
     <array name="toifalar">
         <item>mahalla</item>
         <item>qarindoshlar</item>
-        <item>do`stlar</item>
+        <item>do\'stlar</item>
         <item>ishxona</item>
         <item>sinfdoshlar</item>
         <item>boshqa</item>
     </array>
 
+    <!--Button texts -->
+    <string name="add_new_member">A\'zo qo\'shish</string>
+    <string name="add_new_guest">Qo\'shish</string>
+    <string name="thanks">Rahmat</string>
+    <string name="where_i_can_get_code_link">Ulanish kodini qayerdan olaman</string>
+    <string name="what_are_these_even_link">Qaysi birini bosishni bilmayman</string>
+    <string name="done">TAYYOR</string>
+
     <array name="tasks_with_mehmon">
         <item>@string/edit</item>
         <item>@string/delete</item>
     </array>
+    <string name="edit">Ismni o\'zgartirish</string>
+    <string name="delete">Mehmonni o\'chirib yuborish</string>
+    <string name="move">Boshqa userga o\'tkazib yuborish</string>
+    <string name="enter_new_name">Yangi ism kiriting</string>
+    <string name="cancel">Bekor qilish</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title_activity_main">MainActivity</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Android Studio</string>
-    <string name="nav_header_subtitle">android.studio@android.com</string>
-    <string name="nav_header_desc">Navigation header</string>
-    <string name="action_settings">Settings</string>
 
-    <string name="menu_home">Home</string>
-    <string name="menu_gallery">Gallery</string>
-    <string name="menu_slideshow">Slideshow</string>
-    <string name="menu_tools">Tools</string>
-    <string name="menu_share">Share</string>
-    <string name="menu_send">Send</string>
-    <string name="emptylist">Ro\'yxat bo\'sh</string>
-    <string name="edit">Edit</string>
-    <string name="delete">Delete</string>
-    <string name="move">Move</string>
+
+    <!--Help texts -->
     <string name="select_task_with_mehmon">Nima qilmoqchisiz</string>
-    <string name="enter_new_name">Yangi nom kiriting</string>
-    <string name="done">TAYYOR</string>
-    <string name="cancel">Cancel</string>
-    <string name="there_is_no_internet">There is no internet</string>
-    <string name="search">Izlash</string>
-
-    <!--Help textlar -->
-    <string name="what_are_these_even_link">Qaysi birini bosishni bilmayman</string>
-
-    <string name="what_are_these_even_text">Agar oilangizda dasturni birinchi bo\'lib siz ishlatayotkan
-        bo\'lsangiz Create ni bosing. Agar kimdir bu dasturni ishlatishni boshlagan bo\'lsa Join ni bosib o\'sha birinchi ishlatgan odamning Kodi bilan uning tizimiga ulanishingiz mumkin</string>
-
-    <string name="where_i_can_get_code_link">Wedding IDni qayerdan olaman</string>
-    <string name="where_i_can_get_code_text">Synchronize bo\'limiga kiring va u yerdan Add tugmasini bosish orqali
-        Wedding IDni ko\'rishingiz mumkin. Agar oilangizda hali hech kim dasturni avval ishlatmagan bo\'lsa bir kishi Create tugmasini bosishi kerak
+    <string name="there_is_no_internet">Internetga ulanib bo\'lmadi</string>
+    <string name="congratulate">To\'ylar muborak bo\'lsin</string>
+    <string name="list_is_empty">Hali bu yerga mehmon yozilmadi</string>
+    <string name="enter_guest_name">Mehmon ismini kiriting</string>
+    <string name="where_i_can_get_code_text">Sinxronizatsiya paneliga kiring va u yerdan A\'zo qo\'shish tugmasini bosish orqali
+      Ulanish kodini ko\'rishingiz mumkin. Agar oilangizda hali hech kim dasturni avval ishlatmagan bo\'lsa bir kishi Yaratish tugmasini bosishi kerak
     </string>
-    <string name="empty_list">There are no item</string>
-    <string name="add_new_member">Add</string>
+    <string name="what_are_these_even_text">Agar oilangizda dasturni birinchi bo\'lib siz ishlatayotkan
+        bo\'lsangiz Yaratish ni bosing. Agar kimdir bu dasturni ishlatishni boshlagan bo\'lsa Ulanish ni bosib o\'sha birinchi ishlatgan odamning Kodi bilan uning tizimiga ulanishingiz mumkin
+    </string>
+    <string name="help_code_use">Oilangizdan biror odam sizning ro\'yxatingizga ulanmoqchi bo\'sa mana shu Ulanish kodi orqali kirishi kerak bo\'ladi</string>
+
+
+    <!--Screen labels -->
+    <string name="screem_label_guests">Mehmonlar</string>
+    <string name="screen_label_authorization">Avtorizatsiyadan o\'tish</string>
+    <string name="screen_label_synchronization">Sinxronizatsiya paneli</string>
+    <string name="screen_label_join">Ulanish</string>
+    <string name="screen_label_create_wedding">Yaratish</string>
+    <string name="screen_label_uploading">Mehmonlar ro\'yxati bazaga saqlanmoqda</string>
+    <string name="screen_label_members">To\'yga aytuvchilar</string>
+    <string name="screen_label_add_member">A\'zo qo\'shish</string>
+    <string name="screen_label_no_internet">Internet bilan muammo</string>
+    <string name="enter_your_name">Ismingizni kiriting</string>
+    <string name="enter_wedding_id">Ulanish kodini kiriting</string>
 </resources>

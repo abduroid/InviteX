@@ -30,7 +30,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@={viewModel.username}"
-                android:hint="enter_username" />
+                android:hint="@string/enter_your_name" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -48,7 +48,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@={viewModel.userEnteredWeddingId}"
-                android:hint="Enter Wedding Id" />
+                android:hint="@string/enter_wedding_id" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <Button
@@ -56,7 +56,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            android:text="Join"
+            android:text="@string/screen_label_join"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textInputLayout3" />
@@ -66,7 +66,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
-            android:text="Where I can get QR Code?"
+            android:text="@string/where_i_can_get_code_link"
             android:textColor="#3F41FF"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
