@@ -27,8 +27,10 @@ class MezbonRecyclerAdapter :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(memberName: String) {
-            binding.mezbonIsm = memberName
-            binding.executePendingBindings()
+
+
+            binding.memberNameText.text = memberName
+
         }
 
         companion object {

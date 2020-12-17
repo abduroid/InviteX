@@ -1,10 +1,12 @@
 package com.abduqodirov.invitex.adapters
 
+import android.graphics.Paint
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.constraintlayout.widget.Constraints
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -72,8 +74,9 @@ class SingleListRecycleViewAdapter(
     class TextViewViewHolder private constructor(val binding: ItemEmptyListBinding): RecyclerView.ViewHolder(binding.root) {
 
         fun bind(mehmon: Mehmon) {
-            binding.mehmon = mehmon
-            binding.executePendingBindings()
+            //TODO collapse qilish
+//            binding.mehmon = mehmon
+//            binding.executePendingBindings()
         }
 
         companion object {
@@ -90,7 +93,7 @@ class SingleListRecycleViewAdapter(
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(member: Mehmon, collapseClickListener: CollapseClickListener) {
-            binding.member = member
+            binding.memberNameText.text = member.ism
 
             binding.expandCollapseButton.isChecked = MembersManager.membersCollapsed.get(member.ism) ?: false
 
@@ -99,7 +102,6 @@ class SingleListRecycleViewAdapter(
                 collapseClickListener.onCollapsed(member = member, isCollapsed = isCollapsed)
             }
 
-            binding.executePendingBindings()
         }
 
         companion object {
@@ -135,9 +137,30 @@ class SingleListRecycleViewAdapter(
             }
 
             //TODO watch about how RecyclerView re-use views again
-            binding.mehmon = item
-            binding.aytilganClickListener = aytilganClickListener
-            binding.executePendingBindings()
+            binding.mehmonIsmText.text = item.ism
+            binding.rootOfItem.setOnClickListener {
+                aytilganClickListener.onChecked(item)
+            }
+
+            binding.itemGuestRoot.layoutParams.height = if (item.isCollapsed) {
+                0
+            } else {
+                Constraints.LayoutParams.WRAP_CONTENT
+            }
+
+            binding.mehmonIsmText.paintFlags = if (item.isAytilgan) {
+                binding.mehmonIsmText.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+            } else {
+                0
+            }
+
+            binding.isAytilganCheckBox.setOnClickListener {
+                aytilganClickListener.onChecked(item)
+            }
+
+            binding.isAytilganCheckBox.isChecked = item.isAytilgan
+
+//            binding.executePendingBindings()
         }
 
         companion object {

@@ -1,79 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/single_list_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <data>
+    <TextView
+        android:id="@+id/list_empty_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/list_is_empty"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <variable
-            name="viewModel"
-            type="com.abduqodirov.invitex.viewmodel.SingleListViewModel" />
-    </data>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/main_list"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="64dp"
+        android:background="@color/colorBackground"
+        android:visibility="visible"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:itemCount="20"
+        tools:listitem="@layout/item_list" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".singleList.MainListsFragment"
-        android:id="@+id/single_list_layout">
-
-        <TextView
-            android:id="@+id/list_empty_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/list_is_empty"
-            android:textSize="18sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/main_list"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginBottom="64dp"
-            android:background="@color/colorBackground"
-            android:visibility="visible"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:itemCount="20"
-            tools:listitem="@layout/item_list" />
-
-        <EditText
-            android:id="@+id/ism_edit"
-            android:layout_width="0dp"
-            android:layout_height="48dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:textCursorDrawable="@null"
-            android:background="@drawable/shape_edit_text_mehmon"
-            android:hint="@string/enter_guest_name"
-            android:singleLine="true"
-            android:text="@={viewModel.ism}"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/add_mehmon_button"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/main_list" />
+    <EditText
+        android:id="@+id/ism_edit"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/shape_edit_text_mehmon"
+        android:hint="@string/enter_guest_name"
+        android:singleLine="true"
+        android:textCursorDrawable="@null"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/add_mehmon_button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/main_list" />
 
 
-        <Button
-            android:id="@+id/add_mehmon_button"
-            android:layout_width="88dp"
-            android:layout_height="0dp"
-            android:clickable="true"
-            android:focusable="true"
-            android:foreground="?attr/selectableItemBackground"
-            android:layout_marginEnd="8dp"
-            android:enabled="@{viewModel.ism.length() > 0}"
-            android:onClick="@{() -> viewModel.addNewMehmon()}"
-            android:text="@string/add_new_guest"
-            android:textColor="@android:color/white"
-            app:layout_constraintBottom_toBottomOf="@+id/ism_edit"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/ism_edit" />
+    <!--         android:onClick="@{() -> viewModel.addNewMehmon()}" -->
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</layout>
+    <Button
+        android:id="@+id/add_mehmon_button"
+        android:layout_width="88dp"
+        android:layout_height="0dp"
+        android:layout_marginEnd="8dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackground"
+        android:text="@string/add_new_guest"
+        android:textColor="@android:color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/ism_edit"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/ism_edit" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

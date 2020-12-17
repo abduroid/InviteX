@@ -2,19 +2,13 @@ package com.abduqodirov.invitex.fragments
 
 import android.content.Context
 import android.content.DialogInterface
-import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
-import android.widget.ImageButton
-import android.widget.Toolbar
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -30,11 +24,6 @@ import com.abduqodirov.invitex.firestore.CloudFirestoreRepo
 import com.abduqodirov.invitex.models.Mehmon
 import com.abduqodirov.invitex.viewmodel.ListViewModelFactory
 import com.abduqodirov.invitex.viewmodel.SingleListViewModel
-import com.github.amlcurran.showcaseview.ShowcaseDrawer
-import com.github.amlcurran.showcaseview.ShowcaseView
-import com.github.amlcurran.showcaseview.targets.ActionViewTarget
-import com.github.amlcurran.showcaseview.targets.ViewTarget
-import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.fragment_single_list.*
 
 
@@ -47,20 +36,19 @@ private const val DIALOG_TASK_MOVE = 2
 class SingleListFragment : Fragment() {
 
     private var toifa: String = ""
-    private lateinit var binding: FragmentSingleListBinding
+    private var _binding: FragmentSingleListBinding? = null
+    private val binding get() = _binding!!
 
     private lateinit var viewModel: SingleListViewModel
 
-//    @RequiresApi(Build.VERSION_CODES.N)
+    //    @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
 
-        binding = DataBindingUtil.inflate(
-            inflater, R.layout.fragment_single_list,
-            container, false
-        )
+
+        _binding = FragmentSingleListBinding.inflate(inflater, container, false)
 
         val application = requireNotNull(activity!!.application)
 
@@ -76,9 +64,6 @@ class SingleListFragment : Fragment() {
                 SingleListViewModel::class.java
             )
 
-
-
-        binding.viewModel = viewModel
 
         val mAdapter =
             SingleListRecycleViewAdapter(
@@ -170,7 +155,12 @@ class SingleListFragment : Fragment() {
                 })
         }
 
-        binding.lifecycleOwner = this
+        binding.addMehmonButton.setOnClickListener {
+
+            viewModel.addNewMehmon(binding.ismEdit.text.toString())
+
+        }
+
 
         return binding.root
     }

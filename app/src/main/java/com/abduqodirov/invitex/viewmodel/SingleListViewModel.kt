@@ -252,7 +252,7 @@ class SingleListViewModel(
 
     }
 
-    fun addNewMehmon() {
+    fun addNewMehmon(name: String) {
 
         //TODO odamga o'xshab norm ism yozmasa qo'shmaslik kerak.
 
@@ -260,7 +260,7 @@ class SingleListViewModel(
             MembersManager.membersCollapsed.get(CloudFirestoreRepo.username) ?: false
 
         val mehmonForLocal = Mehmon(
-            ism = ism.value!!,
+            ism = name,
             toifa = toifa.value!!,
             isCollapsed = isCollapsed
         )
