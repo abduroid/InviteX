@@ -27,16 +27,16 @@ class SynchronizeViewModel(val database: MehmonDatabaseDao, application: Applica
         application.getSharedPreferences("keyim", Context.MODE_PRIVATE)
 
 
-    fun createNewFirestoreDatabase() {
+    fun createNewFirestoreDatabase(username: String) {
 
         val cardAmount = sharedPreferences.getInt("cardAmount", 0)
 
         //TODO username va wedding id ni trim qilib spacelarni olib tashlash kk
 
-        CloudFirestoreRepo.initializeFireStore(cardAmount, username.value!!,
+        CloudFirestoreRepo.initializeFireStore(cardAmount, username,
             ConnectedClickListener {
                 persistString("userEnteredWeddingId", it)
-                persistString("username", username.value!!)
+                persistString("username", username)
 
                 uploadOfflineMehmons()
             })
@@ -46,15 +46,15 @@ class SynchronizeViewModel(val database: MehmonDatabaseDao, application: Applica
 
     }
 
-    fun joinToExistingDatabase() {
+    fun joinToExistingDatabase(username: String, weddingId: String) {
 
         //TODO Ulanganda WeddingIdni textViewga chiqarib qo'ymayapti faqat qayta kirganda initdan qo'yilyabdi
-        CloudFirestoreRepo.joinToExistingWedding(username.value!!, userEnteredWeddingId.value!!,
+        CloudFirestoreRepo.joinToExistingWedding(username, weddingId,
             ConnectedClickListener {
                 Log.i("tek", "Callback ishga tushdi")
 
                 persistString("userEnteredWeddingId", userEnteredWeddingId.value!!)
-                persistString("username", username.value!!)
+                persistString("username", username)
 
                 uploadOfflineMehmons()
             })

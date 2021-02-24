@@ -49,10 +49,10 @@ class CreateWeddingFragment : Fragment() {
 
         binding.createButton.setOnClickListener {
 
-            if (viewModel.username.value.isNullOrEmpty()) {
+            if (binding.usernameCreateEdit.text.toString().isEmpty()) {
                 Snackbar.make(view!!, "Username kiritishingiz shart", Snackbar.LENGTH_SHORT).show()
             } else {
-                viewModel.createNewFirestoreDatabase()
+                viewModel.createNewFirestoreDatabase(binding.usernameCreateEdit.text.toString())
 
                 this.findNavController()
                     .navigate(CreateWeddingFragmentDirections.actionCreateWeddingFragmentToUploadingProgressFragment())

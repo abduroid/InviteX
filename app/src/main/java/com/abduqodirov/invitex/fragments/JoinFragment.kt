@@ -51,24 +51,24 @@ class JoinFragment : Fragment() {
 
         binding.joinButton.setOnClickListener {
 
-            if (viewModel.username.value.isNullOrBlank() || viewModel.userEnteredWeddingId.value.isNullOrBlank()) {
+            if (binding.usernameJoinEdit.text.toString().isBlank() || binding.weddingIdEdit.text.toString().isNullOrBlank()) {
                 Snackbar.make(view!!, "Barcha fieldlar to'ldirilishi shart", Snackbar.LENGTH_SHORT)
                     .show()
             }
 
 
-            if (!viewModel.userEnteredWeddingId.value.isNullOrEmpty() && !viewModel.username.value.isNullOrEmpty()) {
+            if (!binding.weddingIdEdit.text.toString().isEmpty() && !binding.usernameJoinEdit.text.toString().isNullOrEmpty()) {
 
                 CloudFirestoreRepo.isThereWeddingWithPassedId(
-                    viewModel.userEnteredWeddingId.value!!,
+                    binding.weddingIdEdit.text.toString(),
                     CompletedClickListener { _, isSuccessful ->
                         if (isSuccessful) {
 
-                            CloudFirestoreRepo.isUsernameAvailable(viewModel.userEnteredWeddingId.value!!,
-                                viewModel.username.value!!,
+                            CloudFirestoreRepo.isUsernameAvailable(binding.weddingIdEdit.text.toString(),
+                                binding.usernameJoinEdit.text.toString(),
                                 CompletedClickListener { resultUsername, isSuccessfulUsername ->
                                     if (isSuccessfulUsername) {
-                                        viewModel.joinToExistingDatabase()
+                                        viewModel.joinToExistingDatabase(binding.usernameJoinEdit.text.toString(), binding.weddingIdEdit.text.toString())
                                         this.findNavController()
                                             .navigate(JoinFragmentDirections.actionJoinFragmentToUploadingProgressFragment())
                                     } else {
